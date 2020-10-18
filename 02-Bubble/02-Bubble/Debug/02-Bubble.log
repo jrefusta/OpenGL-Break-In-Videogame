@@ -1,0 +1,7 @@
+﻿  Game.cpp
+D:\Users\jrefu\Desktop\2DGame\02-Bubble\02-Bubble\Game.cpp(11,40): warning C4305: 'argumento': truncamiento de 'double' a 'GLclampf'
+SOIL.lib(image_DXT.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(image_DXT.obj)' o en 'D:\Users\jrefu\Desktop\2DGame\02-Bubble\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
+SOIL.lib(image_helper.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(image_helper.obj)' o en 'D:\Users\jrefu\Desktop\2DGame\02-Bubble\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
+SOIL.lib(SOIL.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(SOIL.obj)' o en 'D:\Users\jrefu\Desktop\2DGame\02-Bubble\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
+SOIL.lib(stb_image_aug.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(stb_image_aug.obj)' o en 'D:\Users\jrefu\Desktop\2DGame\02-Bubble\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
+  02-Bubble.vcxproj -> D:\Users\jrefu\Desktop\2DGame\02-Bubble\Debug\02-Bubble.exe
