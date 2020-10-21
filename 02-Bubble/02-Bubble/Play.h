@@ -12,9 +12,18 @@ public:
 	Play();
 	~Play();
 
-	void init();
+	void init(int l);
 	void update(int deltaTime);
 	void render();
+	void loadSprites();
+
 private:
+	struct Level {
+		Sprite* sprite;
+		Texture spritesheet;
+	};
+
+	Level levels[7];
+	int level; //nivel seleccionado
 };
 

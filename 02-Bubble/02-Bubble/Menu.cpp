@@ -6,7 +6,7 @@ using namespace std;
 Menu::Menu() {}
 Menu:: ~Menu() {}
 
-void Menu::init(int level) {
+void Menu::init(int o) {
 	Scene::init();
 	spritesheet.loadFromFile("images/menu.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	background = Sprite::createSprite(glm::vec2(640.0, 480.0), glm::vec2(1.f, 1.f), &spritesheet, &texProgram);
@@ -15,7 +15,7 @@ void Menu::init(int level) {
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	loadSprites();
 
-	this->option = level;
+	this->option = o;
 	
 }
 
@@ -41,7 +41,7 @@ void Menu::update(int deltaTime) {
 	currentTime += deltaTime;
 	currentTurnTime += deltaTime;
 
-	if (currentTurnTime >= float(100.0f)) {
+	if (currentTurnTime >= float(150.0f)) {
 		if (Game::instance().moveDownPressed()) {
 			if (option < 2) ++option;
 			else {

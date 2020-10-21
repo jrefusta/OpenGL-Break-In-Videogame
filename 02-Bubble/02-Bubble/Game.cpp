@@ -109,7 +109,7 @@ void Game::selectScene(int ID) {
 			break;
 		case 1:
 			scene = new Play();
-			scene->init();
+			scene->init(0);
 			break;
 		case 2:
 			scene = new Help();
@@ -118,6 +118,10 @@ void Game::selectScene(int ID) {
 		case 3: 
 			scene = new Credits();
 			scene->init();
+			break;
+		default:
+			//scene = new Level();
+			//scene->init(ID-4);
 			break;
 	}
 }
