@@ -120,7 +120,8 @@ void Game::selectScene(int ID) {
 			scene->init();
 			break;
 		default:
-			//scene = new Level();
+			scene = new Level();
+			scene->init();
 			//scene->init(ID-4);
 			break;
 	}

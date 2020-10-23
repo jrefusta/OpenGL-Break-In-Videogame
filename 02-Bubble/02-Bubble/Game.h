@@ -7,6 +7,7 @@
 #include "Menu.h"
 #include "Play.h"
 #include "Help.h"
+#include "Level.h"
 
 
 #define SCREEN_WIDTH 640
