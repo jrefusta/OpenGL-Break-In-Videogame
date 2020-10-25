@@ -8,8 +8,11 @@
 #define SCREEN_X 8
 #define SCREEN_Y 24
 
-#define INIT_PLAYER_X_TILES 12
-#define INIT_PLAYER_Y_TILES 94
+#define INIT_PLAYER_X 96
+#define INIT_PLAYER_Y 166 + 24*3*8
+
+#define INIT_BALL_X 101
+#define INIT_BALL_Y 157
 
 #define NUM_ROOMS 4
 
@@ -38,11 +41,11 @@ void Level::init()
 	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), (INIT_PLAYER_Y_TILES * map->getTileSize())-35));
+	player->setPosition(glm::vec2(INIT_PLAYER_X, INIT_PLAYER_Y));
 	player->setTileMap(map);
 	ball = new Ball();
 	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	
+	ball->setPosition(glm::vec2(INIT_BALL_X, INIT_BALL_Y));
 	ball->setTileMap(map);
 	ball->setStuck(true);
 	currentTime = 0.0f;
@@ -54,15 +57,11 @@ void Level::update(int deltaTime)
 {
 	currentTime += deltaTime;
 	player->update(deltaTime);
-	
+	ball->update(deltaTime, player->getPosition());
 
 	if (ball->getStuck()) {
-		glm::vec2 ballPos = player->getPosition();
-		ballPos.y -= 12;
-		ballPos.x += 6;
-		ball->setPosition(ballPos);
+		ball->setPosition(player->getPosition());
 	}
-	else ball->update(deltaTime, player->getPosition());
 
 	if (Game::instance().getKey('1'))
 	{
