@@ -15,19 +15,22 @@ class Ball
 
 public:
 	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
-	void update(int deltaTime);
+	void update(int deltaTime, glm::vec2 posPlayer);
 	void render();
 
 	void setTileMap(TileMap* tileMap);
 	void setPosition(const glm::vec2& pos);
-
+	bool collisionPlayer(glm::vec2& posPlayer);
 	void setStuck(bool s);
 
 	bool getStuck();
 
 private:
+	int ballVelX;
+	int ballVelY;
+
 	bool stuck;
-	glm::ivec2 tileMapDispl, posPlayer;
+	glm::ivec2 tileMapDispl, posBall;
 	int jumpAngle, startY;
 	Texture spritesheet;
 	Sprite* sprite;

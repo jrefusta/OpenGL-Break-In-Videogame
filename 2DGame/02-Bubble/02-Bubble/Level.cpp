@@ -38,11 +38,11 @@ void Level::init()
 	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
+	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), (INIT_PLAYER_Y_TILES * map->getTileSize())-35));
 	player->setTileMap(map);
 	ball = new Ball();
 	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	ball->setPosition(player->getPosition());
+	
 	ball->setTileMap(map);
 	ball->setStuck(true);
 	currentTime = 0.0f;
@@ -54,11 +54,15 @@ void Level::update(int deltaTime)
 {
 	currentTime += deltaTime;
 	player->update(deltaTime);
-	ball->update(deltaTime);
+	
 
 	if (ball->getStuck()) {
-		ball->setPosition(player->getPosition());
+		glm::vec2 ballPos = player->getPosition();
+		ballPos.y -= 12;
+		ballPos.x += 6;
+		ball->setPosition(ballPos);
 	}
+	else ball->update(deltaTime, player->getPosition());
 
 	if (Game::instance().getKey('1'))
 	{
@@ -79,6 +83,10 @@ void Level::update(int deltaTime)
 	{
 		currentRoom = 4;
 		projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(NUM_ROOMS - currentRoom), 192.f*float(NUM_ROOMS - currentRoom));
+	}
+	if (Game::instance().getKey('\ '))
+	{	
+		ball->setStuck(false);
 	}
 }
 
