@@ -15,9 +15,9 @@
 
 void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
-	bJumping = false;
+	stuck = true;
 	spritesheet.loadFromFile("images/ball.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(1.0, 1.0), &spritesheet, &shaderProgram);
+	sprite = Sprite::createSprite(glm::ivec2(12, 12), glm::vec2(1.0, 1.0), &spritesheet, &shaderProgram);
 	/*sprite->setNumberAnimations(4);
 
 	sprite->setAnimationSpeed(STAND_LEFT, 8);
@@ -45,16 +45,16 @@ void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 void Ball::update(int deltaTime)
 {
 	sprite->update(deltaTime);
-	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
+	/*if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 	{
 		/*if (sprite->animation() != MOVE_LEFT)
 			sprite->changeAnimation(MOVE_LEFT);
 		posPlayer.x -= 2;
 		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
 		{*/
-			posPlayer.x += 2;
+			posPlayer.x -= 2;
 			/*sprite->changeAnimation(STAND_LEFT);
-		//}*/
+		//}
 	}
 	if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
 	{
@@ -62,17 +62,17 @@ void Ball::update(int deltaTime)
 			sprite->changeAnimation(MOVE_RIGHT);
 		posPlayer.x += 2;
 		if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32)))
-		{*/
-			posPlayer.x -= 2;
-			/*sprite->changeAnimation(STAND_RIGHT);
-		/*}
-	}/*
+		{
+			posPlayer.x += 2;
+			sprite->changeAnimation(STAND_RIGHT);
+		}
+	}
 	else
 	{
 		if(sprite->animation() == MOVE_LEFT)
 			sprite->changeAnimation(STAND_LEFT);
 		else if(sprite->animation() == MOVE_RIGHT)
-			sprite->changeAnimation(STAND_RIGHT*/
+			sprite->changeAnimation(STAND_RIGHT
 	}
 
 	if (Game::instance().getSpecialKey(GLUT_KEY_UP))
@@ -82,7 +82,7 @@ void Ball::update(int deltaTime)
 	if (Game::instance().getSpecialKey(GLUT_KEY_DOWN))
 	{
 		posPlayer.y += 2;
-	}
+	}*/
 	/*if(bJumping)
 	{
 		jumpAngle += JUMP_ANGLE_STEP;
@@ -110,9 +110,18 @@ void Ball::update(int deltaTime)
 				startY = posPlayer.y;
 			}
 		}
-	}*/
+	}
 
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));*/
+}
+
+
+bool Ball::getStuck() {
+	return this->stuck;
+}
+
+void Ball::setStuck(bool s) {
+	this->stuck = s;
 }
 
 void Ball::render()

@@ -10,8 +10,8 @@
 #include "Level.h"
 
 
-#define SCREEN_WIDTH 272*2
-#define SCREEN_HEIGHT 240*2
+#define SCREEN_WIDTH 272
+#define SCREEN_HEIGHT 240
 
 
 // Game is a singleton (a class with a single instance) that represents our whole application
@@ -43,8 +43,8 @@ public:
 	void mouseMove(int x, int y);
 	void mousePress(int button);
 	void exit();
-	void mouseRelease(int button);
 	void runConsole();
+	void mouseRelease(int button);
 	bool moveUpPressed();
 	bool moveDownPressed();
 	bool moveRightPressed();
