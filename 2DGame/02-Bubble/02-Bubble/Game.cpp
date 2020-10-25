@@ -8,7 +8,7 @@ using namespace std;
 void Game::init()
 {
 	bPlay = true;
-	glClearColor(0.082, 0.094, 0.121, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 	scene = new Menu();
 	scene->init(0);

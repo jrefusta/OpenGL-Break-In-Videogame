@@ -5,11 +5,13 @@
 #include "Game.h"
 
 
-#define SCREEN_X 32
-#define SCREEN_Y 16
+#define SCREEN_X 8
+#define SCREEN_Y 24
 
-#define INIT_PLAYER_X_TILES 4
-#define INIT_PLAYER_Y_TILES 25
+#define INIT_PLAYER_X_TILES 12
+#define INIT_PLAYER_Y_TILES 94
+
+#define NUM_ROOMS 4
 
 
 Level::Level()
@@ -42,8 +44,9 @@ void Level::init()
 	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	ball->setPosition(glm::vec2(INIT_PLAYER_X_TILES+10 * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 	ball->setTileMap(map);
-	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
+	currentRoom = 1;
+	projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(NUM_ROOMS - currentRoom), 192.f*float(NUM_ROOMS - currentRoom));
 }
 
 void Level::update(int deltaTime)
@@ -51,6 +54,26 @@ void Level::update(int deltaTime)
 	currentTime += deltaTime;
 	player->update(deltaTime);
 	ball->update(deltaTime);
+	if (Game::instance().getKey('1'))
+	{
+		currentRoom = 1;
+		projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(NUM_ROOMS - currentRoom), 192.f*float(NUM_ROOMS - currentRoom));
+	}
+	if (Game::instance().getKey('2'))
+	{
+		currentRoom = 2;
+		projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(NUM_ROOMS - currentRoom), 192.f*float(NUM_ROOMS - currentRoom));
+	}
+	if (Game::instance().getKey('3'))
+	{
+		currentRoom = 3;
+		projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(NUM_ROOMS - currentRoom), 192.f*float(NUM_ROOMS - currentRoom));
+	}
+	if (Game::instance().getKey('4'))
+	{
+		currentRoom = 4;
+		projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(NUM_ROOMS - currentRoom), 192.f*float(NUM_ROOMS - currentRoom));
+	}
 }
 
 void Level::render()

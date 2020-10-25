@@ -1,20 +1,4 @@
-﻿  Ball.cpp
-  Game.cpp
-C:\Users\GL553VD\source\repos\VJ_2D\2DGame\02-Bubble\02-Bubble\Game.cpp(11,40): warning C4305: 'argumento': truncamiento de 'double' a 'GLclampf'
-  Help.cpp
-  Level.cpp
-  main.cpp
-  Menu.cpp
-  Play.cpp
-  Player.cpp
-  Scene.cpp
-  Shader.cpp
-  ShaderProgram.cpp
-  Credits.cpp
-  Sprite.cpp
-  Texture.cpp
-  TileMap.cpp
-  Generando código...
+﻿  TileMap.cpp
 SOIL.lib(image_DXT.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(image_DXT.obj)' o en 'C:\Users\GL553VD\source\repos\VJ_2D\2DGame\02-Bubble\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
 SOIL.lib(image_helper.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(image_helper.obj)' o en 'C:\Users\GL553VD\source\repos\VJ_2D\2DGame\02-Bubble\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
 SOIL.lib(SOIL.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(SOIL.obj)' o en 'C:\Users\GL553VD\source\repos\VJ_2D\2DGame\02-Bubble\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
