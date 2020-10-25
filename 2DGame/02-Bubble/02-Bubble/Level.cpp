@@ -42,8 +42,9 @@ void Level::init()
 	player->setTileMap(map);
 	ball = new Ball();
 	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	ball->setPosition(glm::vec2(INIT_PLAYER_X_TILES+10 * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
+	ball->setPosition(player->getPosition());
 	ball->setTileMap(map);
+	ball->setStuck(true);
 	currentTime = 0.0f;
 	currentRoom = 1;
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(NUM_ROOMS - currentRoom), 192.f*float(NUM_ROOMS - currentRoom));
@@ -54,6 +55,11 @@ void Level::update(int deltaTime)
 	currentTime += deltaTime;
 	player->update(deltaTime);
 	ball->update(deltaTime);
+
+	if (ball->getStuck()) {
+		ball->setPosition(player->getPosition());
+	}
+
 	if (Game::instance().getKey('1'))
 	{
 		currentRoom = 1;
