@@ -9,9 +9,7 @@
 #define SCREEN_Y 24
 
 #define INIT_PLAYER_X 96
-#define INIT_PLAYER_Y 166 + 24*3*8
-
-#define NUM_ROOMS 4
+#define INIT_PLAYER_Y 742
 
 
 Level::Level()
@@ -46,13 +44,13 @@ void Level::init()
 	ball->setStuck(true);
 	currentTime = 0.0f;
 	currentRoom = 1;
-	projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(NUM_ROOMS - currentRoom), 192.f*float(NUM_ROOMS - currentRoom));
+	projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
 }
 
 void Level::update(int deltaTime)
 {
 	currentTime += deltaTime;
-	player->update(deltaTime);
+	player->update(deltaTime, currentRoom);
 	ball->update(deltaTime, player->getPosition());
 
 	if (ball->getStuck()) {
@@ -62,22 +60,22 @@ void Level::update(int deltaTime)
 	if (Game::instance().getKey('1'))
 	{
 		currentRoom = 1;
-		projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(NUM_ROOMS - currentRoom), 192.f*float(NUM_ROOMS - currentRoom));
+		projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
 	}
 	if (Game::instance().getKey('2'))
 	{
 		currentRoom = 2;
-		projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(NUM_ROOMS - currentRoom), 192.f*float(NUM_ROOMS - currentRoom));
+		projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
 	}
 	if (Game::instance().getKey('3'))
 	{
 		currentRoom = 3;
-		projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(NUM_ROOMS - currentRoom), 192.f*float(NUM_ROOMS - currentRoom));
+		projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
 	}
 	if (Game::instance().getKey('4'))
 	{
 		currentRoom = 4;
-		projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(NUM_ROOMS - currentRoom), 192.f*float(NUM_ROOMS - currentRoom));
+		projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
 	}
 	if (Game::instance().getKey('\ '))
 	{	

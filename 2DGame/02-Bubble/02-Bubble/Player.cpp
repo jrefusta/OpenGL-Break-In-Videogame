@@ -46,7 +46,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	
 }
 
-void Player::update(int deltaTime)
+void Player::update(int deltaTime, int currentRoom)
 {
 	sprite->update(deltaTime);
 	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
@@ -59,7 +59,7 @@ void Player::update(int deltaTime)
 	{
 		//if (sprite->animation() != MOVE_RIGHT)
 			//sprite->changeAnimation(MOVE_RIGHT);
-		if (posPlayer.x < 192 - 18 - 8) posPlayer.x += 2;
+		if (posPlayer.x < 166) posPlayer.x += 2;
 	}/*
 	else
 	{
@@ -73,13 +73,13 @@ void Player::update(int deltaTime)
 	{
 		/*if (sprite->animation() != MOVE_RIGHT)
 			sprite->changeAnimation(MOVE_RIGHT);*/
-		if (posPlayer.y < 192 - 26 + 192*3) posPlayer.y += 2;
+		if (posPlayer.y < 166 + 192*(4 - currentRoom)) posPlayer.y += 2;
 	}
 	if (Game::instance().getSpecialKey(GLUT_KEY_UP))
 	{
 		/*if (sprite->animation() != MOVE_RIGHT)
 			sprite->changeAnimation(MOVE_RIGHT);*/
-		if (posPlayer.y > 8 + 12 + 192*3) posPlayer.y -= 2;
+		if (posPlayer.y > 20 + 192*(4 - currentRoom)) posPlayer.y -= 2;
 	}
 	/*if(bJumping)
 	{
