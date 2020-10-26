@@ -11,9 +11,6 @@
 #define INIT_PLAYER_X 96
 #define INIT_PLAYER_Y 166 + 24*3*8
 
-#define INIT_BALL_X 101
-#define INIT_BALL_Y 157
-
 #define NUM_ROOMS 4
 
 
@@ -45,7 +42,6 @@ void Level::init()
 	player->setTileMap(map);
 	ball = new Ball();
 	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	ball->setPosition(glm::vec2(INIT_BALL_X, INIT_BALL_Y));
 	ball->setTileMap(map);
 	ball->setStuck(true);
 	currentTime = 0.0f;
@@ -60,7 +56,7 @@ void Level::update(int deltaTime)
 	ball->update(deltaTime, player->getPosition());
 
 	if (ball->getStuck()) {
-		ball->setPosition(player->getPosition());
+		ball->setPosition(player->getPosition() + glm::vec2(5, -9));
 	}
 
 	if (Game::instance().getKey('1'))
@@ -100,8 +96,8 @@ void Level::render()
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	map->render();
-	player->render();
 	ball->render();
+	player->render();
 }
 
 void Level::initShaders()
