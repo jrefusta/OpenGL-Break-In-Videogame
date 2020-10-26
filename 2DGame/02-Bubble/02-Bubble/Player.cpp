@@ -46,30 +46,20 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	
 }
 
-void Player::update(int deltaTime)
+void Player::update(int deltaTime, int currentRoom)
 {
 	sprite->update(deltaTime);
 	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 	{
 		/*if (sprite->animation() != MOVE_LEFT)
 			sprite->changeAnimation(MOVE_LEFT);*/
-		posPlayer.x -= 2;
-		if (map->collisionMoveLeft(posPlayer, glm::ivec2(24, 32)))
-		{
-			posPlayer.x += 2;
-			//sprite->changeAnimation(STAND_LEFT);
-		}
+		if (posPlayer.x > 8) posPlayer.x -= 2;
 	}
 	if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
 	{
 		//if (sprite->animation() != MOVE_RIGHT)
 			//sprite->changeAnimation(MOVE_RIGHT);
-		posPlayer.x += 2;
-		if (map->collisionMoveRight(posPlayer, glm::ivec2(24, 32)))
-		{
-			posPlayer.x -= 2;
-			//sprite->changeAnimation(STAND_RIGHT);
-		}
+		if (posPlayer.x < 166) posPlayer.x += 2;
 	}/*
 	else
 	{
@@ -83,25 +73,13 @@ void Player::update(int deltaTime)
 	{
 		/*if (sprite->animation() != MOVE_RIGHT)
 			sprite->changeAnimation(MOVE_RIGHT);*/
-		posPlayer.y += 2;
-		if (map->collisionMoveDown(posPlayer, glm::ivec2(24, 32)))
-		{
-			posPlayer.y -= 2;
-			//sprite->changeAnimation(STAND_RIGHT);
-		}
+		if (posPlayer.y < 166 + 192*(4 - currentRoom)) posPlayer.y += 2;
 	}
 	if (Game::instance().getSpecialKey(GLUT_KEY_UP))
 	{
 		/*if (sprite->animation() != MOVE_RIGHT)
 			sprite->changeAnimation(MOVE_RIGHT);*/
-		posPlayer.y -= 2;
-		if (map->collisionMoveUp(posPlayer, glm::ivec2(24, 32)))
-		{
-			/*Game::instance().runConsole();
-			cout << "HH" << endl;*/
-			posPlayer.y += 2;
-			//sprite->changeAnimation(STAND_RIGHT);
-		}
+		if (posPlayer.y > 20 + 192*(4 - currentRoom)) posPlayer.y -= 2;
 	}
 	/*if(bJumping)
 	{

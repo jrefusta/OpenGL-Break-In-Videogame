@@ -9,12 +9,7 @@
 #define SCREEN_Y 24
 
 #define INIT_PLAYER_X 96
-#define INIT_PLAYER_Y 166 + 24*3*8
-
-#define INIT_BALL_X 101
-#define INIT_BALL_Y 157
-
-#define NUM_ROOMS 4
+#define INIT_PLAYER_Y 742
 
 
 Level::Level()
@@ -45,43 +40,46 @@ void Level::init()
 	player->setTileMap(map);
 	ball = new Ball();
 	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	ball->setPosition(glm::vec2(INIT_BALL_X, INIT_BALL_Y));
 	ball->setTileMap(map);
 	ball->setStuck(true);
 	currentTime = 0.0f;
 	currentRoom = 1;
-	projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(NUM_ROOMS - currentRoom), 192.f*float(NUM_ROOMS - currentRoom));
+	projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
 }
 
 void Level::update(int deltaTime)
 {
 	currentTime += deltaTime;
-	player->update(deltaTime);
+	player->update(deltaTime, currentRoom);
 	ball->update(deltaTime, player->getPosition());
 
 	if (ball->getStuck()) {
+<<<<<<< HEAD
 		ball->setPosition(glm::vec2(INIT_BALL_X, INIT_BALL_Y));
+=======
+		ball->setPosition(player->getPosition() + glm::vec2(5, -9));
+>>>>>>> e1fe8170a56e774bc14a906e22ec52553037085f
 	}
 
 	if (Game::instance().getKey('1'))
 	{
 		currentRoom = 1;
-		projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(NUM_ROOMS - currentRoom), 192.f*float(NUM_ROOMS - currentRoom));
+		projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
 	}
 	if (Game::instance().getKey('2'))
 	{
 		currentRoom = 2;
-		projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(NUM_ROOMS - currentRoom), 192.f*float(NUM_ROOMS - currentRoom));
+		projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
 	}
 	if (Game::instance().getKey('3'))
 	{
 		currentRoom = 3;
-		projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(NUM_ROOMS - currentRoom), 192.f*float(NUM_ROOMS - currentRoom));
+		projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
 	}
 	if (Game::instance().getKey('4'))
 	{
 		currentRoom = 4;
-		projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(NUM_ROOMS - currentRoom), 192.f*float(NUM_ROOMS - currentRoom));
+		projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
 	}
 	if (Game::instance().getKey('\ '))
 	{	
@@ -100,8 +98,8 @@ void Level::render()
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	map->render();
-	player->render();
 	ball->render();
+	player->render();
 }
 
 void Level::initShaders()
