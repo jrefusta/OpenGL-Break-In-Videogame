@@ -60,7 +60,7 @@ void Level::update(int deltaTime)
 	ball->update(deltaTime, player->getPosition());
 
 	if (ball->getStuck()) {
-		ball->setPosition(player->getPosition());
+		ball->setPosition(glm::vec2(INIT_BALL_X, INIT_BALL_Y));
 	}
 
 	if (Game::instance().getKey('1'))
