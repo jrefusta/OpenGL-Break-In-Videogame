@@ -44,7 +44,7 @@ void Level::init()
 	ball->setStuck(true);
 	currentTime = 0.0f;
 	currentRoom = 1;
-	projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
+	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
 }
 
 void Level::update(int deltaTime)
@@ -60,22 +60,22 @@ void Level::update(int deltaTime)
 	if (Game::instance().getKey('1'))
 	{
 		currentRoom = 1;
-		projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
+		projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
 	}
 	if (Game::instance().getKey('2'))
 	{
 		currentRoom = 2;
-		projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
+		projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
 	}
 	if (Game::instance().getKey('3'))
 	{
 		currentRoom = 3;
-		projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
+		projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
 	}
 	if (Game::instance().getKey('4'))
 	{
 		currentRoom = 4;
-		projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
+		projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
 	}
 	if (Game::instance().getKey('\ '))
 	{	

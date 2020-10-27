@@ -9,7 +9,7 @@ Menu:: ~Menu() {}
 void Menu::init(int o) {
 	Scene::init();
 	spritesheet.loadFromFile("images/menu.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	background = Sprite::createSprite(glm::vec2(640.0, 480.0), glm::vec2(1.f, 1.f), &spritesheet, &texProgram);
+	background = Sprite::createSprite(glm::vec2(272.0, 240.0), glm::vec2(1.f, 1.f), &spritesheet, &texProgram);
 	background->setPosition(glm::vec2(0.0, 0.0));
 
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
@@ -21,19 +21,19 @@ void Menu::init(int o) {
 
 void Menu::loadSprites() {
 
-	options[0].spritesheet.loadFromFile("images/play_button.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	options[0].sprite = Sprite::createSprite(glm::ivec2(100, 30), glm::vec2(1.f, 1.f), &options[0].spritesheet, &texProgram);
-	options[0].sprite->setPosition(glm::vec2(float(SCREEN_WIDTH - 355), float(SCREEN_HEIGHT - 250)));
+	options[0].spritesheet.loadFromFile("images/text_play.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	options[0].sprite = Sprite::createSprite(glm::ivec2(32, 8), glm::vec2(1.f, 1.f), &options[0].spritesheet, &texProgram);
+	options[0].sprite->setPosition(glm::vec2(120.0, 160.0));
 	options[0].sprite->setColor(glm::vec3(1.0f, 1.0f, 1.0f));
 
-	options[1].spritesheet.loadFromFile("images/help_button.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	options[1].sprite = Sprite::createSprite(glm::ivec2(107, 40), glm::vec2(1.f, 1.f), &options[1].spritesheet, &texProgram);
-	options[1].sprite->setPosition(glm::vec2(float(SCREEN_WIDTH - 360), float(SCREEN_HEIGHT - 190)));
+	options[1].spritesheet.loadFromFile("images/text_instructions.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	options[1].sprite = Sprite::createSprite(glm::ivec2(96, 8), glm::vec2(1.f, 1.f), &options[1].spritesheet, &texProgram);
+	options[1].sprite->setPosition(glm::vec2(88.0, 176.0));
 	options[1].sprite->setColor(glm::vec3(1.0f, 1.0f, 1.0f));
 
-	options[2].spritesheet.loadFromFile("images/credits_button.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	options[2].sprite = Sprite::createSprite(glm::ivec2(130, 40), glm::vec2(1.f, 1.f), &options[2].spritesheet, &texProgram);
-	options[2].sprite->setPosition(glm::vec2(float(SCREEN_WIDTH - 380), float(SCREEN_HEIGHT - 100)));
+	options[2].spritesheet.loadFromFile("images/text_credits.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	options[2].sprite = Sprite::createSprite(glm::ivec2(56, 8), glm::vec2(1.f, 1.f), &options[2].spritesheet, &texProgram);
+	options[2].sprite->setPosition(glm::vec2(104.0, 192.0));
 	options[2].sprite->setColor(glm::vec3(1.0f, 1.0f, 1.0f));
 }
 
@@ -84,11 +84,11 @@ void Menu::render() {
 
 	for (int i = 0; i < 3; i++) {
 		if (option != i) {
-			options[i].sprite->resize(1.25f);
+			options[i].sprite->resize(1.f);
 			options[i].sprite->setColor(glm::vec3(0.4f, 0.0f, 0.1f));
 		}
 		else {
-			options[i].sprite->resize(1.5f);
+			options[i].sprite->resize(1.f);
 			options[i].sprite->setColor(glm::vec3(0.4f, 0.7f, 0.1f));
 		}
 	}
