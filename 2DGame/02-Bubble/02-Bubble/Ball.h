@@ -20,7 +20,9 @@ public:
 
 	void setTileMap(TileMap* tileMap);
 	void setPosition(const glm::vec2& pos);
-	bool collisionPlayer(glm::vec2& posPlayer);
+	bool collisionPlayerUp(glm::vec2& posPlayer);
+	bool collisionPlayerRight(glm::vec2& posPlayer);
+	bool collisionPlayerLeft(glm::vec2& posPlayer);
 	void setStuck(bool s);
 
 	bool getStuck();

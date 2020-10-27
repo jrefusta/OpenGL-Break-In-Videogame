@@ -54,11 +54,7 @@ void Level::update(int deltaTime)
 	ball->update(deltaTime, player->getPosition());
 
 	if (ball->getStuck()) {
-<<<<<<< HEAD
-		ball->setPosition(glm::vec2(INIT_BALL_X, INIT_BALL_Y));
-=======
 		ball->setPosition(player->getPosition() + glm::vec2(5, -9));
->>>>>>> e1fe8170a56e774bc14a906e22ec52553037085f
 	}
 
 	if (Game::instance().getKey('1'))
