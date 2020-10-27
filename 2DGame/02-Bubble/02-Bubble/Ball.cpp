@@ -30,7 +30,7 @@ void Ball::update(int deltaTime, glm::vec2 posPlayer)
 		ballVelY = -abs(ballVelY);
 	}
 
-	if (collisionPlayer(posPlayer) && ballVelY > 0 ) {
+	if (collisionPlayerUp(posPlayer) && ballVelY > 0 ) {
 		posBall.y -= ballVelY;
 		ballVelY = -abs(ballVelY);
 	}
@@ -47,13 +47,21 @@ void Ball::update(int deltaTime, glm::vec2 posPlayer)
 		ballVelX = abs(ballVelX);
 		//ballVelY = -abs(ballVelY);
 	}
+	if (collisionPlayerRight(posPlayer) && ballVelX > 0) {
+		posBall.x -= ballVelX;
+		ballVelX = -abs(ballVelX);
+	}
+	else if (collisionPlayerLeft(posPlayer) && ballVelX < 0) {
+		posBall.x -= ballVelX;
+		ballVelX = abs(ballVelX);
+	}
 
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBall.x), float(tileMapDispl.y + posBall.y)));
 }
 
 
-bool Ball::collisionPlayer(glm::vec2& posPlayer) {
-	int x0 = posPlayer.x -10;
+bool Ball::collisionPlayerUp(glm::vec2& posPlayer) {
+	int x0 = posPlayer.x - 10;
 	int x1 = posPlayer.x + 16;
 	int y = posPlayer.y - 8;
 	for (int i = x0; i <= x1; ++i) {
@@ -61,6 +69,33 @@ bool Ball::collisionPlayer(glm::vec2& posPlayer) {
 		pos.x = i;
 		pos.y = y;
 		if (this->posBall.x == pos.x && this->posBall.y == pos.y) return true;
+	}
+	return false;
+}
+bool Ball::collisionPlayerRight(glm::vec2& posPlayer) {
+	int y0 = posPlayer.y - 8;
+	int y1 = posPlayer.y + 4;
+	int x = posPlayer.x - 8;
+	for (int i = y0; i <= y1; ++i) {
+		glm::vec2 pos;
+		pos.y = i;
+		pos.x = x;
+		if (this->posBall.x == pos.x && this->posBall.y == pos.y) return true;
+	}
+	return false;
+}
+bool Ball::collisionPlayerLeft(glm::vec2& posPlayer) {
+	int y0 = posPlayer.y - 8;
+	int y1 = posPlayer.y + 4;
+	int x = posPlayer.x + 16;
+	for (int i = y0; i <= y1; ++i) {
+		glm::vec2 pos;
+		pos.y = i;
+		pos.x = x;
+		if (this->posBall.x == pos.x && this->posBall.y == pos.y) {
+			return true;
+
+		}
 	}
 	return false;
 }
