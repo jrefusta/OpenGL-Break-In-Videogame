@@ -27,15 +27,20 @@ public:
 	void free();
 	
 	int getTileSize() const { return tileSize; }
+	bool collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, const glm::vec2& minCoords, ShaderProgram& program, int currentRoom);
+	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, const glm::vec2& minCoords, ShaderProgram& program, int currentRoom);
+	bool collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, const glm::vec2& minCoords, ShaderProgram& program, int currentRoom);
+	bool collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, const glm::vec2& minCoords, ShaderProgram& program, int currentRoom);
+	pair<int, int> calculateNewTiles(int x, int y);
+	bool isLeftSideBlock(int pos);
+	bool isRightSideBlock(int pos);
+	bool isKey(int pos);
 
-	bool collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const;
-	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) const;
-	bool collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size) const;
-	bool collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size) const;
 	
 private:
 	bool loadLevel(const string &levelFile);
-	void prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program);
+	void prepareArrays(const glm::vec2& minCoords, ShaderProgram& program);
+	void printTile(const glm::vec2& minCoords, ShaderProgram& program, int pos, int newTile);
 
 private:
 	GLuint vao;

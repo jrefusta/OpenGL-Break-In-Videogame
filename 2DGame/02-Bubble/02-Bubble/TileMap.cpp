@@ -5,6 +5,7 @@
 #include "TileMap.h"
 #include "Game.h"
 
+#include <utility>
 
 using namespace std;
 
@@ -147,11 +148,100 @@ void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
 	texCoordLocation = program.bindVertexAttribute("texCoord", 2, 4*sizeof(float), (void *)(2*sizeof(float)));
 }
 
+void TileMap::printTile(const glm::vec2& minCoords, ShaderProgram& program, int pos, int newTile) {
+	int tile, nTiles = 2;
+	glm::vec2 posTile, texCoordTile[2], halfTexel;
+	vector<float> vertices;
+
+	halfTexel = glm::vec2(0.5f / tilesheet.width(), 0.5f / tilesheet.height());
+	for (int j = 0; j < mapSize.y; j++)
+	{
+		for (int i = 0; i < mapSize.x; i++)
+		{
+			if (pos == (j * mapSize.x + i)) {
+				tile = newTile;
+				map[pos] = newTile;
+			}
+			else tile = map[j * mapSize.x + i];
+			if (tile != 0)
+			{
+				// Non-empty tile
+				nTiles++;
+				posTile = glm::vec2(minCoords.x + i * tileSize, minCoords.y + j * tileSize);
+				texCoordTile[0] = glm::vec2(float((tile - 1) % tilesheetSize.x) / tilesheetSize.x, float((tile - 1) / tilesheetSize.x) / tilesheetSize.y);
+				texCoordTile[1] = texCoordTile[0] + tileTexSize;
+				//texCoordTile[0] += halfTexel;
+				texCoordTile[1] -= halfTexel;
+				// First triangle
+				vertices.push_back(posTile.x); vertices.push_back(posTile.y);
+				vertices.push_back(texCoordTile[0].x); vertices.push_back(texCoordTile[0].y);
+				vertices.push_back(posTile.x + blockSize); vertices.push_back(posTile.y);
+				vertices.push_back(texCoordTile[1].x); vertices.push_back(texCoordTile[0].y);
+				vertices.push_back(posTile.x + blockSize); vertices.push_back(posTile.y + blockSize);
+				vertices.push_back(texCoordTile[1].x); vertices.push_back(texCoordTile[1].y);
+				// Second triangle
+				vertices.push_back(posTile.x); vertices.push_back(posTile.y);
+				vertices.push_back(texCoordTile[0].x); vertices.push_back(texCoordTile[0].y);
+				vertices.push_back(posTile.x + blockSize); vertices.push_back(posTile.y + blockSize);
+				vertices.push_back(texCoordTile[1].x); vertices.push_back(texCoordTile[1].y);
+				vertices.push_back(posTile.x); vertices.push_back(posTile.y + blockSize);
+				vertices.push_back(texCoordTile[0].x); vertices.push_back(texCoordTile[1].y);
+			}
+		}
+	}
+
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+	glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, 24 * nTiles * sizeof(float), &vertices[0], GL_STATIC_DRAW);
+	posLocation = program.bindVertexAttribute("position", 2, 4 * sizeof(float), 0);
+	texCoordLocation = program.bindVertexAttribute("texCoord", 2, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+}
+
 // Collision tests for axis aligned bounding boxes.
 // Method collisionMoveDown also corrects Y coordinate if the box is
 // already intersecting a tile below.
 
-bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const
+
+pair<int, int> TileMap::calculateNewTiles(int x, int y) {
+	pair<int,int> newTile;
+	if (x % 2 == 0) {
+		if (y % 2 == 0) {
+			newTile.first = 25;
+			newTile.second = 26;
+		}
+		else {
+			newTile.first = 26;
+			newTile.second = 25;
+		}
+	}
+	else {
+		if (y % 2 == 0) {
+			newTile.first = 37;
+			newTile.second = 38;
+		}
+		else {
+			newTile.first = 38;
+			newTile.second = 37;
+		}
+	}
+	return newTile;
+}
+
+bool TileMap::isRightSideBlock(int pos) {
+	return map[pos] == 2 || map[pos] == 4 || map[pos] == 6 || map[pos] == 8 || map[pos] == 10 || map[pos] == 12;
+}
+bool TileMap::isLeftSideBlock(int pos) {
+	return map[pos] == 1 || map[pos] == 3 || map[pos] == 5 || map[pos] == 7 || map[pos] == 9 || map[pos] == 11;
+}
+
+bool TileMap::isKey(int pos) {
+	return map[pos] == 31 || map[pos] == 32 || map[pos] == 43 || map[pos] == 44;
+}
+
+
+bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, const glm::vec2& minCoords, ShaderProgram& program, int currentRoom) 
 {
 	int x, y0, y1;
 	x = pos.x / tileSize;
@@ -159,15 +249,91 @@ bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) c
 	y1 = (pos.y + size.y - 1) / tileSize;
 	for(int y=y0; y<=y1; y++)
 	{	
-		if (map[y * mapSize.x + x] == 13) {
+		int pos = y * mapSize.x + x;
+		if (map[pos] == 13) return true;
+		else if (isLeftSideBlock(pos) || isRightSideBlock(pos)) {
+			pair<int,int> newTile = calculateNewTiles(x,y);
+			if (isRightSideBlock(pos)) {
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+			}
+			if (isLeftSideBlock(pos)) {
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+			}
+			return true;
+		}
+		else if (isKey(pos)) {
+			if (map[pos] == 44) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+				int pos2 = (y - 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 - 1, newTile2.second);
+				map[pos2 - 1] = newTile2.second;
+			}
+			if (map[pos] == 32) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+				int pos2 = (y + 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 - 1, newTile2.second);
+				map[pos2 - 1] = newTile2.second;
+			}
+			if (map[pos] == 43) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+				int pos2 = (y - 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 + 1, newTile2.second);
+				map[pos2 + 1] = newTile2.second;
+			}
+			if (map[pos] == 31) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+				int pos2 = (y + 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 + 1, newTile2.second);
+				map[pos2 + 1] = newTile2.second;
+			}
+			for (int i = 8; i <= 15; ++i) {
+				int pos = (97 - currentRoom * 25) * mapSize.x + i;
+				int tile;
+				if (i % 2 == 0) tile = 19;
+				else tile = 20;
+				printTile(minCoords, program, pos, tile);
+			}
 			return true;
 		}
 	}
-	
 	return false;
 }
 
-bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) const
+bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, const glm::vec2& minCoords, ShaderProgram& program, int currentRoom) 
 {
 	int x, y0, y1;
 	
@@ -176,14 +342,91 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) 
 	y1 = (pos.y + size.y - 1) / tileSize;
 	for(int y=y0; y<=y1; y++)
 	{
-		if(map[y*mapSize.x+x] == 13)
+		int pos = y * mapSize.x + x;
+		if (map[pos] == 13) return true;
+		else if (isLeftSideBlock(pos) || isRightSideBlock(pos)) {
+			pair<int, int> newTile = calculateNewTiles(x, y);
+			if (isRightSideBlock(pos)) {
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+			}
+			if (isLeftSideBlock(pos)) {
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+			}
 			return true;
+		}
+		else if (isKey(pos)) {
+			if (map[pos] == 44) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+				int pos2 = (y - 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 - 1, newTile2.second);
+				map[pos2 - 1] = newTile2.second;
+			}
+			if (map[pos] == 32) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+				int pos2 = (y + 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 - 1, newTile2.second);
+				map[pos2 - 1] = newTile2.second;
+			}
+			if (map[pos] == 43) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+				int pos2 = (y - 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 + 1, newTile2.second);
+				map[pos2 + 1] = newTile2.second;
+			}
+			if (map[pos] == 31) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+				int pos2 = (y + 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 + 1, newTile2.second);
+				map[pos2 + 1] = newTile2.second;
+			}
+			for (int i = 8; i <= 15; ++i) {
+				int pos = (97 - currentRoom * 25) * mapSize.x + i;
+				int tile;
+				if (i % 2 == 0) tile = 19;
+				else tile = 20;
+				printTile(minCoords, program, pos, tile);
+			}
+			return true;
+		}
 	}
-	
 	return false;
 }
 
-bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size) const
+bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, const glm::vec2& minCoords, ShaderProgram& program, int currentRoom)
 {
 	int x0, x1, y;
 
@@ -192,20 +435,91 @@ bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size) c
 	y = (pos.y +size.y - 1) / tileSize;
 	for (int x = x0; x <= x1; x++)
 	{
-		if (map[y * mapSize.x + x] == 13)
-		{
+		int pos = y * mapSize.x + x;
+		if (map[pos] == 13) return true;
+		else if (isLeftSideBlock(pos) || isRightSideBlock(pos)) {
+			pair<int, int> newTile = calculateNewTiles(x, y);
+			if (isRightSideBlock(pos)) {
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+			}
+			if (isLeftSideBlock(pos)) {
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+			}
 			return true;
-			/*if (*posY - tileSize * y + size.y <= 8)
-			{
-				*posY = tileSize * y - size.y;
-				return true;
-			}*/
+		}
+		else if (isKey(pos)) {
+			if (map[pos] == 44) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+				int pos2 = (y - 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 - 1, newTile2.second);
+				map[pos2 - 1] = newTile2.second;
+			}
+			if (map[pos] == 32) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+				int pos2 = (y + 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 - 1, newTile2.second);
+				map[pos2 - 1] = newTile2.second;
+			}
+			if (map[pos] == 43) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+				int pos2 = (y - 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 + 1, newTile2.second);
+				map[pos2 + 1] = newTile2.second;
+			}
+			if (map[pos] == 31) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+				int pos2 = (y + 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 + 1, newTile2.second);
+				map[pos2 + 1] = newTile2.second;
+			}
+			for (int i = 8; i <= 15; ++i) {
+				int pos = (97 - currentRoom * 25) * mapSize.x + i;
+				int tile;
+				if (i % 2 == 0) tile = 19;
+				else tile = 20;
+				printTile(minCoords, program, pos, tile);
+			}
+			return true;
 		}
 	}
 
 	return false;
 }
-bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size) const
+bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, const glm::vec2& minCoords, ShaderProgram& program, int currentRoom)
 {
 	int x0, x1, y;
 
@@ -214,14 +528,85 @@ bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size) con
 	y = pos.y / tileSize;
 	for (int x = x0; x <= x1; x++)
 	{
-		if (map[y * mapSize.x + x] == 13)
-		{
+		int pos = y * mapSize.x + x;
+		if (map[pos] == 13) return true;
+		else if (isLeftSideBlock(pos) || isRightSideBlock(pos)) {
+			pair<int, int> newTile = calculateNewTiles(x, y);
+			if (isRightSideBlock(pos)) {
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+			}
+			if (isLeftSideBlock(pos)) {
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+			}
 			return true;
-			/*if (*posY - tileSize * y + size.y <= 4)
-			{
-				//*posY = tileSize * y - size.y;
-				return true;
-			}*/
+		}
+		else if (isKey(pos)) {
+			if (map[pos] == 44) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+				int pos2 = (y - 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 - 1, newTile2.second);
+				map[pos2 - 1] = newTile2.second;
+			}
+			if (map[pos] == 32) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+				int pos2 = (y + 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 - 1, newTile2.second);
+				map[pos2 - 1] = newTile2.second;
+			}
+			if (map[pos] == 43) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+				int pos2 = (y - 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 + 1, newTile2.second);
+				map[pos2 + 1] = newTile2.second;
+			}
+			if (map[pos] == 31) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+				int pos2 = (y + 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 + 1, newTile2.second);
+				map[pos2 + 1] = newTile2.second;
+			}
+			for (int i = 8; i <= 15; ++i) {
+				int pos = (97-currentRoom*25) * mapSize.x + i;
+				int tile;
+				if (i % 2 == 0) tile = 19;
+				else tile = 20;
+				printTile(minCoords, program, pos, tile);
+			}
+			return true;
 		}
 	}
 

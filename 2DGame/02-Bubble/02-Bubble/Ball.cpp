@@ -11,21 +11,22 @@ void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	spritesheet.loadFromFile("images/ball.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(9, 10), glm::vec2(1.0, 1.0), &spritesheet, &shaderProgram);
 	tileMapDispl = tileMapPos;
+	this->shaderProgram = shaderProgram;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBall.x), float(tileMapDispl.y + posBall.y)));
 	ballVelX = -1;
 	ballVelY = 1;
 }
 
-void Ball::update(int deltaTime, glm::vec2 posPlayer)
+void Ball::update(int deltaTime, glm::vec2 posPlayer, int currentRoom)
 {
 	sprite->update(deltaTime);
 
 	posBall.y += ballVelY;
-	if (map->collisionMoveUp(posBall, glm::ivec2(12, 12))) {
+	if (map->collisionMoveUp(posBall, glm::ivec2(12, 12), tileMapDispl, shaderProgram, currentRoom)) {
 		posBall.y -= ballVelY;
 		ballVelY = abs(ballVelY);
 	}
-	else if (map->collisionMoveDown(posBall, glm::ivec2(12, 12))) {
+	else if (map->collisionMoveDown(posBall, glm::ivec2(12, 12), tileMapDispl, shaderProgram, currentRoom)) {
 		posBall.y -= ballVelY;
 		ballVelY = -abs(ballVelY);
 	}
@@ -36,16 +37,14 @@ void Ball::update(int deltaTime, glm::vec2 posPlayer)
 	}
 
 	posBall.x += ballVelX;
-	if (map->collisionMoveRight(posBall, glm::ivec2(12, 12))) {
+	if (map->collisionMoveRight(posBall, glm::ivec2(12, 12), tileMapDispl, shaderProgram, currentRoom)) {
 		posBall.x -= ballVelX;
 		ballVelX = -abs(ballVelX);
-		//ballVelY = -abs(ballVelY);
 
 	}
-	else if (map->collisionMoveLeft(posBall, glm::ivec2(12, 12))) {
+	else if (map->collisionMoveLeft(posBall, glm::ivec2(12, 12), tileMapDispl, shaderProgram, currentRoom)) {
 		posBall.x -= ballVelX;
 		ballVelX = abs(ballVelX);
-		//ballVelY = -abs(ballVelY);
 	}
 	if (collisionPlayerRight(posPlayer) && ballVelX > 0) {
 		posBall.x -= ballVelX;

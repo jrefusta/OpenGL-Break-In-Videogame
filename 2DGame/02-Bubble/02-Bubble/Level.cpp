@@ -51,7 +51,7 @@ void Level::update(int deltaTime)
 {
 	currentTime += deltaTime;
 	player->update(deltaTime, currentRoom);
-	ball->update(deltaTime, player->getPosition());
+	ball->update(deltaTime, player->getPosition(), currentRoom);
 
 	if (ball->getStuck()) {
 		ball->setPosition(player->getPosition() + glm::vec2(5, -9));

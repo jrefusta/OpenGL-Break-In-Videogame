@@ -15,7 +15,7 @@ class Ball
 
 public:
 	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
-	void update(int deltaTime, glm::vec2 posPlayer);
+	void update(int deltaTime, glm::vec2 posPlayer, int currentRoom);
 	void render();
 
 	void setTileMap(TileMap* tileMap);
@@ -37,6 +37,7 @@ private:
 	Texture spritesheet;
 	Sprite* sprite;
 	TileMap* map;
+	ShaderProgram shaderProgram;
 
 };
 
