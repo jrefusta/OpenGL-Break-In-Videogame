@@ -321,7 +321,7 @@ bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, c
 				map[pos2 + 1] = newTile2.second;
 			}
 			for (int i = 8; i <= 15; ++i) {
-				int pos = (97 - currentRoom * 25) * mapSize.x + i;
+				int pos = (96 - currentRoom * 24) * mapSize.x + i;
 				int tile;
 				if (i % 2 == 0) tile = 19;
 				else tile = 20;
@@ -414,7 +414,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, 
 				map[pos2 + 1] = newTile2.second;
 			}
 			for (int i = 8; i <= 15; ++i) {
-				int pos = (97 - currentRoom * 25) * mapSize.x + i;
+				int pos = (96 - currentRoom * 24) * mapSize.x + i;
 				int tile;
 				if (i % 2 == 0) tile = 19;
 				else tile = 20;
@@ -507,7 +507,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, c
 				map[pos2 + 1] = newTile2.second;
 			}
 			for (int i = 8; i <= 15; ++i) {
-				int pos = (97 - currentRoom * 25) * mapSize.x + i;
+				int pos = (96 - currentRoom * 24) * mapSize.x + i;
 				int tile;
 				if (i % 2 == 0) tile = 19;
 				else tile = 20;
@@ -600,7 +600,7 @@ bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, con
 				map[pos2 + 1] = newTile2.second;
 			}
 			for (int i = 8; i <= 15; ++i) {
-				int pos = (97-currentRoom*25) * mapSize.x + i;
+				int pos = (96-currentRoom*24) * mapSize.x + i;
 				int tile;
 				if (i % 2 == 0) tile = 19;
 				else tile = 20;
