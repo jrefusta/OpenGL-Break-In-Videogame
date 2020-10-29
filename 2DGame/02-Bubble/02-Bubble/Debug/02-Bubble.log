@@ -1,4 +1,90 @@
-﻿  TileMap.cpp
+﻿  Ball.cpp
+D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\02-Bubble\Ball.cpp(89,9): warning C4244: 'inicializando': conversión de 'T' a 'int'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\02-Bubble\Ball.cpp(90,9): warning C4244: 'inicializando': conversión de 'T' a 'int'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\02-Bubble\Ball.cpp(91,8): warning C4244: 'inicializando': conversión de 'T' a 'int'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\02-Bubble\Ball.cpp(94,11): warning C4244: '=': conversión de 'int' a 'T'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\02-Bubble\Ball.cpp(95,11): warning C4244: '=': conversión de 'int' a 'T'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\02-Bubble\Ball.cpp(101,9): warning C4244: 'inicializando': conversión de 'T' a 'int'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\02-Bubble\Ball.cpp(102,9): warning C4244: 'inicializando': conversión de 'T' a 'int'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\02-Bubble\Ball.cpp(103,8): warning C4244: 'inicializando': conversión de 'T' a 'int'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\02-Bubble\Ball.cpp(106,11): warning C4244: '=': conversión de 'int' a 'T'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\02-Bubble\Ball.cpp(107,11): warning C4244: '=': conversión de 'int' a 'T'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\02-Bubble\Ball.cpp(113,9): warning C4244: 'inicializando': conversión de 'T' a 'int'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\02-Bubble\Ball.cpp(114,9): warning C4244: 'inicializando': conversión de 'T' a 'int'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\02-Bubble\Ball.cpp(115,8): warning C4244: 'inicializando': conversión de 'T' a 'int'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\02-Bubble\Ball.cpp(118,11): warning C4244: '=': conversión de 'int' a 'T'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\02-Bubble\Ball.cpp(119,11): warning C4244: '=': conversión de 'int' a 'T'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+  Credits.cpp
+  Game.cpp
+  Help.cpp
+  Level.cpp
+D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\02-Bubble\Level.cpp(89,30): warning C4129: ' ': secuencia de escape de carácter no reconocida
+  Menu.cpp
+  Play.cpp
+  Player.cpp
+  TileMap.cpp
+  main.cpp
+  Generando código...
 SOIL.lib(image_DXT.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(image_DXT.obj)' o en 'D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
 SOIL.lib(image_helper.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(image_helper.obj)' o en 'D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
 SOIL.lib(SOIL.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(SOIL.obj)' o en 'D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración

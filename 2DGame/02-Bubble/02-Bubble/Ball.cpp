@@ -15,6 +15,8 @@ void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBall.x), float(tileMapDispl.y + posBall.y)));
 	ballVelX = -1;
 	ballVelY = 1;
+	this->currentRoom = 1;
+	this->crossingRoom = 0;
 }
 
 void Ball::update(int deltaTime, glm::vec2 posPlayer, int currentRoom)
@@ -31,7 +33,7 @@ void Ball::update(int deltaTime, glm::vec2 posPlayer, int currentRoom)
 		ballVelY = -abs(ballVelY);
 	}
 
-	if (collisionPlayerUp(posPlayer) && ballVelY > 0 ) {
+	if (collisionPlayerUp(posPlayer) && ballVelY > 0) {
 		posBall.y -= ballVelY;
 		ballVelY = -abs(ballVelY);
 	}
@@ -54,8 +56,32 @@ void Ball::update(int deltaTime, glm::vec2 posPlayer, int currentRoom)
 		posBall.x -= ballVelX;
 		ballVelX = abs(ballVelX);
 	}
-
+	//this->currentRoom = map->ballNextRoom(posBall, glm::ivec2(12, 12), this->currentRoom);
+	Game::instance().runConsole();
+	if (posBall.y != 0 && posBall.x != 0) {
+		if (posBall.y > 768.0 - (24 * 8 * (this->currentRoom - 1))) {
+			this->currentRoom -= 1;
+			crossingRoom = -1;
+		}
+		else if (posBall.y < 768.0 - (24 * 8 * (this->currentRoom))) {
+			this->currentRoom += 1;
+			crossingRoom = 1;
+		}
+		
+	}
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBall.x), float(tileMapDispl.y + posBall.y)));
+}
+
+int Ball::getCurrentRoom() {
+	return this->currentRoom;
+}
+
+int Ball::getCrossingRoom() {
+	return this->crossingRoom;
+}
+
+void Ball::setCrossingRoom(int c) {
+	this->crossingRoom = c;
 }
 
 
@@ -122,7 +148,3 @@ void Ball::setPosition(const glm::vec2& pos)
 	posBall = pos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBall.x), float(tileMapDispl.y + posBall.y)));
 }
-
-
-
-

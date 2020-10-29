@@ -34,7 +34,6 @@ private:
 	Player* player;
 	Ball* ball;
 	ShaderProgram texProgram;
-	float currentTime;
 	int currentRoom;
 	glm::mat4 projection;
 

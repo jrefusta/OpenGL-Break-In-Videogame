@@ -24,14 +24,19 @@ public:
 	bool collisionPlayerRight(glm::vec2& posPlayer);
 	bool collisionPlayerLeft(glm::vec2& posPlayer);
 	void setStuck(bool s);
+	void setCrossingRoom(int c);
 
 	bool getStuck();
+	int getCrossingRoom();
+	int getCurrentRoom();
 
 private:
 	int ballVelX;
 	int ballVelY;
-
+	int currentRoom;
 	bool stuck;
+	float currentTime;
+	int crossingRoom;
 	glm::ivec2 tileMapDispl, posBall;
 	int jumpAngle, startY;
 	Texture spritesheet;

@@ -3,7 +3,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "Scene.h"
 #include "Game.h"
-
+#include <string>
+using namespace std;
 
 #define SCREEN_X 8
 #define SCREEN_Y 24
@@ -50,31 +51,39 @@ void Level::init()
 void Level::update(int deltaTime)
 {
 	currentTime += deltaTime;
+	currentTurnTime += deltaTime;
 	player->update(deltaTime, currentRoom);
 	ball->update(deltaTime, player->getPosition(), currentRoom);
+	this->currentRoom = ball->getCurrentRoom();
 
 	if (ball->getStuck()) {
 		ball->setPosition(player->getPosition() + glm::vec2(5, -9));
 	}
 
-	if (Game::instance().getKey('1'))
+	if (ball->getCrossingRoom() == 1) {
+		player->setPosition(player->getPosition() + glm::vec2(0, -192));
+		ball->setCrossingRoom(0);
+	}
+	if (ball->getCrossingRoom() == -1) {
+		player->setPosition(player->getPosition() + glm::vec2(0, 192));
+		ball->setCrossingRoom(0);
+	}
+	
+	if (this->currentRoom == 1)
 	{
-		currentRoom = 1;
 		projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
 	}
-	if (Game::instance().getKey('2'))
+	if (this->currentRoom == 2)
 	{
-		currentRoom = 2;
+		
 		projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
 	}
-	if (Game::instance().getKey('3'))
+	if (this->currentRoom == 3)
 	{
-		currentRoom = 3;
 		projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
 	}
-	if (Game::instance().getKey('4'))
+	if (this->currentRoom == 4)
 	{
-		currentRoom = 4;
 		projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
 	}
 	if (Game::instance().getKey('\ '))
