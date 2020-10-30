@@ -30,13 +30,13 @@ private:
 	void initShaders();
 
 private:
-	TileMap *map;
+	TileMap* map;
 	Player* player;
 	Ball* ball;
 	ShaderProgram texProgram;
 	int currentRoom;
 	glm::mat4 projection;
-
+	int livesNum;
 };
 
 

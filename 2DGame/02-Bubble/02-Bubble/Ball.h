@@ -29,6 +29,7 @@ public:
 	bool getStuck();
 	int getCrossingRoom();
 	int getCurrentRoom();
+	void setCurrentRoom(int c);
 
 private:
 	int ballVelX;

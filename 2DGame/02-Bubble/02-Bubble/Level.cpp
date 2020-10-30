@@ -22,9 +22,9 @@ Level::Level()
 
 Level::~Level()
 {
-	if(map != NULL)
+	if (map != NULL)
 		delete map;
-	if(player != NULL)
+	if (player != NULL)
 		delete player;
 	if (ball != NULL)
 		delete ball;
@@ -45,7 +45,8 @@ void Level::init()
 	ball->setStuck(true);
 	currentTime = 0.0f;
 	currentRoom = 1;
-	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
+	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f * float(4 - currentRoom), 192.f * float(4 - currentRoom));
+	livesNum = 4;
 }
 
 void Level::update(int deltaTime)
@@ -55,9 +56,11 @@ void Level::update(int deltaTime)
 	player->update(deltaTime, currentRoom);
 	ball->update(deltaTime, player->getPosition(), currentRoom);
 	this->currentRoom = ball->getCurrentRoom();
+	//livesText.render("Videogames!!!", glm::vec2(10, 450 - 20), 32, glm::vec4(1, 1, 1, 1));
+	//livesText.render("Videogames!!!", glm::vec2(10, 450 - 20), 32, glm::vec4(1, 1, 1, 1));
 
 	if (ball->getStuck()) {
-		ball->setPosition(player->getPosition() + glm::vec2(5, -9));
+		ball->setPosition(player->getPosition() + glm::vec2(5.f, -9.f));
 	}
 
 	if (ball->getCrossingRoom() == 1) {
@@ -65,29 +68,35 @@ void Level::update(int deltaTime)
 		ball->setCrossingRoom(0);
 	}
 	if (ball->getCrossingRoom() == -1) {
-		player->setPosition(player->getPosition() + glm::vec2(0, 192));
+		if (this->currentRoom != 0) {
+			player->setPosition(player->getPosition() + glm::vec2(0, 192));
+		}
 		ball->setCrossingRoom(0);
 	}
-	
+	if (this->currentRoom == 0)
+	{
+		ball->setCurrentRoom(1);
+		ball->setStuck(true);
+		--livesNum;
+	}
 	if (this->currentRoom == 1)
 	{
-		projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
+		projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f * float(4 - currentRoom), 192.f * float(4 - currentRoom));
 	}
 	if (this->currentRoom == 2)
 	{
-		
-		projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
+		projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f * float(4 - currentRoom), 192.f * float(4 - currentRoom));
 	}
 	if (this->currentRoom == 3)
 	{
-		projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
+		projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f * float(4 - currentRoom), 192.f * float(4 - currentRoom));
 	}
 	if (this->currentRoom == 4)
 	{
-		projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
+		projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f * float(4 - currentRoom), 192.f * float(4 - currentRoom));
 	}
 	if (Game::instance().getKey('\ '))
-	{	
+	{
 		ball->setStuck(false);
 	}
 }
@@ -112,13 +121,13 @@ void Level::initShaders()
 	Shader vShader, fShader;
 
 	vShader.initFromFile(VERTEX_SHADER, "shaders/texture.vert");
-	if(!vShader.isCompiled())
+	if (!vShader.isCompiled())
 	{
 		cout << "Vertex Shader Error" << endl;
 		cout << "" << vShader.log() << endl << endl;
 	}
 	fShader.initFromFile(FRAGMENT_SHADER, "shaders/texture.frag");
-	if(!fShader.isCompiled())
+	if (!fShader.isCompiled())
 	{
 		cout << "Fragment Shader Error" << endl;
 		cout << "" << fShader.log() << endl << endl;
@@ -127,7 +136,7 @@ void Level::initShaders()
 	texProgram.addShader(vShader);
 	texProgram.addShader(fShader);
 	texProgram.link();
-	if(!texProgram.isLinked())
+	if (!texProgram.isLinked())
 	{
 		cout << "Shader Linking Error" << endl;
 		cout << "" << texProgram.log() << endl << endl;
