@@ -73,11 +73,19 @@ void Level::update(int deltaTime)
 		}
 		ball->setCrossingRoom(0);
 	}
+	if (this->livesNum == -1) {
+		Game::instance().runConsole();
+		cout << "GAME OVER" << endl;
+	}
 	if (this->currentRoom == 0)
 	{
-		ball->setCurrentRoom(1);
 		ball->setStuck(true);
+		player->setPosition(glm::vec2(INIT_PLAYER_X, INIT_PLAYER_Y));
+		ball->setPosition(player->getPosition() + glm::vec2(5.f, -9.f));
+		ball->setCurrentRoom(1);
+		this->currentRoom = ball->getCurrentRoom();
 		--livesNum;
+		Sleep(1500);
 	}
 	if (this->currentRoom == 1)
 	{
@@ -95,7 +103,7 @@ void Level::update(int deltaTime)
 	{
 		projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f * float(4 - currentRoom), 192.f * float(4 - currentRoom));
 	}
-	if (Game::instance().getKey('\ '))
+	if (Game::instance().getKey('\ ') || Game::instance().getSpecialKey(GLUT_KEY_UP))
 	{
 		ball->setStuck(false);
 	}

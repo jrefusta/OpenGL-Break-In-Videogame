@@ -99,4 +99,3 @@ images/blocks.png 	-- Tilesheet
 =VUVUVUVUIUVUVUVUVUVUVU=
 =JIJIJIJIJIJIJIJIJIJIJI=
 ========UVUVUVUV========
-

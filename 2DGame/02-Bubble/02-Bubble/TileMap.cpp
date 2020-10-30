@@ -776,7 +776,9 @@ bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, c
 	for (int x = x0; x <= x1; x++)
 	{
 		int pos = y * mapSize.x + x;
-		if (map[pos] == 13) return true;
+		if (map[pos] == 13) {
+			return true;
+		}
 		else if (isLeftSideBlock(pos) || isRightSideBlock(pos)) {
 			pair<int, int> newTile = calculateNewTiles(x, y);
 			if (isRightSideBlock(pos)) {
