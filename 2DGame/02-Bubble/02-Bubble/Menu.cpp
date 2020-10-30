@@ -83,13 +83,8 @@ void Menu::render() {
 	background->render();
 
 	for (int i = 0; i < 3; i++) {
-		if (option != i) {
-			options[i].sprite->resize(1.f);
-			options[i].sprite->setColor(glm::vec3(0.4f, 0.0f, 0.1f));
-		}
-		else {
-			options[i].sprite->resize(1.f);
-			options[i].sprite->setColor(glm::vec3(0.4f, 0.7f, 0.1f));
+		if (option != i || int(currentTime/500)%2 == 0) {
+			options[i].sprite->render();
 		}
 	}
 
