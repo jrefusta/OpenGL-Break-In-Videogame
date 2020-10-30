@@ -5,19 +5,20 @@
 #include "TileMap.h"
 #include "Game.h"
 
+#include <utility>
 
 using namespace std;
 
 
-TileMap *TileMap::createTileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program)
+TileMap* TileMap::createTileMap(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program)
 {
-	TileMap *map = new TileMap(levelFile, minCoords, program);
-	
+	TileMap* map = new TileMap(levelFile, minCoords, program);
+
 	return map;
 }
 
 
-TileMap::TileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program)
+TileMap::TileMap(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program)
 {
 	loadLevel(levelFile);
 	prepareArrays(minCoords, program);
@@ -25,7 +26,7 @@ TileMap::TileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProg
 
 TileMap::~TileMap()
 {
-	if(map != NULL)
+	if (map != NULL)
 		delete map;
 }
 
@@ -46,18 +47,18 @@ void TileMap::free()
 	glDeleteBuffers(1, &vbo);
 }
 
-bool TileMap::loadLevel(const string &levelFile)
+bool TileMap::loadLevel(const string& levelFile)
 {
 	ifstream fin;
 	string line, tilesheetFile;
 	stringstream sstream;
 	char tile;
-	
+
 	fin.open(levelFile.c_str());
-	if(!fin.is_open())
+	if (!fin.is_open())
 		return false;
 	getline(fin, line);
-	if(line.compare(0, 7, "TILEMAP") != 0)
+	if (line.compare(0, 7, "TILEMAP") != 0)
 		return false;
 	getline(fin, line);
 	sstream.str(line);
@@ -77,17 +78,17 @@ bool TileMap::loadLevel(const string &levelFile)
 	sstream.str(line);
 	sstream >> tilesheetSize.x >> tilesheetSize.y;
 	tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y);
-	
+
 	map = new int[mapSize.x * mapSize.y];
-	for(int j=0; j<mapSize.y; j++)
+	for (int j = 0; j < mapSize.y; j++)
 	{
-		for(int i=0; i<mapSize.x; i++)
+		for (int i = 0; i < mapSize.x; i++)
 		{
 			fin.get(tile);
-			if(tile == ' ')
-				map[j*mapSize.x+i] = 0;
+			if (tile == ' ')
+				map[j * mapSize.x + i] = 0;
 			else
-				map[j*mapSize.x+i] = tile - int('0');
+				map[j * mapSize.x + i] = tile - int('0');
 		}
 		fin.get(tile);
 #ifndef _WIN32
@@ -95,28 +96,28 @@ bool TileMap::loadLevel(const string &levelFile)
 #endif
 	}
 	fin.close();
-	
+
 	return true;
 }
 
-void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
+void TileMap::prepareArrays(const glm::vec2& minCoords, ShaderProgram& program)
 {
 	int tile, nTiles = 0;
 	glm::vec2 posTile, texCoordTile[2], halfTexel;
 	vector<float> vertices;
-	
+
 	halfTexel = glm::vec2(0.5f / tilesheet.width(), 0.5f / tilesheet.height());
-	for(int j=0; j<mapSize.y; j++)
+	for (int j = 0; j < mapSize.y; j++)
 	{
-		for(int i=0; i<mapSize.x; i++)
+		for (int i = 0; i < mapSize.x; i++)
 		{
 			tile = map[j * mapSize.x + i];
-			if(tile != 0)
+			if (tile != 0)
 			{
 				// Non-empty tile
 				nTiles++;
 				posTile = glm::vec2(minCoords.x + i * tileSize, minCoords.y + j * tileSize);
-				texCoordTile[0] = glm::vec2(float((tile-1)%tilesheetSize.x) / tilesheetSize.x, float((tile-1)/tilesheetSize.x) / tilesheetSize.y);
+				texCoordTile[0] = glm::vec2(float((tile - 1) % tilesheetSize.x) / tilesheetSize.x, float((tile - 1) / tilesheetSize.x) / tilesheetSize.y);
 				texCoordTile[1] = texCoordTile[0] + tileTexSize;
 				//texCoordTile[0] += halfTexel;
 				texCoordTile[1] -= halfTexel;
@@ -143,69 +144,886 @@ void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, 24 * nTiles * sizeof(float), &vertices[0], GL_STATIC_DRAW);
-	posLocation = program.bindVertexAttribute("position", 2, 4*sizeof(float), 0);
-	texCoordLocation = program.bindVertexAttribute("texCoord", 2, 4*sizeof(float), (void *)(2*sizeof(float)));
+	posLocation = program.bindVertexAttribute("position", 2, 4 * sizeof(float), 0);
+	texCoordLocation = program.bindVertexAttribute("texCoord", 2, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+}
+
+void TileMap::printTile(const glm::vec2& minCoords, ShaderProgram& program, int pos, int newTile) {
+	int tile, nTiles = 2;
+	glm::vec2 posTile, texCoordTile[2], halfTexel;
+	vector<float> vertices;
+
+	halfTexel = glm::vec2(0.5f / tilesheet.width(), 0.5f / tilesheet.height());
+	for (int j = 0; j < mapSize.y; j++)
+	{
+		for (int i = 0; i < mapSize.x; i++)
+		{
+			if (pos == (j * mapSize.x + i)) {
+				tile = newTile;
+				map[pos] = newTile;
+			}
+			else tile = map[j * mapSize.x + i];
+			if (tile != 0)
+			{
+				// Non-empty tile
+				nTiles++;
+				posTile = glm::vec2(minCoords.x + i * tileSize, minCoords.y + j * tileSize);
+				texCoordTile[0] = glm::vec2(float((tile - 1) % tilesheetSize.x) / tilesheetSize.x, float((tile - 1) / tilesheetSize.x) / tilesheetSize.y);
+				texCoordTile[1] = texCoordTile[0] + tileTexSize;
+				//texCoordTile[0] += halfTexel;
+				texCoordTile[1] -= halfTexel;
+				// First triangle
+				vertices.push_back(posTile.x); vertices.push_back(posTile.y);
+				vertices.push_back(texCoordTile[0].x); vertices.push_back(texCoordTile[0].y);
+				vertices.push_back(posTile.x + blockSize); vertices.push_back(posTile.y);
+				vertices.push_back(texCoordTile[1].x); vertices.push_back(texCoordTile[0].y);
+				vertices.push_back(posTile.x + blockSize); vertices.push_back(posTile.y + blockSize);
+				vertices.push_back(texCoordTile[1].x); vertices.push_back(texCoordTile[1].y);
+				// Second triangle
+				vertices.push_back(posTile.x); vertices.push_back(posTile.y);
+				vertices.push_back(texCoordTile[0].x); vertices.push_back(texCoordTile[0].y);
+				vertices.push_back(posTile.x + blockSize); vertices.push_back(posTile.y + blockSize);
+				vertices.push_back(texCoordTile[1].x); vertices.push_back(texCoordTile[1].y);
+				vertices.push_back(posTile.x); vertices.push_back(posTile.y + blockSize);
+				vertices.push_back(texCoordTile[0].x); vertices.push_back(texCoordTile[1].y);
+			}
+		}
+	}
+
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+	glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, 24 * nTiles * sizeof(float), &vertices[0], GL_STATIC_DRAW);
+	posLocation = program.bindVertexAttribute("position", 2, 4 * sizeof(float), 0);
+	texCoordLocation = program.bindVertexAttribute("texCoord", 2, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 }
 
 // Collision tests for axis aligned bounding boxes.
 // Method collisionMoveDown also corrects Y coordinate if the box is
 // already intersecting a tile below.
 
-bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const
+
+pair<int, int> TileMap::calculateNewTiles(int x, int y) {
+	pair<int, int> newTile;
+	if (x % 2 == 0) {
+		if (y % 2 == 0) {
+			newTile.first = 25;
+			newTile.second = 26;
+		}
+		else {
+			newTile.first = 26;
+			newTile.second = 25;
+		}
+	}
+	else {
+		if (y % 2 == 0) {
+			newTile.first = 37;
+			newTile.second = 38;
+		}
+		else {
+			newTile.first = 38;
+			newTile.second = 37;
+		}
+	}
+	return newTile;
+}
+
+bool TileMap::isRightSideBlock(int pos) {
+	return map[pos] == 2 || map[pos] == 4 || map[pos] == 6 || map[pos] == 8 || map[pos] == 10 || map[pos] == 12;
+}
+bool TileMap::isLeftSideBlock(int pos) {
+	return map[pos] == 1 || map[pos] == 3 || map[pos] == 5 || map[pos] == 7 || map[pos] == 9 || map[pos] == 11;
+}
+
+bool TileMap::isKey(int pos) {
+	return map[pos] == 31 || map[pos] == 32 || map[pos] == 43 || map[pos] == 44;
+}
+
+bool TileMap::isCoin(int pos) {//dan 100€
+	return map[pos] == 49 || map[pos] == 50 || map[pos] == 61 || map[pos] == 62;
+}
+bool TileMap::isBag(int pos) {//dan 200€
+	return map[pos] == 51 || map[pos] == 52 || map[pos] == 63 || map[pos] == 64;
+}
+bool TileMap::isPhone(int pos) {//dan 200€
+	return map[pos] == 57 || map[pos] == 58 || map[pos] == 69 || map[pos] == 70;
+}
+
+
+bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, const glm::vec2& minCoords, ShaderProgram& program, int currentRoom)
 {
 	int x, y0, y1;
 	x = pos.x / tileSize;
 	y0 = pos.y / tileSize;
 	y1 = (pos.y + size.y - 1) / tileSize;
-	for(int y=y0; y<=y1; y++)
-	{	
-		if (map[y * mapSize.x + x] == 13) {
+	for (int y = y0; y <= y1; y++)
+	{
+		int pos = y * mapSize.x + x;
+		if (map[pos] == 13) return true;
+		else if (isLeftSideBlock(pos) || isRightSideBlock(pos)) {
+			pair<int, int> newTile = calculateNewTiles(x, y);
+			if (isRightSideBlock(pos)) {
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+			}
+			if (isLeftSideBlock(pos)) {
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+			}
 			return true;
 		}
+		else if (isKey(pos)) {
+			if (map[pos] == 44) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+				int pos2 = (y - 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 - 1, newTile2.second);
+				map[pos2 - 1] = newTile2.second;
+			}
+			if (map[pos] == 32) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+				int pos2 = (y + 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 - 1, newTile2.second);
+				map[pos2 - 1] = newTile2.second;
+			}
+			if (map[pos] == 43) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+				int pos2 = (y - 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 + 1, newTile2.second);
+				map[pos2 + 1] = newTile2.second;
+			}
+			if (map[pos] == 31) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+				int pos2 = (y + 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 + 1, newTile2.second);
+				map[pos2 + 1] = newTile2.second;
+			}
+			for (int i = 8; i <= 15; ++i) {
+				int pos = (96 - currentRoom * 24) * mapSize.x + i;
+				int tile;
+				if (i % 2 == 0) tile = 19;
+				else tile = 20;
+				printTile(minCoords, program, pos, tile);
+			}
+			return true;
+		}
+		else if (isCoin(pos)) {
+			if (map[pos] == 62) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+				int pos2 = (y - 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 - 1, newTile2.second);
+				map[pos2 - 1] = newTile2.second;
+			}
+			if (map[pos] == 50) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+				int pos2 = (y + 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 - 1, newTile2.second);
+				map[pos2 - 1] = newTile2.second;
+			}
+			if (map[pos] == 61) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+				int pos2 = (y - 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 + 1, newTile2.second);
+				map[pos2 + 1] = newTile2.second;
+			}
+			if (map[pos] == 49) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+				int pos2 = (y + 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 + 1, newTile2.second);
+				map[pos2 + 1] = newTile2.second;
+			}
+			return true;
+		}
+		else if (isBag(pos)) {
+			if (map[pos] == 64) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+				int pos2 = (y - 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 - 1, newTile2.second);
+				map[pos2 - 1] = newTile2.second;
+			}
+			if (map[pos] == 52) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+				int pos2 = (y + 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 - 1, newTile2.second);
+				map[pos2 - 1] = newTile2.second;
+			}
+			if (map[pos] == 63) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+				int pos2 = (y - 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 + 1, newTile2.second);
+				map[pos2 + 1] = newTile2.second;
+			}
+			if (map[pos] == 51) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+				int pos2 = (y + 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 + 1, newTile2.second);
+				map[pos2 + 1] = newTile2.second;
+			}
+			return true;
+		}
+		else if (isPhone(pos)) {
+		if (map[pos] == 70) {
+			pair<int, int> newTile = calculateNewTiles(x, y);
+			printTile(minCoords, program, pos, newTile.first);
+			map[pos] = newTile.first;
+			printTile(minCoords, program, pos - 1, newTile.second);
+			map[pos - 1] = newTile.second;
+			int pos2 = (y - 1) * mapSize.x + x;
+			pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+			printTile(minCoords, program, pos2, newTile2.first);
+			map[pos2] = newTile2.first;
+			printTile(minCoords, program, pos2 - 1, newTile2.second);
+			map[pos2 - 1] = newTile2.second;
+		}
+		if (map[pos] == 58) {
+			pair<int, int> newTile = calculateNewTiles(x, y);
+			printTile(minCoords, program, pos, newTile.first);
+			map[pos] = newTile.first;
+			printTile(minCoords, program, pos - 1, newTile.second);
+			map[pos - 1] = newTile.second;
+			int pos2 = (y + 1) * mapSize.x + x;
+			pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+			printTile(minCoords, program, pos2, newTile2.first);
+			map[pos2] = newTile2.first;
+			printTile(minCoords, program, pos2 - 1, newTile2.second);
+			map[pos2 - 1] = newTile2.second;
+		}
+		if (map[pos] == 69) {
+			pair<int, int> newTile = calculateNewTiles(x, y);
+			printTile(minCoords, program, pos, newTile.first);
+			map[pos] = newTile.first;
+			printTile(minCoords, program, pos + 1, newTile.second);
+			map[pos + 1] = newTile.second;
+			int pos2 = (y - 1) * mapSize.x + x;
+			pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+			printTile(minCoords, program, pos2, newTile2.first);
+			map[pos2] = newTile2.first;
+			printTile(minCoords, program, pos2 + 1, newTile2.second);
+			map[pos2 + 1] = newTile2.second;
+		}
+		if (map[pos] == 57) {
+			pair<int, int> newTile = calculateNewTiles(x, y);
+			printTile(minCoords, program, pos, newTile.first);
+			map[pos] = newTile.first;
+			printTile(minCoords, program, pos + 1, newTile.second);
+			map[pos + 1] = newTile.second;
+			int pos2 = (y + 1) * mapSize.x + x;
+			pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+			printTile(minCoords, program, pos2, newTile2.first);
+			map[pos2] = newTile2.first;
+			printTile(minCoords, program, pos2 + 1, newTile2.second);
+			map[pos2 + 1] = newTile2.second;
+		}
+		return true;
+		}
 	}
-	
 	return false;
 }
 
-bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) const
+bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, const glm::vec2& minCoords, ShaderProgram& program, int currentRoom)
 {
 	int x, y0, y1;
-	
+
 	x = (pos.x + size.x - 1) / tileSize;
 	y0 = pos.y / tileSize;
 	y1 = (pos.y + size.y - 1) / tileSize;
-	for(int y=y0; y<=y1; y++)
+	for (int y = y0; y <= y1; y++)
 	{
-		if(map[y*mapSize.x+x] == 13)
+		int pos = y * mapSize.x + x;
+		if (map[pos] == 13) return true;
+		else if (isLeftSideBlock(pos) || isRightSideBlock(pos)) {
+			pair<int, int> newTile = calculateNewTiles(x, y);
+			if (isRightSideBlock(pos)) {
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+			}
+			if (isLeftSideBlock(pos)) {
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+			}
 			return true;
+		}
+		else if (isKey(pos)) {
+			if (map[pos] == 44) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+				int pos2 = (y - 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 - 1, newTile2.second);
+				map[pos2 - 1] = newTile2.second;
+			}
+			if (map[pos] == 32) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+				int pos2 = (y + 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 - 1, newTile2.second);
+				map[pos2 - 1] = newTile2.second;
+			}
+			if (map[pos] == 43) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+				int pos2 = (y - 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 + 1, newTile2.second);
+				map[pos2 + 1] = newTile2.second;
+			}
+			if (map[pos] == 31) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+				int pos2 = (y + 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 + 1, newTile2.second);
+				map[pos2 + 1] = newTile2.second;
+			}
+			for (int i = 8; i <= 15; ++i) {
+				int pos = (96 - currentRoom * 24) * mapSize.x + i;
+				int tile;
+				if (i % 2 == 0) tile = 19;
+				else tile = 20;
+				printTile(minCoords, program, pos, tile);
+			}
+			return true;
+		}
+		else if (isCoin(pos)) {
+			if (map[pos] == 62) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+				int pos2 = (y - 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 - 1, newTile2.second);
+				map[pos2 - 1] = newTile2.second;
+			}
+			if (map[pos] == 50) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+				int pos2 = (y + 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 - 1, newTile2.second);
+				map[pos2 - 1] = newTile2.second;
+			}
+			if (map[pos] == 61) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+				int pos2 = (y - 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 + 1, newTile2.second);
+				map[pos2 + 1] = newTile2.second;
+			}
+			if (map[pos] == 49) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+				int pos2 = (y + 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 + 1, newTile2.second);
+				map[pos2 + 1] = newTile2.second;
+			}
+			return true;
+		}
+		else if (isBag(pos)) {
+			if (map[pos] == 64) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+				int pos2 = (y - 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 - 1, newTile2.second);
+				map[pos2 - 1] = newTile2.second;
+			}
+			if (map[pos] == 52) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+				int pos2 = (y + 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 - 1, newTile2.second);
+				map[pos2 - 1] = newTile2.second;
+			}
+			if (map[pos] == 63) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+				int pos2 = (y - 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 + 1, newTile2.second);
+				map[pos2 + 1] = newTile2.second;
+			}
+			if (map[pos] == 51) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+				int pos2 = (y + 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 + 1, newTile2.second);
+				map[pos2 + 1] = newTile2.second;
+			}
+			return true;
+		}
+		else if (isPhone(pos)) {
+		if (map[pos] == 70) {
+			pair<int, int> newTile = calculateNewTiles(x, y);
+			printTile(minCoords, program, pos, newTile.first);
+			map[pos] = newTile.first;
+			printTile(minCoords, program, pos - 1, newTile.second);
+			map[pos - 1] = newTile.second;
+			int pos2 = (y - 1) * mapSize.x + x;
+			pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+			printTile(minCoords, program, pos2, newTile2.first);
+			map[pos2] = newTile2.first;
+			printTile(minCoords, program, pos2 - 1, newTile2.second);
+			map[pos2 - 1] = newTile2.second;
+		}
+		if (map[pos] == 58) {
+			pair<int, int> newTile = calculateNewTiles(x, y);
+			printTile(minCoords, program, pos, newTile.first);
+			map[pos] = newTile.first;
+			printTile(minCoords, program, pos - 1, newTile.second);
+			map[pos - 1] = newTile.second;
+			int pos2 = (y + 1) * mapSize.x + x;
+			pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+			printTile(minCoords, program, pos2, newTile2.first);
+			map[pos2] = newTile2.first;
+			printTile(minCoords, program, pos2 - 1, newTile2.second);
+			map[pos2 - 1] = newTile2.second;
+		}
+		if (map[pos] == 69) {
+			pair<int, int> newTile = calculateNewTiles(x, y);
+			printTile(minCoords, program, pos, newTile.first);
+			map[pos] = newTile.first;
+			printTile(minCoords, program, pos + 1, newTile.second);
+			map[pos + 1] = newTile.second;
+			int pos2 = (y - 1) * mapSize.x + x;
+			pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+			printTile(minCoords, program, pos2, newTile2.first);
+			map[pos2] = newTile2.first;
+			printTile(minCoords, program, pos2 + 1, newTile2.second);
+			map[pos2 + 1] = newTile2.second;
+		}
+		if (map[pos] == 57) {
+			pair<int, int> newTile = calculateNewTiles(x, y);
+			printTile(minCoords, program, pos, newTile.first);
+			map[pos] = newTile.first;
+			printTile(minCoords, program, pos + 1, newTile.second);
+			map[pos + 1] = newTile.second;
+			int pos2 = (y + 1) * mapSize.x + x;
+			pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+			printTile(minCoords, program, pos2, newTile2.first);
+			map[pos2] = newTile2.first;
+			printTile(minCoords, program, pos2 + 1, newTile2.second);
+			map[pos2 + 1] = newTile2.second;
+		}
+		return true;
+		}
 	}
-	
 	return false;
 }
 
-bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size) const
+bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, const glm::vec2& minCoords, ShaderProgram& program, int currentRoom)
 {
 	int x0, x1, y;
 
 	x0 = pos.x / tileSize;
-	x1 = (pos.x  + size.x - 1) / tileSize;
-	y = (pos.y +size.y - 1) / tileSize;
+	x1 = (pos.x + size.x - 1) / tileSize;
+	y = (pos.y + size.y - 1) / tileSize;
 	for (int x = x0; x <= x1; x++)
 	{
-		if (map[y * mapSize.x + x] == 13)
-		{
+		int pos = y * mapSize.x + x;
+		if (map[pos] == 13) return true;
+		else if (isLeftSideBlock(pos) || isRightSideBlock(pos)) {
+			pair<int, int> newTile = calculateNewTiles(x, y);
+			if (isRightSideBlock(pos)) {
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+			}
+			if (isLeftSideBlock(pos)) {
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+			}
 			return true;
-			/*if (*posY - tileSize * y + size.y <= 8)
-			{
-				*posY = tileSize * y - size.y;
-				return true;
-			}*/
+		}
+		else if (isKey(pos)) {
+			if (map[pos] == 44) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+				int pos2 = (y - 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 - 1, newTile2.second);
+				map[pos2 - 1] = newTile2.second;
+			}
+			if (map[pos] == 32) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+				int pos2 = (y + 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 - 1, newTile2.second);
+				map[pos2 - 1] = newTile2.second;
+			}
+			if (map[pos] == 43) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+				int pos2 = (y - 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 + 1, newTile2.second);
+				map[pos2 + 1] = newTile2.second;
+			}
+			if (map[pos] == 31) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+				int pos2 = (y + 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 + 1, newTile2.second);
+				map[pos2 + 1] = newTile2.second;
+			}
+			for (int i = 8; i <= 15; ++i) {
+				int pos = (96 - currentRoom * 24) * mapSize.x + i;
+				int tile;
+				if (i % 2 == 0) tile = 19;
+				else tile = 20;
+				printTile(minCoords, program, pos, tile);
+			}
+			return true;
+		}
+		else if (isCoin(pos)) {
+			if (map[pos] == 62) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+				int pos2 = (y - 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 - 1, newTile2.second);
+				map[pos2 - 1] = newTile2.second;
+			}
+			if (map[pos] == 50) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+				int pos2 = (y + 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 - 1, newTile2.second);
+				map[pos2 - 1] = newTile2.second;
+			}
+			if (map[pos] == 61) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+				int pos2 = (y - 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 + 1, newTile2.second);
+				map[pos2 + 1] = newTile2.second;
+			}
+			if (map[pos] == 49) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+				int pos2 = (y + 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 + 1, newTile2.second);
+				map[pos2 + 1] = newTile2.second;
+			}
+			return true;
+		}
+		else if (isBag(pos)) {
+			if (map[pos] == 64) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+				int pos2 = (y - 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 - 1, newTile2.second);
+				map[pos2 - 1] = newTile2.second;
+			}
+			if (map[pos] == 52) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+				int pos2 = (y + 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 - 1, newTile2.second);
+				map[pos2 - 1] = newTile2.second;
+			}
+			if (map[pos] == 63) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+				int pos2 = (y - 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 + 1, newTile2.second);
+				map[pos2 + 1] = newTile2.second;
+			}
+			if (map[pos] == 51) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+				int pos2 = (y + 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 + 1, newTile2.second);
+				map[pos2 + 1] = newTile2.second;
+			}
+			return true;
+		}
+		else if (isPhone(pos)) {
+		if (map[pos] == 70) {
+			pair<int, int> newTile = calculateNewTiles(x, y);
+			printTile(minCoords, program, pos, newTile.first);
+			map[pos] = newTile.first;
+			printTile(minCoords, program, pos - 1, newTile.second);
+			map[pos - 1] = newTile.second;
+			int pos2 = (y - 1) * mapSize.x + x;
+			pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+			printTile(minCoords, program, pos2, newTile2.first);
+			map[pos2] = newTile2.first;
+			printTile(minCoords, program, pos2 - 1, newTile2.second);
+			map[pos2 - 1] = newTile2.second;
+		}
+		if (map[pos] == 58) {
+			pair<int, int> newTile = calculateNewTiles(x, y);
+			printTile(minCoords, program, pos, newTile.first);
+			map[pos] = newTile.first;
+			printTile(minCoords, program, pos - 1, newTile.second);
+			map[pos - 1] = newTile.second;
+			int pos2 = (y + 1) * mapSize.x + x;
+			pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+			printTile(minCoords, program, pos2, newTile2.first);
+			map[pos2] = newTile2.first;
+			printTile(minCoords, program, pos2 - 1, newTile2.second);
+			map[pos2 - 1] = newTile2.second;
+		}
+		if (map[pos] == 69) {
+			pair<int, int> newTile = calculateNewTiles(x, y);
+			printTile(minCoords, program, pos, newTile.first);
+			map[pos] = newTile.first;
+			printTile(minCoords, program, pos + 1, newTile.second);
+			map[pos + 1] = newTile.second;
+			int pos2 = (y - 1) * mapSize.x + x;
+			pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+			printTile(minCoords, program, pos2, newTile2.first);
+			map[pos2] = newTile2.first;
+			printTile(minCoords, program, pos2 + 1, newTile2.second);
+			map[pos2 + 1] = newTile2.second;
+		}
+		if (map[pos] == 57) {
+			pair<int, int> newTile = calculateNewTiles(x, y);
+			printTile(minCoords, program, pos, newTile.first);
+			map[pos] = newTile.first;
+			printTile(minCoords, program, pos + 1, newTile.second);
+			map[pos + 1] = newTile.second;
+			int pos2 = (y + 1) * mapSize.x + x;
+			pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+			printTile(minCoords, program, pos2, newTile2.first);
+			map[pos2] = newTile2.first;
+			printTile(minCoords, program, pos2 + 1, newTile2.second);
+			map[pos2 + 1] = newTile2.second;
+		}
+		return true;
 		}
 	}
-
 	return false;
 }
-bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size) const
+bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, const glm::vec2& minCoords, ShaderProgram& program, int currentRoom)
 {
 	int x0, x1, y;
 
@@ -214,46 +1032,251 @@ bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size) con
 	y = pos.y / tileSize;
 	for (int x = x0; x <= x1; x++)
 	{
-		if (map[y * mapSize.x + x] == 13)
-		{
+		int pos = y * mapSize.x + x;
+		if (map[pos] == 13) return true;
+		else if (isLeftSideBlock(pos) || isRightSideBlock(pos)) {
+			pair<int, int> newTile = calculateNewTiles(x, y);
+			if (isRightSideBlock(pos)) {
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+			}
+			if (isLeftSideBlock(pos)) {
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+			}
 			return true;
-			/*if (*posY - tileSize * y + size.y <= 4)
-			{
-				//*posY = tileSize * y - size.y;
-				return true;
-			}*/
+		}
+		else if (isKey(pos)) {
+			if (map[pos] == 44) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+				int pos2 = (y - 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 - 1, newTile2.second);
+				map[pos2 - 1] = newTile2.second;
+			}
+			if (map[pos] == 32) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+				int pos2 = (y + 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 - 1, newTile2.second);
+				map[pos2 - 1] = newTile2.second;
+			}
+			if (map[pos] == 43) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+				int pos2 = (y - 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 + 1, newTile2.second);
+				map[pos2 + 1] = newTile2.second;
+			}
+			if (map[pos] == 31) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+				int pos2 = (y + 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 + 1, newTile2.second);
+				map[pos2 + 1] = newTile2.second;
+			}
+			for (int i = 8; i <= 15; ++i) {
+				int pos = (96 - currentRoom * 24) * mapSize.x + i;
+				int tile;
+				if (i % 2 == 0) tile = 19;
+				else tile = 20;
+				printTile(minCoords, program, pos, tile);
+			}
+			return true;
+		}
+		else if (isCoin(pos)) {
+			if (map[pos] == 62) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+				int pos2 = (y - 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 - 1, newTile2.second);
+				map[pos2 - 1] = newTile2.second;
+			}
+			if (map[pos] == 50) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+				int pos2 = (y + 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 - 1, newTile2.second);
+				map[pos2 - 1] = newTile2.second;
+			}
+			if (map[pos] == 61) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+				int pos2 = (y - 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 + 1, newTile2.second);
+				map[pos2 + 1] = newTile2.second;
+			}
+			if (map[pos] == 49) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+				int pos2 = (y + 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 + 1, newTile2.second);
+				map[pos2 + 1] = newTile2.second;
+			}
+			return true;
+		}
+		else if (isBag(pos)) {
+			if (map[pos] == 64) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+				int pos2 = (y - 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 - 1, newTile2.second);
+				map[pos2 - 1] = newTile2.second;
+			}
+			if (map[pos] == 52) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos - 1, newTile.second);
+				map[pos - 1] = newTile.second;
+				int pos2 = (y + 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 - 1, newTile2.second);
+				map[pos2 - 1] = newTile2.second;
+			}
+			if (map[pos] == 63) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+				int pos2 = (y - 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 + 1, newTile2.second);
+				map[pos2 + 1] = newTile2.second;
+			}
+			if (map[pos] == 51) {
+				pair<int, int> newTile = calculateNewTiles(x, y);
+				printTile(minCoords, program, pos, newTile.first);
+				map[pos] = newTile.first;
+				printTile(minCoords, program, pos + 1, newTile.second);
+				map[pos + 1] = newTile.second;
+				int pos2 = (y + 1) * mapSize.x + x;
+				pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+				printTile(minCoords, program, pos2, newTile2.first);
+				map[pos2] = newTile2.first;
+				printTile(minCoords, program, pos2 + 1, newTile2.second);
+				map[pos2 + 1] = newTile2.second;
+			}
+			return true;
+		}
+		else if (isPhone(pos)) {
+		if (map[pos] == 70) {
+			pair<int, int> newTile = calculateNewTiles(x, y);
+			printTile(minCoords, program, pos, newTile.first);
+			map[pos] = newTile.first;
+			printTile(minCoords, program, pos - 1, newTile.second);
+			map[pos - 1] = newTile.second;
+			int pos2 = (y - 1) * mapSize.x + x;
+			pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+			printTile(minCoords, program, pos2, newTile2.first);
+			map[pos2] = newTile2.first;
+			printTile(minCoords, program, pos2 - 1, newTile2.second);
+			map[pos2 - 1] = newTile2.second;
+		}
+		if (map[pos] == 58) {
+			pair<int, int> newTile = calculateNewTiles(x, y);
+			printTile(minCoords, program, pos, newTile.first);
+			map[pos] = newTile.first;
+			printTile(minCoords, program, pos - 1, newTile.second);
+			map[pos - 1] = newTile.second;
+			int pos2 = (y + 1) * mapSize.x + x;
+			pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+			printTile(minCoords, program, pos2, newTile2.first);
+			map[pos2] = newTile2.first;
+			printTile(minCoords, program, pos2 - 1, newTile2.second);
+			map[pos2 - 1] = newTile2.second;
+		}
+		if (map[pos] == 69) {
+			pair<int, int> newTile = calculateNewTiles(x, y);
+			printTile(minCoords, program, pos, newTile.first);
+			map[pos] = newTile.first;
+			printTile(minCoords, program, pos + 1, newTile.second);
+			map[pos + 1] = newTile.second;
+			int pos2 = (y - 1) * mapSize.x + x;
+			pair<int, int> newTile2 = calculateNewTiles(x, y - 1);
+			printTile(minCoords, program, pos2, newTile2.first);
+			map[pos2] = newTile2.first;
+			printTile(minCoords, program, pos2 + 1, newTile2.second);
+			map[pos2 + 1] = newTile2.second;
+		}
+		if (map[pos] == 57) {
+			pair<int, int> newTile = calculateNewTiles(x, y);
+			printTile(minCoords, program, pos, newTile.first);
+			map[pos] = newTile.first;
+			printTile(minCoords, program, pos + 1, newTile.second);
+			map[pos + 1] = newTile.second;
+			int pos2 = (y + 1) * mapSize.x + x;
+			pair<int, int> newTile2 = calculateNewTiles(x, y + 1);
+			printTile(minCoords, program, pos2, newTile2.first);
+			map[pos2] = newTile2.first;
+			printTile(minCoords, program, pos2 + 1, newTile2.second);
+			map[pos2 + 1] = newTile2.second;
+		}
+		return true;
 		}
 	}
-
 	return false;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

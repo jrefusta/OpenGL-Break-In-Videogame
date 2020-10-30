@@ -15,7 +15,7 @@ class Ball
 
 public:
 	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
-	void update(int deltaTime, glm::vec2 posPlayer);
+	void update(int deltaTime, glm::vec2 posPlayer, int currentRoom);
 	void render();
 
 	void setTileMap(TileMap* tileMap);
@@ -24,19 +24,26 @@ public:
 	bool collisionPlayerRight(glm::vec2& posPlayer);
 	bool collisionPlayerLeft(glm::vec2& posPlayer);
 	void setStuck(bool s);
+	void setCrossingRoom(int c);
 
 	bool getStuck();
+	int getCrossingRoom();
+	int getCurrentRoom();
+	void setCurrentRoom(int c);
 
 private:
 	int ballVelX;
 	int ballVelY;
-
+	int currentRoom;
 	bool stuck;
+	float currentTime;
+	int crossingRoom;
 	glm::ivec2 tileMapDispl, posBall;
 	int jumpAngle, startY;
 	Texture spritesheet;
 	Sprite* sprite;
 	TileMap* map;
+	ShaderProgram shaderProgram;
 
 };
 
