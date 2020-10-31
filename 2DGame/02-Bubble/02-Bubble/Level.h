@@ -35,6 +35,7 @@ private:
 	Ball* ball;
 	ShaderProgram texProgram;
 	int currentRoom;
+	int currentLevel;
 	glm::mat4 projection;
 	int livesNum;
 };

@@ -33,7 +33,9 @@ Level::~Level()
 
 void Level::init(int ID)
 {
+
 	initShaders();
+	this->currentLevel = ID;
 	map = TileMap::createTileMap("levels/level0" + to_string(ID) + ".txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -55,10 +57,13 @@ void Level::update(int deltaTime)
 	currentTurnTime += deltaTime;
 	player->update(deltaTime, currentRoom);
 	ball->update(deltaTime, player->getPosition(), currentRoom);
-	this->currentRoom = ball->getCurrentRoom();
-	//livesText.render("Videogames!!!", glm::vec2(10, 450 - 20), 32, glm::vec4(1, 1, 1, 1));
-	//livesText.render("Videogames!!!", glm::vec2(10, 450 - 20), 32, glm::vec4(1, 1, 1, 1));
-
+	this->currentRoom = ball->getCurrentRoom(); 
+	if (ball->getGetAllMoney()) {
+		Game::instance().runConsole();
+		cout << "YOU WIN" << endl;
+	}
+	Game::instance().runConsole();
+	cout << "Money = " << ball->getCurrentMoney() << ", Points = " << ball->getCurrentPoints() << ", Lives = " << livesNum << endl;
 	if (ball->getStuck()) {
 		ball->setPosition(player->getPosition() + glm::vec2(5.f, -9.f));
 	}
@@ -107,6 +112,10 @@ void Level::update(int deltaTime)
 	if (Game::instance().getKey('\ ') || Game::instance().getSpecialKey(GLUT_KEY_UP))
 	{
 		ball->setStuck(false);
+	}
+	if (Game::instance().getKey('0'))
+	{
+		this->init(this->currentLevel);
 	}
 	if (Game::instance().getKey('1')) currentRoom = 1;
 	if (Game::instance().getKey('2')) currentRoom = 2;

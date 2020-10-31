@@ -53,7 +53,9 @@ bool TileMap::loadLevel(const string& levelFile)
 	string line, tilesheetFile;
 	stringstream sstream;
 	char tile;
-
+	this->totalMoney = 0;
+	this->money = 0;
+	this->points = 0;
 	fin.open(levelFile.c_str());
 	if (!fin.is_open())
 		return false;
@@ -89,6 +91,8 @@ bool TileMap::loadLevel(const string& levelFile)
 				map[j * mapSize.x + i] = 0;
 			else
 				map[j * mapSize.x + i] = tile - int('0');
+			if (isCoin(j * mapSize.x + i)) this->totalMoney += 0.25 * 100;
+			if (isBag(j * mapSize.x + i)) this->totalMoney += 0.25 * 200;
 		}
 		fin.get(tile);
 #ifndef _WIN32
@@ -146,6 +150,16 @@ void TileMap::prepareArrays(const glm::vec2& minCoords, ShaderProgram& program)
 	glBufferData(GL_ARRAY_BUFFER, 24 * nTiles * sizeof(float), &vertices[0], GL_STATIC_DRAW);
 	posLocation = program.bindVertexAttribute("position", 2, 4 * sizeof(float), 0);
 	texCoordLocation = program.bindVertexAttribute("texCoord", 2, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+}
+
+int TileMap::getMoney() {
+	return this->money;
+}
+int TileMap::getPoints() {
+	return this->points;
+}
+int TileMap::getTotalMoney() {
+	return this->totalMoney;
 }
 
 void TileMap::printTile(const glm::vec2& minCoords, ShaderProgram& program, int pos, int newTile) {
@@ -275,6 +289,7 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, c
 				printTile(minCoords, program, pos + 1, newTile.second);
 				map[pos + 1] = newTile.second;
 			}
+			this->points += 100;
 			return true;
 		}
 		else if (isKey(pos)) {
@@ -392,6 +407,8 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, c
 				printTile(minCoords, program, pos2 + 1, newTile2.second);
 				map[pos2 + 1] = newTile2.second;
 			}
+			this->money += 100;
+			this->totalMoney -= 100;
 			return true;
 		}
 		else if (isBag(pos)) {
@@ -447,6 +464,8 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, c
 				printTile(minCoords, program, pos2 + 1, newTile2.second);
 				map[pos2 + 1] = newTile2.second;
 			}
+			this->money += 200;
+			this->totalMoney -= 200;
 			return true;
 		}
 		else if (isPhone(pos)) {
@@ -502,6 +521,8 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, c
 			printTile(minCoords, program, pos2 + 1, newTile2.second);
 			map[pos2 + 1] = newTile2.second;
 		}
+		this->money += this->points;
+		this->points = 0;
 		return true;
 		}
 	}
@@ -533,6 +554,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, 
 				printTile(minCoords, program, pos + 1, newTile.second);
 				map[pos + 1] = newTile.second;
 			}
+			this->points += 100;
 			return true;
 		}
 		else if (isKey(pos)) {
@@ -650,6 +672,8 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, 
 				printTile(minCoords, program, pos2 + 1, newTile2.second);
 				map[pos2 + 1] = newTile2.second;
 			}
+			this->money += 100;
+			this->totalMoney -= 100;
 			return true;
 		}
 		else if (isBag(pos)) {
@@ -705,6 +729,8 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, 
 				printTile(minCoords, program, pos2 + 1, newTile2.second);
 				map[pos2 + 1] = newTile2.second;
 			}
+			this->money += 200;
+			this->totalMoney -= 200;
 			return true;
 		}
 		else if (isPhone(pos)) {
@@ -760,6 +786,8 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, 
 			printTile(minCoords, program, pos2 + 1, newTile2.second);
 			map[pos2 + 1] = newTile2.second;
 		}
+		this->money += this->points;
+		this->points = 0;
 		return true;
 		}
 	}
@@ -791,6 +819,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, c
 				printTile(minCoords, program, pos + 1, newTile.second);
 				map[pos + 1] = newTile.second;
 			}
+			this->points += 100;
 			return true;
 		}
 		else if (isKey(pos)) {
@@ -908,6 +937,8 @@ bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, c
 				printTile(minCoords, program, pos2 + 1, newTile2.second);
 				map[pos2 + 1] = newTile2.second;
 			}
+			this->money += 100;
+			this->totalMoney -= 100;
 			return true;
 		}
 		else if (isBag(pos)) {
@@ -963,6 +994,8 @@ bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, c
 				printTile(minCoords, program, pos2 + 1, newTile2.second);
 				map[pos2 + 1] = newTile2.second;
 			}
+			this->money += 200;
+			this->totalMoney -= 200;
 			return true;
 		}
 		else if (isPhone(pos)) {
@@ -1018,6 +1051,8 @@ bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, c
 			printTile(minCoords, program, pos2 + 1, newTile2.second);
 			map[pos2 + 1] = newTile2.second;
 		}
+		this->money += this->points;
+		this->points = 0;
 		return true;
 		}
 	}
@@ -1048,6 +1083,7 @@ bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, con
 				printTile(minCoords, program, pos + 1, newTile.second);
 				map[pos + 1] = newTile.second;
 			}
+			this->points += 100;
 			return true;
 		}
 		else if (isKey(pos)) {
@@ -1165,6 +1201,8 @@ bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, con
 				printTile(minCoords, program, pos2 + 1, newTile2.second);
 				map[pos2 + 1] = newTile2.second;
 			}
+			this->money += 100;
+			this->totalMoney -= 100;
 			return true;
 		}
 		else if (isBag(pos)) {
@@ -1220,6 +1258,8 @@ bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, con
 				printTile(minCoords, program, pos2 + 1, newTile2.second);
 				map[pos2 + 1] = newTile2.second;
 			}
+			this->money += 200;
+			this->totalMoney -= 200;
 			return true;
 		}
 		else if (isPhone(pos)) {
@@ -1275,6 +1315,8 @@ bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, con
 			printTile(minCoords, program, pos2 + 1, newTile2.second);
 			map[pos2 + 1] = newTile2.second;
 		}
+		this->money += this->points;
+		this->points = 0;
 		return true;
 		}
 	}

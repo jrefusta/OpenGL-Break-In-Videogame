@@ -39,6 +39,9 @@ public:
 	bool isBag(int pos);
 	bool isPhone(int pos);
 
+	int getPoints();
+	int getMoney();
+	int getTotalMoney();
 
 private:
 	bool loadLevel(const string& levelFile);
@@ -54,6 +57,9 @@ private:
 	Texture tilesheet;
 	glm::vec2 tileTexSize;
 	int* map;
+	int totalMoney;
+	int money;
+	int points;
 
 };
 

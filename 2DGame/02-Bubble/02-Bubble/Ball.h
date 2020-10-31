@@ -20,13 +20,13 @@ public:
 
 	void setTileMap(TileMap* tileMap);
 	void setPosition(const glm::vec2& pos);
-	bool collisionPlayerUp(glm::vec2& posPlayer);
-	bool collisionPlayerRight(glm::vec2& posPlayer);
-	bool collisionPlayerLeft(glm::vec2& posPlayer);
+	bool collisionPlayer(glm::vec2& posPlayer);
 	void setStuck(bool s);
 	void setCrossingRoom(int c);
-
-	bool getStuck();
+	bool getGetAllMoney();
+	bool getStuck();	
+	int getCurrentMoney();
+	int getCurrentPoints();
 	int getCrossingRoom();
 	int getCurrentRoom();
 	void setCurrentRoom(int c);
@@ -36,7 +36,10 @@ private:
 	int ballVelY;
 	int currentRoom;
 	bool stuck;
-	float currentTime;
+	float currentTime;	
+	int currentMoney;
+	int currentPoints;
+	bool getAllMoney;
 	int crossingRoom;
 	glm::ivec2 tileMapDispl, posBall;
 	int jumpAngle, startY;
