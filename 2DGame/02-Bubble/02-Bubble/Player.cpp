@@ -54,13 +54,13 @@ void Player::update(int deltaTime, int currentRoom)
 	{
 		/*if (sprite->animation() != MOVE_LEFT)
 			sprite->changeAnimation(MOVE_LEFT);*/
-		if (posPlayer.x > 8) posPlayer.x -= 4;
+		if (posPlayer.x > 8) posPlayer.x -= 2;
 	}
 	if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
 	{
 		//if (sprite->animation() != MOVE_RIGHT)
 			//sprite->changeAnimation(MOVE_RIGHT);
-		if (posPlayer.x < 166) posPlayer.x += 4;
+		if (posPlayer.x < 166) posPlayer.x += 2;
 	}/*
 	else
 	{

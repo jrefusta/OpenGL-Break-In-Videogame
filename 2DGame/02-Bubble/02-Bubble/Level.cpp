@@ -1,7 +1,5 @@
 #include <iostream>
 #include <cmath>
-#include <chrono>
-#include <ctime>   
 #include <glm/gtc/matrix_transform.hpp>
 #include "Scene.h"
 #include "Game.h"
@@ -33,10 +31,10 @@ Level::~Level()
 }
 
 
-void Level::init()
+void Level::init(int ID)
 {
 	initShaders();
-	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	map = TileMap::createTileMap("levels/level0" + to_string(ID) + ".txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X, INIT_PLAYER_Y));
@@ -58,12 +56,9 @@ void Level::update(int deltaTime)
 	player->update(deltaTime, currentRoom);
 	ball->update(deltaTime, player->getPosition(), currentRoom);
 	this->currentRoom = ball->getCurrentRoom();
-	if (ball->getGetAllMoney()) {
-		Game::instance().runConsole();
-		cout << "YOU WIN" << endl;
-	}
-	Game::instance().runConsole();
-	cout<< "Money = " << ball->getCurrentMoney() << ", Points = " << ball->getCurrentPoints() << ", Lives = " << livesNum << endl;
+	//livesText.render("Videogames!!!", glm::vec2(10, 450 - 20), 32, glm::vec4(1, 1, 1, 1));
+	//livesText.render("Videogames!!!", glm::vec2(10, 450 - 20), 32, glm::vec4(1, 1, 1, 1));
+
 	if (ball->getStuck()) {
 		ball->setPosition(player->getPosition() + glm::vec2(5.f, -9.f));
 	}
@@ -113,10 +108,10 @@ void Level::update(int deltaTime)
 	{
 		ball->setStuck(false);
 	}
-	if (Game::instance().getKey('1'))
-	{
-		this->init();
-	}
+	if (Game::instance().getKey('1')) currentRoom = 1;
+	if (Game::instance().getKey('2')) currentRoom = 2;
+	if (Game::instance().getKey('3')) currentRoom = 3;
+	if (Game::instance().getKey('4')) currentRoom = 4;
 }
 
 void Level::render()

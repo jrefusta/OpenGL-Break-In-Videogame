@@ -27,11 +27,8 @@ public:
 	void setCrossingRoom(int c);
 
 	bool getStuck();
-	bool getGetAllMoney();
 	int getCrossingRoom();
 	int getCurrentRoom();
-	int getCurrentMoney();
-	int getCurrentPoints();
 	void setCurrentRoom(int c);
 
 private:
@@ -39,9 +36,6 @@ private:
 	int ballVelY;
 	int currentRoom;
 	bool stuck;
-	int currentMoney;
-	int currentPoints;
-	bool getAllMoney;
 	float currentTime;
 	int crossingRoom;
 	glm::ivec2 tileMapDispl, posBall;
