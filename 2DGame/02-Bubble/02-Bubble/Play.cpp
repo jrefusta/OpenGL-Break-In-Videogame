@@ -10,7 +10,7 @@ Play::~Play() {
 void Play::init(int l) {
 	Scene::init();
 	spritesheet.loadFromFile("images/play.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	background = Sprite::createSprite(glm::vec2(640.0, 480.0), glm::vec2(1.f, 1.f), &spritesheet, &texProgram);
+	background = Sprite::createSprite(glm::vec2(272.0, 240.0), glm::vec2(1.f, 1.f), &spritesheet, &texProgram);
 	background->setPosition(glm::vec2(0.0, 0.0));
 
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
@@ -23,9 +23,9 @@ void Play::init(int l) {
 void Play::loadSprites() {
 
 	for (int i = 0; i < 3; ++i) {
-		levels[i].spritesheet.loadFromFile("images/level_" + to_string(i + 1) + ".png", TEXTURE_PIXEL_FORMAT_RGBA);
-		levels[i].sprite = Sprite::createSprite(glm::ivec2(107, 40), glm::vec2(1.f, 1.f), &levels[i].spritesheet, &texProgram);
-		levels[i].sprite->setPosition(glm::vec2(51.6+(i*245.6), 337));
+		levels[i].spritesheet.loadFromFile("images/text_bank_0" + to_string(i + 1) + ".png", TEXTURE_PIXEL_FORMAT_RGBA);
+		levels[i].sprite = Sprite::createSprite(glm::ivec2(40, 16), glm::vec2(1.f, 1.f), &levels[i].spritesheet, &texProgram);
+		levels[i].sprite->setPosition(glm::vec2(112.0, 88.0 + 24.0*i));
 		levels[i].sprite->setColor(glm::vec3(1.0f, 1.0f, 1.0f));
 	}
 }
@@ -35,7 +35,7 @@ void Play::update(int deltaTime) {
 	currentTurnTime += deltaTime;
 
 	if (currentTurnTime >= float(150.0f)) {
-		if (Game::instance().moveRightPressed()) {
+		if (Game::instance().moveDownPressed()) {
 			if (level < 2) ++level;
 			else {
 				level = 0;
@@ -43,7 +43,7 @@ void Play::update(int deltaTime) {
 			currentTurnTime = 0;
 		}
 
-		else if (Game::instance().moveLeftPressed()) {
+		else if (Game::instance().moveUpPressed()) {
 			if (level > 0) --level;
 			else {
 				level = 2;
@@ -76,13 +76,6 @@ void Play::render() {
 	background->render();
 
 	for (int i = 0; i < 3; i++) {
-		if (level != i) {
-			levels[i].sprite->resize(1.25f);
-			levels[i].sprite->setColor(glm::vec3(0.4f, 0.0f, 0.1f));
-		}
-		else {
-			levels[i].sprite->resize(1.5f);
-			levels[i].sprite->setColor(glm::vec3(0.4f, 0.7f, 0.1f));
-		}
+		if (level != i || int(currentTime/500)%2 == 0) levels[i].sprite->render();
 	}
 }
