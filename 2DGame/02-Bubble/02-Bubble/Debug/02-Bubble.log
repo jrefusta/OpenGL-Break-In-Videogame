@@ -1,7 +1,1 @@
-﻿  Ball.cpp
-  LINK : no se encontró D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\Debug\02-Bubble.exe o no lo generó el último vínculo incremental; ejecutando vínculo completo
-SOIL.lib(image_DXT.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(image_DXT.obj)' o en 'D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
-SOIL.lib(image_helper.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(image_helper.obj)' o en 'D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
-SOIL.lib(SOIL.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(SOIL.obj)' o en 'D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
-SOIL.lib(stb_image_aug.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(stb_image_aug.obj)' o en 'D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
-  02-Bubble.vcxproj -> D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\Debug\02-Bubble.exe
+﻿
