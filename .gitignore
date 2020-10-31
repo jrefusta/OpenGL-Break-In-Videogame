@@ -131,3 +131,11 @@
 2DGame/02-Bubble/Debug/02-Bubble.exe
 2DGame/02-Bubble/Debug/02-Bubble.ilk
 2DGame/02-Bubble/Debug/02-Bubble.pdb
+*.db
+*.log
+*.tlog
+*.obj
+*.idb
+*.exe
+*.ilk
+*.pdb
