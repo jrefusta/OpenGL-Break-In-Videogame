@@ -22,46 +22,47 @@ void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 void Ball::update(int deltaTime, glm::vec2 posPlayer, int currentRoom)
 {
 	sprite->update(deltaTime);
+	if (!this->getStuck()) {
+		posBall.y += ballVelY;
+		if (map->collisionMoveUp(posBall, glm::ivec2(12, 12), tileMapDispl, shaderProgram, currentRoom)) {
+			posBall.y -= ballVelY;
+			ballVelY = abs(ballVelY);
+		}
+		else if (map->collisionMoveDown(posBall, glm::ivec2(12, 12), tileMapDispl, shaderProgram, currentRoom)) {
+			posBall.y -= ballVelY;
+			ballVelY = -abs(ballVelY);
+		}
 
-	posBall.y += ballVelY;
-	if (map->collisionMoveUp(posBall, glm::ivec2(12, 12), tileMapDispl, shaderProgram, currentRoom)) {
-		posBall.y -= ballVelY;
-		ballVelY = abs(ballVelY);
-	}
-	else if (map->collisionMoveDown(posBall, glm::ivec2(12, 12), tileMapDispl, shaderProgram, currentRoom)) {
-		posBall.y -= ballVelY;
-		ballVelY = -abs(ballVelY);
-	}
+		if (collisionPlayerUp(posPlayer) && ballVelY > 0) {
+			posBall.y -= ballVelY;
+			ballVelY = -abs(ballVelY);
+		}
+		posBall.x += ballVelX;
 
-	if (collisionPlayerUp(posPlayer) && ballVelY > 0) {
-		posBall.y -= ballVelY;
-		ballVelY = -abs(ballVelY);
-	}
-	posBall.x += ballVelX;
+		if (map->collisionMoveRight(posBall, glm::ivec2(12, 12), tileMapDispl, shaderProgram, currentRoom)) {
+			posBall.x -= ballVelX;
+			ballVelX = -abs(ballVelX);
 
-	if (map->collisionMoveRight(posBall, glm::ivec2(12, 12), tileMapDispl, shaderProgram, currentRoom)) {
-		posBall.x -= ballVelX;
-		ballVelX = -abs(ballVelX);
-
-	}
-	else if (map->collisionMoveLeft(posBall, glm::ivec2(12, 12), tileMapDispl, shaderProgram, currentRoom)) {
-		posBall.x -= ballVelX;
-		ballVelX = abs(ballVelX);
-	}
-	if (collisionPlayerRight(posPlayer) && ballVelX > 0) {
-		posBall.x -= ballVelX;
-		ballVelX = -abs(ballVelX);
-	}
-	else if (collisionPlayerLeft(posPlayer) && ballVelX < 0) {
-		posBall.x -= ballVelX;
-		ballVelX = abs(ballVelX);
+		}
+		else if (map->collisionMoveLeft(posBall, glm::ivec2(12, 12), tileMapDispl, shaderProgram, currentRoom)) {
+			posBall.x -= ballVelX;
+			ballVelX = abs(ballVelX);
+		}
+		if (collisionPlayerRight(posPlayer) && ballVelX > 0) {
+			posBall.x -= ballVelX;
+			ballVelX = -abs(ballVelX);
+		}
+		else if (collisionPlayerLeft(posPlayer) && ballVelX < 0) {
+			posBall.x -= ballVelX;
+			ballVelX = abs(ballVelX);
+		}
 	}
 	if (posBall.y != 0 && posBall.x != 0 && this->currentRoom != 0) {
-		if (posBall.y > 768.0 - (24 * 8 * (this->currentRoom - 1))) {
+		if (posBall.y > 756.0 - (24 * 8 * (this->currentRoom - 1))) {
 			this->crossingRoom = -1;
 			this->currentRoom -= 1;
 		}
-		else if (posBall.y < 768.0 - (24 * 8 * (this->currentRoom))) {
+		else if (posBall.y < 756.0 - (24 * 8 * (this->currentRoom))) {
 			this->currentRoom += 1;
 			this->crossingRoom = 1;
 		}
