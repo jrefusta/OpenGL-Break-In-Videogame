@@ -83,9 +83,7 @@ void Menu::render() {
 	background->render();
 
 	for (int i = 0; i < 3; i++) {
-		if (option != i || int(currentTime/500)%2 == 0) {
-			options[i].sprite->render();
-		}
+		if (option != i || int(currentTime/500)%2 == 0) options[i].sprite->render();
 	}
 
 
