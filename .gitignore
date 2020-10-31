@@ -139,3 +139,11 @@
 *.exe
 *.ilk
 *.pdb
+*.db
+*.log
+*.tlog
+*.obj
+*.idb
+*.pdb
+*.exe
+*.ilk
