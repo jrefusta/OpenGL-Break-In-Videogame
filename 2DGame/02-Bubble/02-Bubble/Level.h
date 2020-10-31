@@ -22,7 +22,7 @@ public:
 	Level();
 	~Level();
 
-	void init();
+	void init(int ID);
 	void update(int deltaTime);
 	void render();
 
