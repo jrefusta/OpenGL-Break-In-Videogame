@@ -1,1 +1,10 @@
+<<<<<<< HEAD
 ﻿  02-Bubble.vcxproj -> D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\Debug\02-Bubble.exe
+=======
+﻿  Menu.cpp
+SOIL.lib(image_DXT.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(image_DXT.obj)' o en 'C:\Users\GL553VD\Documents\GitHub\VJ_2D\2DGame\02-Bubble\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
+SOIL.lib(image_helper.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(image_helper.obj)' o en 'C:\Users\GL553VD\Documents\GitHub\VJ_2D\2DGame\02-Bubble\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
+SOIL.lib(SOIL.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(SOIL.obj)' o en 'C:\Users\GL553VD\Documents\GitHub\VJ_2D\2DGame\02-Bubble\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
+SOIL.lib(stb_image_aug.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(stb_image_aug.obj)' o en 'C:\Users\GL553VD\Documents\GitHub\VJ_2D\2DGame\02-Bubble\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
+  02-Bubble.vcxproj -> C:\Users\GL553VD\Documents\GitHub\VJ_2D\2DGame\02-Bubble\Debug\02-Bubble.exe
+>>>>>>> 2e4608d8f7ed3efe89a161a8b974f624f7ab3a4b
