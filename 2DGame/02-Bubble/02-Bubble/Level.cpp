@@ -108,6 +108,10 @@ void Level::update(int deltaTime)
 	{
 		ball->setStuck(false);
 	}
+	if (Game::instance().getKey('1')) currentRoom = 1;
+	if (Game::instance().getKey('2')) currentRoom = 2;
+	if (Game::instance().getKey('3')) currentRoom = 3;
+	if (Game::instance().getKey('4')) currentRoom = 4;
 }
 
 void Level::render()
