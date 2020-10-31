@@ -1,5 +1,7 @@
 #include <iostream>
 #include <cmath>
+#include <chrono>
+#include <ctime>   
 #include <glm/gtc/matrix_transform.hpp>
 #include "Scene.h"
 #include "Game.h"
@@ -56,9 +58,12 @@ void Level::update(int deltaTime)
 	player->update(deltaTime, currentRoom);
 	ball->update(deltaTime, player->getPosition(), currentRoom);
 	this->currentRoom = ball->getCurrentRoom();
-	//livesText.render("Videogames!!!", glm::vec2(10, 450 - 20), 32, glm::vec4(1, 1, 1, 1));
-	//livesText.render("Videogames!!!", glm::vec2(10, 450 - 20), 32, glm::vec4(1, 1, 1, 1));
-
+	if (ball->getGetAllMoney()) {
+		Game::instance().runConsole();
+		cout << "YOU WIN" << endl;
+	}
+	Game::instance().runConsole();
+	cout<< "Money = " << ball->getCurrentMoney() << ", Points = " << ball->getCurrentPoints()  << endl;
 	if (ball->getStuck()) {
 		ball->setPosition(player->getPosition() + glm::vec2(5.f, -9.f));
 	}
@@ -107,6 +112,10 @@ void Level::update(int deltaTime)
 	if (Game::instance().getKey('\ ') || Game::instance().getSpecialKey(GLUT_KEY_UP))
 	{
 		ball->setStuck(false);
+	}
+	if (Game::instance().getKey('1'))
+	{
+		this->init();
 	}
 }
 

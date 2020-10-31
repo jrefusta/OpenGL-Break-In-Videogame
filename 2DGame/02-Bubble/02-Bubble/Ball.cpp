@@ -17,11 +17,19 @@ void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	ballVelY = -1;
 	this->currentRoom = 1;
 	this->crossingRoom = 0;
+	this->getAllMoney = false;
+	this->currentMoney = 0;
+	this->currentPoints = 0;
 }
 
 void Ball::update(int deltaTime, glm::vec2 posPlayer, int currentRoom)
 {
 	sprite->update(deltaTime);
+	if (map->getTotalMoney() == 0) {
+		this->getAllMoney = true;
+	}
+	this->currentMoney = map->getMoney();
+	this->currentPoints = map->getPoints();
 	if (!this->getStuck()) {
 		posBall.y += ballVelY;
 		if (map->collisionMoveUp(posBall, glm::ivec2(12, 12), tileMapDispl, shaderProgram, currentRoom)) {
@@ -81,6 +89,16 @@ void Ball::setCurrentRoom(int c) {
 
 int Ball::getCrossingRoom() {
 	return this->crossingRoom;
+}
+
+bool Ball::getGetAllMoney() {
+	return this->getAllMoney;
+}
+int Ball::getCurrentMoney() {
+	return this->currentMoney;
+}
+int Ball::getCurrentPoints() {
+	return this->currentPoints;
 }
 
 void Ball::setCrossingRoom(int c) {
