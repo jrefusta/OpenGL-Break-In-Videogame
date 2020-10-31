@@ -63,7 +63,7 @@ void Level::update(int deltaTime)
 		cout << "YOU WIN" << endl;
 	}
 	Game::instance().runConsole();
-	cout<< "Money = " << ball->getCurrentMoney() << ", Points = " << ball->getCurrentPoints()  << endl;
+	cout<< "Money = " << ball->getCurrentMoney() << ", Points = " << ball->getCurrentPoints() << ", Lives = " << livesNum << endl;
 	if (ball->getStuck()) {
 		ball->setPosition(player->getPosition() + glm::vec2(5.f, -9.f));
 	}
