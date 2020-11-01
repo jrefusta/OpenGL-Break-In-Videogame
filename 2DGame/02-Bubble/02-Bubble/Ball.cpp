@@ -5,21 +5,23 @@
 #include "Ball.h"
 #include "Game.h"
 
-void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
+void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, int ID)
 {
-	stuck = true;
+	this->stuck = true;
 	spritesheet.loadFromFile("images/ball.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(9, 10), glm::vec2(1.0, 1.0), &spritesheet, &shaderProgram);
 	tileMapDispl = tileMapPos;
 	this->shaderProgram = shaderProgram;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBall.x), float(tileMapDispl.y + posBall.y)));
-	ballVelX = 2;
-	ballVelY = -2;
+	this->ballVelX = 1;
+	this->ballVelY = -1;
 	this->currentRoom = 1;
 	this->crossingRoom = 0;
 	this->getAllMoney = false;
 	this->currentMoney = 0;
 	this->currentPoints = 0;
+	this->currentLevel = ID;
+	this->alarmHited = false;
 }
 
 void Ball::update(int deltaTime, glm::vec2 posPlayer, int currentRoom)
@@ -28,15 +30,16 @@ void Ball::update(int deltaTime, glm::vec2 posPlayer, int currentRoom)
 	if (map->getTotalMoney() == 0) {
 		this->getAllMoney = true;
 	}
+	this->alarmHited = map->getAlarmHited();
 	this->currentMoney = map->getMoney();
 	this->currentPoints = map->getPoints();
 	if (!this->getStuck()) {
 		posBall.y += ballVelY;
-		if (map->collisionMoveUp(posBall, glm::ivec2(9, 10), tileMapDispl, shaderProgram, currentRoom)) {
+		if (map->collisionMoveUp(posBall, glm::ivec2(9, 10), tileMapDispl, shaderProgram, currentRoom, this->currentLevel)) {
 			posBall.y -= ballVelY;
 			ballVelY = abs(ballVelY);
 		}
-		else if (map->collisionMoveDown(posBall, glm::ivec2(9, 10), tileMapDispl, shaderProgram, currentRoom)) {
+		else if (map->collisionMoveDown(posBall, glm::ivec2(9, 10), tileMapDispl, shaderProgram, currentRoom, this->currentLevel)) {
 			posBall.y -= ballVelY;
 			ballVelY = -abs(ballVelY);
 		}
@@ -47,12 +50,12 @@ void Ball::update(int deltaTime, glm::vec2 posPlayer, int currentRoom)
 		}
 		posBall.x += ballVelX;
 
-		if (map->collisionMoveRight(posBall, glm::ivec2(9, 10), tileMapDispl, shaderProgram, currentRoom)) {
+		if (map->collisionMoveRight(posBall, glm::ivec2(9, 10), tileMapDispl, shaderProgram, currentRoom, this->currentLevel)) {
 			posBall.x -= ballVelX;
 			ballVelX = -abs(ballVelX);
 
 		}
-		else if (map->collisionMoveLeft(posBall, glm::ivec2(9, 10), tileMapDispl, shaderProgram, currentRoom)) {
+		else if (map->collisionMoveLeft(posBall, glm::ivec2(9, 10), tileMapDispl, shaderProgram, currentRoom, this->currentLevel)) {
 			posBall.x -= ballVelX;
 			ballVelX = abs(ballVelX);
 		}
@@ -80,6 +83,9 @@ void Ball::update(int deltaTime, glm::vec2 posPlayer, int currentRoom)
 }
 bool Ball::getGetAllMoney() {
 	return this->getAllMoney;
+}
+bool Ball::getGetAlarmHited() {
+	return this->alarmHited;
 }
 int Ball::getCurrentMoney() {
 	return this->currentMoney;

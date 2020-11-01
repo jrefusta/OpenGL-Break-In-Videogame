@@ -17,10 +17,10 @@
 };*/
 
 
-void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
+void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, int ID)
 {
-	bJumping = false;
-	spritesheet.loadFromFile("images/player.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	if (ID != 4) spritesheet.loadFromFile("images/police.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	else spritesheet.loadFromFile("images/player.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(19, 26), glm::vec2(1.0, 1.0), &spritesheet, &shaderProgram);
 	/*sprite->setNumberAnimations(4);
 	

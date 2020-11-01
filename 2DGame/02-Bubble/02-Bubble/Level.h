@@ -40,6 +40,7 @@ private:
 	int currentLevel;
 	glm::mat4 projection;
 	int livesNum;
+	bool alarmHited;
 };
 
 
