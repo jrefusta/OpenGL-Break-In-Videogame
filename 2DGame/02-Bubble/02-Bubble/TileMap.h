@@ -27,18 +27,21 @@ public:
 	void free();
 
 	int getTileSize() const { return tileSize; }
-	bool collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, const glm::vec2& minCoords, ShaderProgram& program, int currentRoom);
-	bool collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, const glm::vec2& minCoords, ShaderProgram& program, int currentRoom);
-	bool collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, const glm::vec2& minCoords, ShaderProgram& program, int currentRoom);
-	bool collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, const glm::vec2& minCoords, ShaderProgram& program, int currentRoom);
-	pair<int, int> calculateNewTiles(int x, int y);
+	bool collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, const glm::vec2& minCoords, ShaderProgram& program, int currentRoom, int ID);
+	bool collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, const glm::vec2& minCoords, ShaderProgram& program, int currentRoom, int ID);
+	bool collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, const glm::vec2& minCoords, ShaderProgram& program, int currentRoom, int ID);
+	bool collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, const glm::vec2& minCoords, ShaderProgram& program, int currentRoom, int ID);
+	pair<int, int> calculateNewTiles(int x, int y, int ID);
 	bool isLeftSideBlock(int pos);
 	bool isRightSideBlock(int pos);
 	bool isKey(int pos);
 	bool isCoin(int pos);
 	bool isBag(int pos);
 	bool isPhone(int pos);
-
+	bool isPearl(int pos);
+	bool isAlarm(int pos);
+	bool isWall(int pos);
+	bool getAlarmHited();
 	int getPoints();
 	int getMoney();
 	int getTotalMoney();
@@ -60,6 +63,7 @@ private:
 	int totalMoney;
 	int money;
 	int points;
+	bool alarmHited;
 
 };
 

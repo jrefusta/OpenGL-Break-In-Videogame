@@ -14,7 +14,7 @@ class Ball
 {
 
 public:
-	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
+	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, int currentLevel);
 	void update(int deltaTime, glm::vec2 posPlayer, int currentRoom);
 	void render();
 
@@ -24,6 +24,7 @@ public:
 	void setStuck(bool s);
 	void setCrossingRoom(int c);
 	bool getGetAllMoney();
+	bool getGetAlarmHited();
 	bool getStuck();	
 	int getCurrentMoney();
 	int getCurrentPoints();
@@ -36,9 +37,11 @@ private:
 	int ballVelY;
 	int currentRoom;
 	bool stuck;
+	bool alarmHited;
 	float currentTime;	
 	int currentMoney;
 	int currentPoints;
+	int currentLevel;
 	bool getAllMoney;
 	int crossingRoom;
 	glm::ivec2 tileMapDispl, posBall;

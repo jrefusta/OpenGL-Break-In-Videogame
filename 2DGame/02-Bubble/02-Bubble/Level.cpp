@@ -38,17 +38,18 @@ void Level::init(int ID)
 	this->currentLevel = ID;
 	map = TileMap::createTileMap("levels/level0" + to_string(ID) + ".txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player = new Player();
-	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, this->currentLevel);
 	player->setPosition(glm::vec2(INIT_PLAYER_X, INIT_PLAYER_Y));
 	player->setTileMap(map);
 	ball = new Ball();
-	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, this->currentLevel);
 	ball->setTileMap(map);
 	ball->setStuck(true);
 	currentTime = 0.0f;
 	currentRoom = 1;
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f * float(4 - currentRoom), 192.f * float(4 - currentRoom));
 	livesNum = 4;
+	alarmHited = false;
 }
 
 void Level::update(int deltaTime)
@@ -61,6 +62,10 @@ void Level::update(int deltaTime)
 	if (ball->getGetAllMoney()) {
 		Game::instance().runConsole();
 		cout << "YOU WIN" << endl;
+	}
+	if (ball->getGetAlarmHited()) {
+		Game::instance().runConsole();
+		cout << "ALARM HITED" << endl;
 	}
 	Game::instance().runConsole();
 	cout << "Money = " << ball->getCurrentMoney() << ", Points = " << ball->getCurrentPoints() << ", Lives = " << livesNum << endl;
@@ -113,10 +118,28 @@ void Level::update(int deltaTime)
 	{
 		ball->setStuck(false);
 	}
-	if (Game::instance().getKey('0'))
+	if (Game::instance().getKey('r'))
 	{
 		this->init(this->currentLevel);
 	}
+	if (Game::instance().getKey('u')) {
+		//currentRoom = 2;
+		Game::instance().runConsole();
+		cout << "u " << this->currentRoom << endl;
+		ball->setStuck(true);
+		cout << "u " << this->currentRoom << endl;
+		ball->setCrossingRoom(1);
+		cout << "u " << this->currentRoom << endl;
+		ball->setPosition(player->getPosition() + glm::vec2(5.f, -9.f));
+		cout << "u " << this->currentRoom << endl;
+		ball->setCurrentRoom(1);
+		cout << "u " << this->currentRoom << endl;
+		this->currentRoom = ball->getCurrentRoom();
+		cout << "u " << this->currentRoom << endl;
+	}
+	if (Game::instance().getKey('2')) currentRoom = 2;
+	if (Game::instance().getKey('3')) currentRoom = 3;
+	if (Game::instance().getKey('4')) currentRoom = 4;
 }
 
 void Level::render()
