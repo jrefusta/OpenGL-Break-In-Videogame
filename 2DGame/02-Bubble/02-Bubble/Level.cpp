@@ -12,22 +12,43 @@ using namespace std;
 #define INIT_PLAYER_X 96
 #define INIT_PLAYER_Y 742
 
+#define INIT_INFO_X 200
+#define INIT_INFO_Y 576
+
 
 Level::Level()
 {
 	map = NULL;
+	moneyMap = NULL;
+	pointsMap = NULL;
+	livesMap = NULL;
+	bankMap = NULL;
+	roomMap = NULL;
 	player = NULL;
 	ball = NULL;
+	info = NULL;
 }
 
 Level::~Level()
 {
 	if (map != NULL)
 		delete map;
+	if (moneyMap != NULL)
+		delete moneyMap;
+	if (pointsMap != NULL)
+		delete pointsMap;
+	if (livesMap != NULL)
+		delete livesMap;
+	if (bankMap != NULL)
+		delete bankMap;
+	if (roomMap != NULL)
+		delete roomMap;
 	if (player != NULL)
 		delete player;
 	if (ball != NULL)
 		delete ball;
+	if (info != NULL)
+		delete info;
 }
 
 
@@ -37,6 +58,11 @@ void Level::init(int ID)
 	initShaders();
 	this->currentLevel = ID;
 	map = TileMap::createTileMap("levels/level0" + to_string(ID) + ".txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	moneyMap = TileMap::createTileMap("tilemaps/money.txt", glm::vec2(208.0, 32.0), texProgram);
+	pointsMap = TileMap::createTileMap("tilemaps/points.txt", glm::vec2(208.0, 72.0), texProgram);
+	livesMap = TileMap::createTileMap("tilemaps/lives.txt", glm::vec2(248.0, 120.0), texProgram);
+	bankMap = TileMap::createTileMap("tilemaps/bank.txt", glm::vec2(248.0, 152.0), texProgram);
+	roomMap = TileMap::createTileMap("tilemaps/room.txt", glm::vec2(248.0, 208.0), texProgram);
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X, INIT_PLAYER_Y));
@@ -45,6 +71,10 @@ void Level::init(int ID)
 	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	ball->setTileMap(map);
 	ball->setStuck(true);
+	info = new Info();
+	info->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	info->setPosition(glm::vec2(INIT_INFO_X, INIT_INFO_Y));
+	info->setTileMap(map);
 	currentTime = 0.0f;
 	currentRoom = 1;
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f * float(4 - currentRoom), 192.f * float(4 - currentRoom));
@@ -57,6 +87,7 @@ void Level::update(int deltaTime)
 	currentTurnTime += deltaTime;
 	player->update(deltaTime, currentRoom);
 	ball->update(deltaTime, player->getPosition(), currentRoom);
+	info->update(deltaTime);
 	this->currentRoom = ball->getCurrentRoom(); 
 	if (ball->getGetAllMoney()) {
 		Game::instance().runConsole();
@@ -136,6 +167,12 @@ void Level::render()
 	map->render();
 	ball->render();
 	player->render();
+	info->render();
+	moneyMap->render();
+	pointsMap->render();
+	livesMap->render();
+	bankMap->render();
+	roomMap->render();
 }
 
 void Level::initShaders()
