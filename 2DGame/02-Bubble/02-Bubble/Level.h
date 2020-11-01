@@ -9,6 +9,7 @@
 #include "TileMap.h"
 #include "Player.h"
 #include "Ball.h"
+#include "Info.h"
 
 
 // Scene contains all the entities of our game.
@@ -30,9 +31,10 @@ private:
 	void initShaders();
 
 private:
-	TileMap* map;
+	TileMap *map, *moneyMap, *pointsMap, *livesMap, *bankMap, *roomMap;
 	Player* player;
 	Ball* ball;
+	Info* info;
 	ShaderProgram texProgram;
 	int currentRoom;
 	int currentLevel;
