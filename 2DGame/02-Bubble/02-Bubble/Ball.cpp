@@ -74,6 +74,7 @@ void Ball::update(int deltaTime, glm::vec2 posPlayer, int currentRoom)
 			this->currentRoom -= 1;
 		}
 		else if (posBall.y < 752.0 - (24 * 8 * (this->currentRoom))) {
+			
 			this->currentRoom += 1;
 			this->crossingRoom = 1;
 		}
