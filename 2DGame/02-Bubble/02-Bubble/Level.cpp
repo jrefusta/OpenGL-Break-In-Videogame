@@ -60,7 +60,7 @@ void Level::init(int ID)
 {
 
 	initShaders();
-	this->currentLevel = ID;
+	this->currentLevel = 4;
 	map = TileMap::createTileMap("levels/level0" + to_string(this->currentLevel) + ".txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	/*moneyMap = TileMap::createTileMap("tilemaps/money.txt", glm::vec2(208.0, 32.0), texProgram);
 	pointsMap = TileMap::createTileMap("tilemaps/points.txt", glm::vec2(208.0, 72.0), texProgram);
@@ -82,7 +82,13 @@ void Level::init(int ID)
 	if (this->currentLevel == 4) {
 		thief = new Thief();
 		thief->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-		thief->setPosition(glm::vec2(INIT_PLAYER_X, INIT_PLAYER_Y - 100));
+		thief->setPosition(glm::vec2(INIT_PLAYER_X+55, INIT_PLAYER_Y - 150));
+		thief->setTileMap(map);
+	}
+	else {
+		thief = new Thief();
+		thief->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		thief->setPosition(glm::vec2(0, 0));
 		thief->setTileMap(map);
 	}
 	for (int i = 0; i < 7; ++i) {
@@ -127,7 +133,7 @@ void Level::update(int deltaTime)
 	currentTime += deltaTime;
 	currentTurnTime += deltaTime;
 	player->update(deltaTime, currentRoom);
-	ball->update(deltaTime, player->getPosition(), currentRoom);
+	ball->update(deltaTime, player->getPosition(), thief->getPosition(), currentRoom);
 	info->update(deltaTime);
 	this->currentRoom = ball->getCurrentRoom();
 	if (this->currentLevel == 4) thief->update(deltaTime, currentRoom);
@@ -158,6 +164,12 @@ void Level::update(int deltaTime)
 		room[i]->setPosition(glm::vec2(248 + 8*i, 784 - 192.f*float(currentRoom - 1)));
 	}
 	this->currentRoom = ball->getCurrentRoom(); 
+	if (this->currentLevel == 4) {
+		if (ball->getThiefShooted()) {
+			ball->setThiefShooted(false);
+			thief->setLives(thief->getLives() - 1);
+		}
+	}
 	if (ball->getGetAllMoney()) {
 		/*Game::instance().runConsole();
 		cout << "YOU WIN" << endl;*/

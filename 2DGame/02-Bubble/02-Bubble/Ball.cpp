@@ -22,9 +22,10 @@ void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, int 
 	this->currentPoints = 0;
 	this->currentLevel = ID;
 	this->alarmHit = false;
+	this->thiefShooted = false;
 }
 
-void Ball::update(int deltaTime, glm::vec2 posPlayer, int currentRoom)
+void Ball::update(int deltaTime, glm::vec2 posPlayer, glm::vec2 posThief, int currentRoom)
 {
 	sprite->update(deltaTime);
 	if (map->getTotalMoney() == 0) {
@@ -47,6 +48,12 @@ void Ball::update(int deltaTime, glm::vec2 posPlayer, int currentRoom)
 		if (collisionPlayer(posPlayer) && ballVelY > 0) {
 			posBall.y -= ballVelY;
 			ballVelY = -abs(ballVelY);
+		}
+
+		if (collisionThief(posThief) && ballVelY < 0) {
+			posBall.y -= ballVelY;
+			ballVelY = abs(ballVelY);
+			thiefShooted = true;
 		}
 		posBall.x += ballVelX;
 
@@ -118,9 +125,12 @@ void Ball::setCrossingRoom(int c) {
 
 bool Ball::collisionPlayer(glm::vec2& posPlayer) {
 	bool collisionX = posPlayer.x + 19 >= posBall.x && posBall.x + 9 >= posPlayer.x;
-	// collision y-axis?
 	bool collisionY = posPlayer.y + 8 >= posBall.y && posBall.y + 10 >= posPlayer.y;
-	// collision only if on both axes
+	return collisionX && collisionY;
+}
+bool Ball::collisionThief(glm::vec2& posThief) {
+	bool collisionX = posThief.x + 19 >= posBall.x && posBall.x + 9 >= posThief.x;
+	bool collisionY = (posThief.y+18) + 8 >= posBall.y && posBall.y + 10 >= (posThief.y+18);
 	return collisionX && collisionY;
 }
 
@@ -130,6 +140,14 @@ bool Ball::getStuck() {
 
 void Ball::setStuck(bool s) {
 	this->stuck = s;
+}
+
+bool Ball::getThiefShooted() {
+	return this->thiefShooted;
+}
+
+void Ball::setThiefShooted(bool t) {
+	this->thiefShooted = t;
 }
 
 void Ball::render()

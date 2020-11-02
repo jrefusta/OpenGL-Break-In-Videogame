@@ -17,11 +17,13 @@ public:
 	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
 	void update(int deltaTime, int currentRoom);
 	void render();
-
+	bool collisionBall(glm::vec2 posBall);
 	void setTileMap(TileMap* tileMap);
 	void setVelocityX(int vx);
 	void setVelocityY(int vy);
 	void setStage(int s);
+	void setLives(int l);
+	int getLives();
 	void setPosition(const glm::vec2& pos);
 	glm::vec2 getPosition();
 
@@ -34,6 +36,12 @@ private:
 	int thiefVelY;
 	int thiefVelX;
 	int stage;
+	int lives;
+	ShaderProgram shaderProgram;
+	bool destroyed1Stage;
+	bool destroyed2Stage;
+	bool destroyed3Stage;
+	bool destroyed4Stage;
 };
 
 
