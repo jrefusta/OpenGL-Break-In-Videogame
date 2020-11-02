@@ -29,6 +29,10 @@ Sprite::Sprite(const glm::vec2 &quadSize, const glm::vec2 &sizeInSpritesheet, Te
 	posLocation = program->bindVertexAttribute("position", 2, 4*sizeof(float), 0);
 	texCoordLocation = program->bindVertexAttribute("texCoord", 2, 4*sizeof(float), (void *)(2*sizeof(float)));
 	texture = spritesheet;
+	texture->setWrapS(GL_CLAMP_TO_EDGE);
+	texture->setWrapT(GL_CLAMP_TO_EDGE);
+	texture->setMinFilter(GL_NEAREST);
+	texture->setMagFilter(GL_NEAREST);
 	shaderProgram = program;
 	currentAnimation = -1;
 	position = glm::vec2(0.f);

@@ -87,7 +87,7 @@ void Level::init(int ID)
 	}
 	currentTime = 0.0f;
 	currentRoom = 1;
-	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
+	projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
 	livesNum = 4;
 	currentTurnTime = 0.0f;
 }
@@ -180,7 +180,7 @@ void Level::update(int deltaTime)
 	{
 		projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f * float(4 - currentRoom), 192.f * float(4 - currentRoom));
 	}*/
-	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f * float(4 - currentRoom), 192.f * float(4 - currentRoom));
+	projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
 
 	if (Game::instance().getKey('\ ') || Game::instance().getSpecialKey(GLUT_KEY_UP))
 	{

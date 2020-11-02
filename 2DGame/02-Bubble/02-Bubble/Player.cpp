@@ -19,7 +19,7 @@
 
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, int ID)
 {
-	if (ID != 4) spritesheet.loadFromFile("images/police.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	if (ID == 4) spritesheet.loadFromFile("images/police.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	else spritesheet.loadFromFile("images/player.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(19, 26), glm::vec2(1.0, 1.0), &spritesheet, &shaderProgram);
 	/*sprite->setNumberAnimations(4);
@@ -54,13 +54,13 @@ void Player::update(int deltaTime, int currentRoom)
 	{
 		/*if (sprite->animation() != MOVE_LEFT)
 			sprite->changeAnimation(MOVE_LEFT);*/
-		if (posPlayer.x > 8) posPlayer.x -= 4;
+		if (posPlayer.x > 8) posPlayer.x -= 2;
 	}
 	if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
 	{
 		//if (sprite->animation() != MOVE_RIGHT)
 			//sprite->changeAnimation(MOVE_RIGHT);
-		if (posPlayer.x < 166) posPlayer.x += 4;
+		if (posPlayer.x < 166) posPlayer.x += 2;
 	}/*
 	else
 	{
