@@ -89,6 +89,11 @@ void Level::init(int ID)
 	currentRoom = 1;
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
 	livesNum = 4;
+<<<<<<< HEAD
+=======
+	alarmHited = false;
+	currentTurnTime = 0.0f;
+>>>>>>> c8e8b7362649cea35792c1aea0ef7b0efec11ef8
 }
 
 void Level::update(int deltaTime)
@@ -98,6 +103,7 @@ void Level::update(int deltaTime)
 	player->update(deltaTime, currentRoom);
 	ball->update(deltaTime, player->getPosition(), currentRoom);
 	info->update(deltaTime);
+<<<<<<< HEAD
 	info->setPosition(glm::vec2(INIT_INFO_X, INIT_INFO_Y - 192.f*float(currentRoom - 1)));
 	for (int i = 0; i < 7; ++i) {
 		int animId = ball->getCurrentMoney()/int(pow(10, 7 - 1 - i))%10;
@@ -125,10 +131,21 @@ void Level::update(int deltaTime)
 		room[i]->setPosition(glm::vec2(248 + 8*i, 784 - 192.f*float(currentRoom - 1)));
 	}
 	this->currentRoom = ball->getCurrentRoom(); 
+=======
+	this->currentRoom = ball->getCurrentRoom();
+>>>>>>> c8e8b7362649cea35792c1aea0ef7b0efec11ef8
 	if (ball->getGetAllMoney()) {
 		/*Game::instance().runConsole();
 		cout << "YOU WIN" << endl;*/
 	}
+<<<<<<< HEAD
+=======
+	if (ball->getGetAlarmHited()) {
+		Game::instance().runConsole();
+		cout << "ALARM HITED" << endl;
+	}
+
+>>>>>>> c8e8b7362649cea35792c1aea0ef7b0efec11ef8
 	if (ball->getStuck()) {
 		ball->setPosition(player->getPosition() + glm::vec2(5.f, -9.f));
 	}
@@ -158,7 +175,7 @@ void Level::update(int deltaTime)
 		--livesNum;
 		Sleep(1500);
 	}
-	if (this->currentRoom == 1)
+	/*if (this->currentRoom == 1)
 	{
 		projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f * float(4 - currentRoom), 192.f * float(4 - currentRoom));
 	}
@@ -173,7 +190,9 @@ void Level::update(int deltaTime)
 	if (this->currentRoom == 4)
 	{
 		projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f * float(4 - currentRoom), 192.f * float(4 - currentRoom));
-	}
+	}*/
+	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f * float(4 - currentRoom), 192.f * float(4 - currentRoom));
+
 	if (Game::instance().getKey('\ ') || Game::instance().getSpecialKey(GLUT_KEY_UP))
 	{
 		ball->setStuck(false);
@@ -182,12 +201,31 @@ void Level::update(int deltaTime)
 	{
 		this->init(this->currentLevel);
 	}
+<<<<<<< HEAD
 	if (Game::instance().getKey('1')) currentRoom = 1;
 	if (Game::instance().getKey('2')) currentRoom = 2;
 	if (Game::instance().getKey('3')) currentRoom = 3;
 	if (Game::instance().getKey('4')) currentRoom = 4;
+=======
+	if (currentTurnTime >= float(300.0f)) {
+		if (Game::instance().getKey('u') || Game::instance().getKey('U')) {//upper Layer
+			if (this->currentRoom > 0 && this->currentRoom < 4) {
+				ball->setStuck(false);
+				ball->setPosition(player->getPosition() + glm::vec2(5.f, -201.f));
+				currentTurnTime = 0;
+			}
+		}
+		if (Game::instance().getKey('g') || Game::instance().getKey('G')) {//God mode
+			if (this->currentRoom > 0 && this->currentRoom < 4) {
+				ball->setStuck(false);
+				ball->setPosition(player->getPosition() + glm::vec2(5.f, -201.f));
+				currentTurnTime = 0;
+			}
+		}
+	}
+	
+>>>>>>> c8e8b7362649cea35792c1aea0ef7b0efec11ef8
 }
-
 void Level::render()
 {
 	glm::mat4 modelview;

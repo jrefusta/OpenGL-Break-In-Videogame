@@ -1,5 +1,6 @@
 #include "Play.h"
-
+#include <iostream>
+using namespace std;
 Play::Play() {
 
 }
@@ -33,7 +34,6 @@ void Play::loadSprites() {
 void Play::update(int deltaTime) {
 	currentTime += deltaTime;
 	currentTurnTime += deltaTime;
-
 	if (currentTurnTime >= float(150.0f)) {
 		if (Game::instance().moveDownPressed()) {
 			if (level < 2) ++level;
