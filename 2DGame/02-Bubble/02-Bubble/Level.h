@@ -10,6 +10,7 @@
 #include "Player.h"
 #include "Ball.h"
 #include "Info.h"
+#include "Digit.h"
 
 
 // Scene contains all the entities of our game.
@@ -31,16 +32,16 @@ private:
 	void initShaders();
 
 private:
-	TileMap *map, *moneyMap, *pointsMap, *livesMap, *bankMap, *roomMap;
+	TileMap* map;
 	Player* player;
 	Ball* ball;
-	Info* info;
+	Info *info;
+	Digit *money[7], *points[7], *lives[2], *bank[2], *room[2];
 	ShaderProgram texProgram;
 	int currentRoom;
 	int currentLevel;
 	glm::mat4 projection;
 	int livesNum;
-	bool alarmHited;
 };
 
 
