@@ -216,3 +216,15 @@
 2DGame/02-Bubble/02-Bubble/Debug/Scene.obj
 2DGame/02-Bubble/02-Bubble/Debug/Shader.obj
 *.obj
+*.exe
+*.ilk
+*.pdb
+2DGame/02-Bubble/.vs/02-Bubble/v16/.suo
+*.db
+*.recipe
+*.log
+*.lastbuildstate
+*.tlog
+*.obj
+*.idb
+*.pdb

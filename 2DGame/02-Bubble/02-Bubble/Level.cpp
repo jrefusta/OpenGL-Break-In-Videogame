@@ -20,7 +20,12 @@ using namespace std;
 Level::Level()
 {
 	map = NULL;
-	player = NULL;
+	/*moneyMap = NULL;
+	pointsMap = NULL;
+	livesMap = NULL;
+	bankMap = NULL;
+	roomMap = NULL;
+	player = NULL;*/
 	ball = NULL;
 	info = NULL;
 	thief = NULL;
@@ -29,7 +34,17 @@ Level::Level()
 Level::~Level()
 {
 	if (map != NULL)
-		delete map;
+		delete map; 
+	/*if (moneyMap != NULL)
+		delete moneyMap;
+	if (pointsMap != NULL)
+		delete pointsMap;
+	if (livesMap != NULL)
+		delete livesMap;
+	if (bankMap != NULL)
+		delete bankMap;
+	if (roomMap != NULL)
+		delete roomMap;*/
 	if (player != NULL)
 		delete player;
 	if (ball != NULL)
@@ -47,17 +62,17 @@ void Level::init(int ID)
 	initShaders();
 	this->currentLevel = ID;
 	map = TileMap::createTileMap("levels/level0" + to_string(this->currentLevel) + ".txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	moneyMap = TileMap::createTileMap("tilemaps/money.txt", glm::vec2(208.0, 32.0), texProgram);
+	/*moneyMap = TileMap::createTileMap("tilemaps/money.txt", glm::vec2(208.0, 32.0), texProgram);
 	pointsMap = TileMap::createTileMap("tilemaps/points.txt", glm::vec2(208.0, 72.0), texProgram);
 	livesMap = TileMap::createTileMap("tilemaps/lives.txt", glm::vec2(248.0, 120.0), texProgram);
 	bankMap = TileMap::createTileMap("tilemaps/bank.txt", glm::vec2(248.0, 152.0), texProgram);
-	roomMap = TileMap::createTileMap("tilemaps/room.txt", glm::vec2(248.0, 208.0), texProgram);
+	roomMap = TileMap::createTileMap("tilemaps/room.txt", glm::vec2(248.0, 208.0), texProgram);*/
 	player = new Player();
-	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, ID);
+	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, this->currentLevel);
 	player->setPosition(glm::vec2(INIT_PLAYER_X, INIT_PLAYER_Y));
 	player->setTileMap(map);
 	ball = new Ball();
-	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, ID);
+	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, this->currentLevel);
 	ball->setTileMap(map);
 	ball->setStuck(true);
 	info = new Info();
@@ -243,7 +258,7 @@ void Level::render()
 	ball->render();
 	player->render();
 	info->render();
-	thief->render();
+	if (this->currentLevel == 4) thief->render();
 	for (int i = 0; i < 7; ++i) money[i]->render();
 	for (int i = 0; i < 7; ++i) points[i]->render();
 	for (int i = 0; i < 2; ++i) lives[i]->render();

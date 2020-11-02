@@ -38,7 +38,6 @@ private:
 	Ball* ball;
 	Info* info;
 	Thief* thief;
-	Info *info;
 	Digit *money[7], *points[7], *lives[2], *bank[2], *room[2];
 	ShaderProgram texProgram;
 	int currentRoom;
