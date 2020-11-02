@@ -63,7 +63,11 @@
     <ClInclude Include="Info.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="Thief.h">
+=======
+    <ClInclude Include="Digit.h">
+>>>>>>> e4df8b5b5178cf981a14bd84626b830f54d044a5
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
@@ -116,7 +120,11 @@
     <ClCompile Include="Info.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="Thief.cpp">
+=======
+    <ClCompile Include="Digit.cpp">
+>>>>>>> e4df8b5b5178cf981a14bd84626b830f54d044a5
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
   </ItemGroup>

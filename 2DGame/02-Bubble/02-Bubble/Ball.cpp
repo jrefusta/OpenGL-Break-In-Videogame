@@ -21,7 +21,7 @@ void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, int 
 	this->currentMoney = 0;
 	this->currentPoints = 0;
 	this->currentLevel = ID;
-	this->alarmHited = false;
+	this->alarmHit = false;
 }
 
 void Ball::update(int deltaTime, glm::vec2 posPlayer, int currentRoom)
@@ -30,7 +30,7 @@ void Ball::update(int deltaTime, glm::vec2 posPlayer, int currentRoom)
 	if (map->getTotalMoney() == 0) {
 		this->getAllMoney = true;
 	}
-	this->alarmHited = map->getAlarmHited();
+	this->alarmHit = map->getAlarmHited();
 	this->currentMoney = map->getMoney();
 	this->currentPoints = map->getPoints();
 	if (!this->getStuck()) {
@@ -85,8 +85,8 @@ void Ball::update(int deltaTime, glm::vec2 posPlayer, int currentRoom)
 bool Ball::getGetAllMoney() {
 	return this->getAllMoney;
 }
-bool Ball::getGetAlarmHited() {
-	return this->alarmHited;
+bool Ball::getGetAlarmHit() {
+	return this->alarmHit;
 }
 
 void Ball::destroyedTop() {
