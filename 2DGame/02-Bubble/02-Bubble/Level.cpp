@@ -80,7 +80,6 @@ void Level::init(int ID)
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f * float(4 - currentRoom), 192.f * float(4 - currentRoom));
 	livesNum = 4;
 	alarmHited = false;
-	upLevel = false;
 	currentTurnTime = 0.0f;
 }
 
@@ -114,11 +113,6 @@ void Level::update(int deltaTime)
 			player->setPosition(player->getPosition() + glm::vec2(0, 192));
 		}
 		ball->setCrossingRoom(0);
-	}
-
-	if (upLevel) {
-		player->setPosition(player->getPosition() + glm::vec2(0, -12));
-		upLevel = false;
 	}
 
 	if (this->livesNum == -1) {

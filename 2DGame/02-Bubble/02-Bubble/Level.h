@@ -41,7 +41,6 @@ private:
 	glm::mat4 projection;
 	int livesNum;
 	bool alarmHited;
-	bool upLevel;
 };
 
 
