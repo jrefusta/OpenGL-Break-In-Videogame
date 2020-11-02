@@ -89,11 +89,7 @@ void Level::init(int ID)
 	currentRoom = 1;
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
 	livesNum = 4;
-<<<<<<< HEAD
-=======
-	alarmHited = false;
 	currentTurnTime = 0.0f;
->>>>>>> c8e8b7362649cea35792c1aea0ef7b0efec11ef8
 }
 
 void Level::update(int deltaTime)
@@ -103,7 +99,6 @@ void Level::update(int deltaTime)
 	player->update(deltaTime, currentRoom);
 	ball->update(deltaTime, player->getPosition(), currentRoom);
 	info->update(deltaTime);
-<<<<<<< HEAD
 	info->setPosition(glm::vec2(INIT_INFO_X, INIT_INFO_Y - 192.f*float(currentRoom - 1)));
 	for (int i = 0; i < 7; ++i) {
 		int animId = ball->getCurrentMoney()/int(pow(10, 7 - 1 - i))%10;
@@ -131,21 +126,15 @@ void Level::update(int deltaTime)
 		room[i]->setPosition(glm::vec2(248 + 8*i, 784 - 192.f*float(currentRoom - 1)));
 	}
 	this->currentRoom = ball->getCurrentRoom(); 
-=======
-	this->currentRoom = ball->getCurrentRoom();
->>>>>>> c8e8b7362649cea35792c1aea0ef7b0efec11ef8
 	if (ball->getGetAllMoney()) {
 		/*Game::instance().runConsole();
 		cout << "YOU WIN" << endl;*/
 	}
-<<<<<<< HEAD
-=======
-	if (ball->getGetAlarmHited()) {
+	if (ball->getGetAlarmHit()) {
 		Game::instance().runConsole();
 		cout << "ALARM HITED" << endl;
 	}
 
->>>>>>> c8e8b7362649cea35792c1aea0ef7b0efec11ef8
 	if (ball->getStuck()) {
 		ball->setPosition(player->getPosition() + glm::vec2(5.f, -9.f));
 	}
@@ -201,12 +190,10 @@ void Level::update(int deltaTime)
 	{
 		this->init(this->currentLevel);
 	}
-<<<<<<< HEAD
 	if (Game::instance().getKey('1')) currentRoom = 1;
 	if (Game::instance().getKey('2')) currentRoom = 2;
 	if (Game::instance().getKey('3')) currentRoom = 3;
 	if (Game::instance().getKey('4')) currentRoom = 4;
-=======
 	if (currentTurnTime >= float(300.0f)) {
 		if (Game::instance().getKey('u') || Game::instance().getKey('U')) {//upper Layer
 			if (this->currentRoom > 0 && this->currentRoom < 4) {
@@ -223,8 +210,6 @@ void Level::update(int deltaTime)
 			}
 		}
 	}
-	
->>>>>>> c8e8b7362649cea35792c1aea0ef7b0efec11ef8
 }
 void Level::render()
 {
@@ -244,7 +229,9 @@ void Level::render()
 	for (int i = 0; i < 7; ++i) points[i]->render();
 	for (int i = 0; i < 2; ++i) lives[i]->render();
 	for (int i = 0; i < 2; ++i) bank[i]->render();
-	for (int i = 0; i < 2; ++i) room[i]->render();
+	if (currentRoom > 1 || int(currentTime/500)%2 == 0) {
+		for (int i = 0; i < 2; ++i) room[i]->render();
+	}
 }
 
 void Level::initShaders()

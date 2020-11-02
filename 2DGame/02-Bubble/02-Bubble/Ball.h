@@ -24,7 +24,7 @@ public:
 	void setStuck(bool s);
 	void setCrossingRoom(int c);
 	bool getGetAllMoney();
-	bool getGetAlarmHited();
+	bool getGetAlarmHit();
 	bool getStuck();	
 	int getCurrentMoney();
 	int getCurrentPoints();
@@ -37,7 +37,7 @@ private:
 	int ballVelY;
 	int currentRoom;
 	bool stuck;
-	bool alarmHited;
+	bool alarmHit;
 	float currentTime;	
 	int currentMoney;
 	int currentPoints;
