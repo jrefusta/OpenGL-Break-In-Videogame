@@ -10,6 +10,7 @@
 #include "Player.h"
 #include "Ball.h"
 #include "Info.h"
+#include "Thief.h"
 
 
 // Scene contains all the entities of our game.
@@ -35,6 +36,7 @@ private:
 	Player* player;
 	Ball* ball;
 	Info* info;
+	Thief* thief;
 	ShaderProgram texProgram;
 	int currentRoom;
 	int currentLevel;

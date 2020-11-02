@@ -6,11 +6,6 @@
 #include "Game.h"
 
 
-#define JUMP_ANGLE_STEP 4
-#define JUMP_HEIGHT 96
-#define FALL_STEP 4
-
-
 /*enum PlayerAnims
 {
 	STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT
@@ -19,7 +14,7 @@
 
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, int ID)
 {
-	if (ID != 4) spritesheet.loadFromFile("images/police.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	if (ID == 4) spritesheet.loadFromFile("images/police.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	else spritesheet.loadFromFile("images/player.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(19, 26), glm::vec2(1.0, 1.0), &spritesheet, &shaderProgram);
 	/*sprite->setNumberAnimations(4);

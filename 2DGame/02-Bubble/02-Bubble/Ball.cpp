@@ -88,6 +88,10 @@ bool Ball::getGetAllMoney() {
 bool Ball::getGetAlarmHited() {
 	return this->alarmHited;
 }
+
+void Ball::destroyedTop() {
+	map->destroyTop(tileMapDispl, shaderProgram, currentRoom);
+}
 int Ball::getCurrentMoney() {
 	return this->currentMoney;
 }

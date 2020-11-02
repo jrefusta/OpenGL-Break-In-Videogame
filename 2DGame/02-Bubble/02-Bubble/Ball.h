@@ -26,6 +26,7 @@ public:
 	bool getGetAllMoney();
 	bool getGetAlarmHited();
 	bool getStuck();	
+	void destroyedTop();
 	int getCurrentMoney();
 	int getCurrentPoints();
 	int getCrossingRoom();

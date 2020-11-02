@@ -3,6 +3,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "Scene.h"
 #include "Game.h"
+#include "Level.h"
 #include <string>
 using namespace std;
 
@@ -27,6 +28,7 @@ Level::Level()
 	player = NULL;
 	ball = NULL;
 	info = NULL;
+	thief = NULL;
 }
 
 Level::~Level()
@@ -49,6 +51,8 @@ Level::~Level()
 		delete ball;
 	if (info != NULL)
 		delete info;
+	if (thief != NULL)
+		delete thief;
 }
 
 
@@ -56,8 +60,8 @@ void Level::init(int ID)
 {
 
 	initShaders();
-	this->currentLevel = ID;
-	map = TileMap::createTileMap("levels/level0" + to_string(ID) + ".txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	this->currentLevel = 4; //ID;
+	map = TileMap::createTileMap("levels/level0" + to_string(this->currentLevel) + ".txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	moneyMap = TileMap::createTileMap("tilemaps/money.txt", glm::vec2(208.0, 32.0), texProgram);
 	pointsMap = TileMap::createTileMap("tilemaps/points.txt", glm::vec2(208.0, 72.0), texProgram);
 	livesMap = TileMap::createTileMap("tilemaps/lives.txt", glm::vec2(248.0, 120.0), texProgram);
@@ -75,6 +79,12 @@ void Level::init(int ID)
 	info->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	info->setPosition(glm::vec2(INIT_INFO_X, INIT_INFO_Y));
 	info->setTileMap(map);
+	if (this->currentLevel == 4) {
+		thief = new Thief();
+		thief->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		thief->setPosition(glm::vec2(INIT_PLAYER_X, INIT_PLAYER_Y - 100));
+		thief->setTileMap(map);
+	}
 	currentTime = 0.0f;
 	currentRoom = 1;
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f * float(4 - currentRoom), 192.f * float(4 - currentRoom));
@@ -90,6 +100,7 @@ void Level::update(int deltaTime)
 	player->update(deltaTime, currentRoom);
 	ball->update(deltaTime, player->getPosition(), currentRoom);
 	info->update(deltaTime);
+	thief->update(deltaTime, currentRoom);
 	this->currentRoom = ball->getCurrentRoom();
 	if (ball->getGetAllMoney()) {
 		Game::instance().runConsole();
@@ -158,6 +169,7 @@ void Level::update(int deltaTime)
 	if (currentTurnTime >= float(300.0f)) {
 		if (Game::instance().getKey('u') || Game::instance().getKey('U')) {//upper Layer
 			if (this->currentRoom > 0 && this->currentRoom < 4) {
+				ball->destroyedTop();
 				ball->setStuck(false);
 				ball->setPosition(player->getPosition() + glm::vec2(5.f, -201.f));
 				currentTurnTime = 0;
@@ -192,6 +204,7 @@ void Level::render()
 	livesMap->render();
 	bankMap->render();
 	roomMap->render();
+	thief->render();
 }
 
 void Level::initShaders()
