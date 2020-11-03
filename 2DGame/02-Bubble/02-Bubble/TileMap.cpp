@@ -1893,3 +1893,13 @@ bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, con
 	}
 	return false;
 }
+
+void TileMap::destroyTop(const glm::vec2& minCoords, ShaderProgram& program, int currentRoom) {
+	for (int i = 8; i <= 15; ++i) {
+		int pos = (96 - currentRoom * 24) * mapSize.x + i;
+		int tile;
+		if (i % 2 == 0) tile = 19;
+		else tile = 20;
+		printTile(minCoords, program, pos, tile);
+	}
+}

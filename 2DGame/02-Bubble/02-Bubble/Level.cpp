@@ -3,6 +3,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "Scene.h"
 #include "Game.h"
+#include "Level.h"
 #include <string>
 using namespace std;
 
@@ -19,9 +20,9 @@ using namespace std;
 Level::Level()
 {
 	map = NULL;
-	player = NULL;
 	ball = NULL;
 	info = NULL;
+	thief = NULL;
 }
 
 Level::~Level()
@@ -34,6 +35,8 @@ Level::~Level()
 		delete ball;
 	if (info != NULL)
 		delete info;
+	if (thief != NULL)
+		delete thief;
 }
 
 
@@ -41,20 +44,32 @@ void Level::init(int ID)
 {
 
 	initShaders();
-	this->currentLevel = ID;
-	map = TileMap::createTileMap("levels/level0" + to_string(ID) + ".txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	currentLevel = ID;
+	map = TileMap::createTileMap("levels/level0" + to_string(currentLevel) + ".txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player = new Player();
-	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, ID);
+	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, currentLevel);
 	player->setPosition(glm::vec2(INIT_PLAYER_X, INIT_PLAYER_Y));
 	player->setTileMap(map);
 	ball = new Ball();
-	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, ID);
+	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, currentLevel);
 	ball->setTileMap(map);
 	ball->setStuck(true);
 	info = new Info();
 	info->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	info->setPosition(glm::vec2(INIT_INFO_X, INIT_INFO_Y));
 	info->setTileMap(map);
+	if (currentLevel == 4) {
+		thief = new Thief();
+		thief->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		thief->setPosition(glm::vec2(INIT_PLAYER_X+55, INIT_PLAYER_Y - 150));
+		thief->setTileMap(map);
+	}
+	else {
+		thief = new Thief();
+		thief->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		thief->setPosition(glm::vec2(0, 0));
+		thief->setTileMap(map);
+	}
 	for (int i = 0; i < 7; ++i) {
 		money[i] = new Digit();
 		money[i]->init(glm::ivec2(0, 0), texProgram);
@@ -99,11 +114,12 @@ void Level::update(int deltaTime)
 {
 	currentTime += deltaTime;
 	currentTurnTime += deltaTime;
-	this->currentRoom = ball->getCurrentRoom();
+	currentRoom = ball->getCurrentRoom();
 	player->update(deltaTime, currentRoom);
-	ball->update(deltaTime, player->getPosition(), currentRoom);
+	ball->update(deltaTime, player->getPosition(), thief->getPosition(), currentRoom);
 	info->update(deltaTime);
 	info->setPosition(glm::vec2(INIT_INFO_X, INIT_INFO_Y - 192.f*float(currentRoom - 1)));
+	if (currentLevel == 4) thief->update(deltaTime, currentRoom);
 	for (int i = 0; i < 7; ++i) {
 		int animId = ball->getCurrentMoney()/int(pow(10, 7 - 1 - i))%10;
 		money[i]->update(deltaTime, animId);
@@ -130,6 +146,12 @@ void Level::update(int deltaTime)
 		room[i]->setPosition(glm::vec2(248 + 8*i, 784 - 192.f*float(currentRoom - 1)));
 	}
 	frameSprite->setPosition(glm::vec2(0.0, 576.0 - 192.0*float(currentRoom - 1)));
+	if (currentLevel == 4) {
+		if (ball->getThiefShooted()) {
+			ball->setThiefShooted(false);
+			thief->setLives(thief->getLives() - 1);
+		}
+	}
 	if (ball->getGetAllMoney()) {
 		/*Game::instance().runConsole();
 		cout << "YOU WIN" << endl;*/
@@ -148,42 +170,26 @@ void Level::update(int deltaTime)
 		ball->setCrossingRoom(0);
 	}
 	if (ball->getCrossingRoom() == -1) {
-		if (this->currentRoom != 0) {
+		if (currentRoom != 0) {
 			player->setPosition(player->getPosition() + glm::vec2(0, 192));
 		}
 		ball->setCrossingRoom(0);
 	}
 
-	if (this->livesNum == -1) {
-		Game::instance().runConsole();
-		cout << "GAME OVER" << endl;
+	if (livesNum == -1) {
+		/*Game::instance().runConsole();
+		cout << "GAME OVER" << endl;*/
 	}
-	if (this->currentRoom == 0)
+	if (currentRoom == 0)
 	{
 		ball->setStuck(true);
 		player->setPosition(glm::vec2(INIT_PLAYER_X, INIT_PLAYER_Y));
 		ball->setPosition(player->getPosition() + glm::vec2(5.f, -9.f));
 		ball->setCurrentRoom(1);
-		this->currentRoom = ball->getCurrentRoom();
+		currentRoom = ball->getCurrentRoom();
 		--livesNum;
 		Sleep(1500);
 	}
-	/*if (this->currentRoom == 1)
-	{
-		projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f * float(4 - currentRoom), 192.f * float(4 - currentRoom));
-	}
-	if (this->currentRoom == 2)
-	{
-		projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f * float(4 - currentRoom), 192.f * float(4 - currentRoom));
-	}
-	if (this->currentRoom == 3)
-	{
-		projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f * float(4 - currentRoom), 192.f * float(4 - currentRoom));
-	}
-	if (this->currentRoom == 4)
-	{
-		projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1) + 192.f * float(4 - currentRoom), 192.f * float(4 - currentRoom));
-	}*/
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
 
 	if (Game::instance().getKey('\ ') || Game::instance().getSpecialKey(GLUT_KEY_UP))
@@ -192,7 +198,7 @@ void Level::update(int deltaTime)
 	}
 	if (Game::instance().getKey('0'))
 	{
-		this->init(this->currentLevel);
+		init(currentLevel);
 	}
 	if (Game::instance().getKey('1')) currentRoom = 1;
 	if (Game::instance().getKey('2')) currentRoom = 2;
@@ -200,14 +206,15 @@ void Level::update(int deltaTime)
 	if (Game::instance().getKey('4')) currentRoom = 4;
 	if (currentTurnTime >= float(300.0f)) {
 		if (Game::instance().getKey('u') || Game::instance().getKey('U')) {//upper Layer
-			if (this->currentRoom > 0 && this->currentRoom < 4) {
+			if (currentRoom > 0 && currentRoom < 4) {
+				ball->destroyedTop();
 				ball->setStuck(false);
 				ball->setPosition(player->getPosition() + glm::vec2(5.f, -201.f));
 				currentTurnTime = 0;
 			}
 		}
 		if (Game::instance().getKey('g') || Game::instance().getKey('G')) {//God mode
-			if (this->currentRoom > 0 && this->currentRoom < 4) {
+			if (currentRoom > 0 && currentRoom < 4) {
 				ball->setStuck(false);
 				ball->setPosition(player->getPosition() + glm::vec2(5.f, -201.f));
 				currentTurnTime = 0;
@@ -230,6 +237,7 @@ void Level::render()
 	player->render();
 	frameSprite->render();
 	info->render();
+	if (currentLevel == 4) thief->render();
 	for (int i = 0; i < 7; ++i) money[i]->render();
 	for (int i = 0; i < 7; ++i) points[i]->render();
 	for (int i = 0; i < 2; ++i) lives[i]->render();

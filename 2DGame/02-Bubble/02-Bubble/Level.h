@@ -10,6 +10,7 @@
 #include "Player.h"
 #include "Ball.h"
 #include "Info.h"
+#include "Thief.h"
 #include "Digit.h"
 
 
@@ -35,7 +36,8 @@ private:
 	TileMap* map;
 	Player* player;
 	Ball* ball;
-	Info *info;
+	Info* info;
+	Thief* thief;
 	Digit *money[7], *points[7], *lives[2], *bank[2], *room[2];
 	ShaderProgram texProgram;
 	int currentRoom;

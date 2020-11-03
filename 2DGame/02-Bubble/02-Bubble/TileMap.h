@@ -45,6 +45,7 @@ public:
 	int getPoints();
 	int getMoney();
 	int getTotalMoney();
+	void destroyTop(const glm::vec2& minCoords, ShaderProgram& program, int currentRoom);
 
 private:
 	bool loadLevel(const string& levelFile);

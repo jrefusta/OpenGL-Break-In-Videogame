@@ -27,6 +27,7 @@
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="Thief.h" />
     <ClInclude Include="TileMap.h" />
   </ItemGroup>
   <ItemGroup>
@@ -46,6 +47,7 @@
     <ClCompile Include="Credits.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Thief.cpp" />
     <ClCompile Include="TileMap.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
