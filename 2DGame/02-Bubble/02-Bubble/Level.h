@@ -44,6 +44,8 @@ private:
 	int currentLevel;
 	glm::mat4 projection;
 	int livesNum;
+	Texture frameSpritesheet, batmodeSpritesheet;
+	Sprite *frameSprite, *batmodeSprite;
 };
 
 
