@@ -43,6 +43,9 @@ private:
 	int currentRoom;
 	int currentLevel;
 	glm::mat4 projection;
+	int cameraVelocity;
+	int topCamera;
+	int bottomCamera;
 	int livesNum;
 	Texture frameSpritesheet, batmodeSpritesheet;
 	Sprite *frameSprite, *batmodeSprite;

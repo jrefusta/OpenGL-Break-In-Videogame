@@ -113,7 +113,9 @@ void Level::init(int ID)
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
 	livesNum = 4;
 	currentTurnTime = 0.0f;
-	//if (currentLevel == 4) currentLevel = 1;
+	cameraVelocity = 24.0f;
+	topCamera = 192.f * float(4 - currentRoom);
+	bottomCamera = float(SCREEN_HEIGHT) + 192.f * float(4 - currentRoom);
 }
 
 void Level::update(int deltaTime)
@@ -165,9 +167,6 @@ void Level::update(int deltaTime)
 			cout << "YOU WIN" << endl;
 		}
 	}
-	if (ball->getGodMode()) {
-
-	}
 	if (ball->getGetAllMoney()) {
 		/*Game::instance().runConsole();
 		cout << "YOU WIN" << endl;*/
@@ -206,7 +205,16 @@ void Level::update(int deltaTime)
 		if (!ball->getGodMode()) --livesNum;
 		Sleep(1500);
 	}
-	projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
+	if (topCamera > 192.f * float(4 - currentRoom)) {
+		topCamera -= cameraVelocity;
+		bottomCamera -= cameraVelocity;
+		projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(bottomCamera), float(topCamera));
+	}
+	else if (topCamera < 192.f * float(4 - currentRoom)) {
+		topCamera += cameraVelocity;
+		bottomCamera += cameraVelocity;
+		projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(bottomCamera), float(topCamera));
+	}
 
 	if (Game::instance().getKey('\ ') || Game::instance().getSpecialKey(GLUT_KEY_UP))
 	{
