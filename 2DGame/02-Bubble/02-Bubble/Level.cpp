@@ -45,7 +45,7 @@ void Level::init(int ID)
 {
 
 	initShaders();
-	currentLevel = ID;
+	currentLevel = 4;
 	map = TileMap::createTileMap("levels/level0" + to_string(currentLevel) + ".txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, currentLevel);
@@ -113,7 +113,7 @@ void Level::init(int ID)
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
 	livesNum = 4;
 	currentTurnTime = 0.0f;
-	if (currentLevel == 4) currentLevel = 1;
+	//if (currentLevel == 4) currentLevel = 1;
 }
 
 void Level::update(int deltaTime)
