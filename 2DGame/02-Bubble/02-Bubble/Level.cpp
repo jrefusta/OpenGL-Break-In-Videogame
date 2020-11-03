@@ -113,7 +113,7 @@ void Level::init(int ID)
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
 	livesNum = 4;
 	currentTurnTime = 0.0f;
-	cameraVelocity = 24.0f;
+	cameraVelocity = 48.0f;
 	topCamera = 192.f * float(4 - currentRoom);
 	bottomCamera = float(SCREEN_HEIGHT) + 192.f * float(4 - currentRoom);
 }
@@ -185,7 +185,7 @@ void Level::update(int deltaTime)
 		ball->setCrossingRoom(0);
 	}
 	if (ball->getCrossingRoom() == -1) {
-		if (currentRoom != 0) {
+		if (ball->getCurrentRoom() != 0) {
 			player->setPosition(player->getPosition() + glm::vec2(0, 192));
 		}
 		ball->setCrossingRoom(0);
@@ -197,23 +197,24 @@ void Level::update(int deltaTime)
 	}
 	if (currentRoom == 0)
 	{
-		ball->setStuck(true);
 		player->setPosition(glm::vec2(INIT_PLAYER_X, INIT_PLAYER_Y));
 		ball->setPosition(player->getPosition() + glm::vec2(5.f, -9.f));
 		ball->setCurrentRoom(1);
+		ball->setStuck(true);
 		currentRoom = ball->getCurrentRoom();
 		if (!ball->getGodMode()) --livesNum;
-		Sleep(1500);
 	}
-	if (topCamera > 192.f * float(4 - currentRoom)) {
-		topCamera -= cameraVelocity;
-		bottomCamera -= cameraVelocity;
-		projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(bottomCamera), float(topCamera));
-	}
-	else if (topCamera < 192.f * float(4 - currentRoom)) {
-		topCamera += cameraVelocity;
-		bottomCamera += cameraVelocity;
-		projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(bottomCamera), float(topCamera));
+	if (currentRoom <= 4 && currentRoom != 0) {
+		if (topCamera > 192.f * float(4 - currentRoom)) {
+			topCamera -= cameraVelocity;
+			bottomCamera -= cameraVelocity;
+			projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(bottomCamera), float(topCamera));
+		}
+		else if (topCamera < 192.f * float(4 - currentRoom)) {
+			topCamera += cameraVelocity;
+			bottomCamera += cameraVelocity;
+			projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(bottomCamera), float(topCamera));
+		}
 	}
 
 	if (Game::instance().getKey('\ ') || Game::instance().getSpecialKey(GLUT_KEY_UP))

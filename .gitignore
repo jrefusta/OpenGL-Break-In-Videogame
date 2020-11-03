@@ -287,3 +287,7 @@
 *.exe
 *.ilk
 *.pdb
+*.db
+*.log
+*.tlog
+*.obj
