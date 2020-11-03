@@ -26,7 +26,8 @@ public:
 	int getLives();
 	void setPosition(const glm::vec2& pos);
 	glm::vec2 getPosition();
-
+	bool getCollisionActive();
+	bool getThiefBeaten();
 private:
 	glm::ivec2 tileMapDispl, posThief;
 	int jumpAngle, startY;
@@ -42,6 +43,8 @@ private:
 	bool destroyed2Stage;
 	bool destroyed3Stage;
 	bool destroyed4Stage;
+	bool activeCollision;
+	bool thiefBeaten;
 };
 
 

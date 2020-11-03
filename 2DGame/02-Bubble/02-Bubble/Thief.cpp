@@ -19,7 +19,7 @@ void Thief::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	this->shaderProgram = shaderProgram;
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posThief.x), float(tileMapDispl.y + posThief.y)));
-	thiefVelY = -1;
+	thiefVelY = 1;
 	thiefVelX = 1;
 	stage = 1;
 	this->lives = 3;
@@ -27,6 +27,8 @@ void Thief::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	destroyed2Stage = false;
 	destroyed3Stage = false;
 	destroyed4Stage = false;
+	this->thiefBeaten = false;
+	activeCollision = true;
 }
 
 void Thief::update(int deltaTime, int currentRoom)
@@ -35,49 +37,99 @@ void Thief::update(int deltaTime, int currentRoom)
 
 	if (stage == 1) {
 		if (lives == 0) {
+			activeCollision = false;
 			if (!destroyed1Stage) {
 				map->destroyTop(tileMapDispl, shaderProgram, stage);
 				destroyed1Stage = true;
 			}
-			if (posThief.x < 87) posThief.x += 4;
-			else if (posThief.x > 87) posThief.x -= 4;
+			if (posThief.x < 87) {
+				posThief.x += 1;
+			}
+			else if (posThief.x > 87) {
+				posThief.x -= 1;
+			}
 			else {
 				posThief.y -= 4;
-				if (posThief.y < 350) {
-					lives = 3;
-					stage = 2;
-					thiefVelX = 1;
+				if (posThief.y < 450) {
+					activeCollision = true;
+					this->lives = 3;
+					this->stage = 2;
+					thiefVelX = 2;
 				}
 			}
 		}
 		if (lives == 2) {
 			if (posThief.x > 20) {
+				activeCollision = false;
 				posThief.x -= 3;
 			}
+			else activeCollision = true;
 		}
 		if (lives == 1) {
 			if (posThief.x < 87) {
+				activeCollision = false;
 				posThief.x += 3;
 			}
+			else activeCollision = true;
 		}
 	}
 	if (stage == 2) {
 		if (lives == 0) {
-			if (!destroyed1Stage) {
+			activeCollision = false;
+			if (!destroyed2Stage) {
 				map->destroyTop(tileMapDispl, shaderProgram, stage);
-				destroyed1Stage = true;
+				destroyed2Stage = true;
 			}
-			posThief.x += thiefVelX * 2;
-			if (posThief.x == 87) {
-				thiefVelX = 0;
+			if (posThief.x < 80) posThief.x += 4;
+			else if (posThief.x > 90) posThief.x -= 4;
+			else {
 				posThief.y -= 4;
-				if (posThief.y < 450) {
+				if (posThief.y < 250) {
+					activeCollision = true;
 					lives = 3;
-					stage = 2;
-					thiefVelX = 1;
+					stage = 3;
+					thiefVelX = 3;
 				}
 			}
+		}
+		if (lives == 1) {
+			posThief.x += thiefVelX;
+			if (posThief.x > 166) {
+				posThief.x -= thiefVelX;
+				thiefVelX = -abs(thiefVelX);
+			}
+			else if (posThief.x < 8) {
+				posThief.x -= thiefVelX;
+				thiefVelX = abs(thiefVelX);
+			}
+			posThief.y += thiefVelY;
+			if (posThief.y > 450) {
+				posThief.y -= thiefVelY;
+				thiefVelY = -abs(thiefVelY);
+			}
+			else if (posThief.y < 400) {
+				posThief.y -= thiefVelY;
+				thiefVelY = abs(thiefVelY);
+			}
+		}
+		if (lives == 3) {
+			posThief.x += thiefVelX;
+			if (posThief.x > 166) {
+				posThief.x -= thiefVelX;
+				thiefVelX = -abs(thiefVelX);
+			}
+			else if (posThief.x < 8) {
+				posThief.x -= thiefVelX;
+				thiefVelX = abs(thiefVelX);
+			}
+		}
+		if (lives == 2) {
+			if (posThief.y > 400) {
+				activeCollision = false;
+				posThief.y -= 3;
+			}
 			else {
+				activeCollision = true;
 				posThief.x += thiefVelX;
 				if (posThief.x > 166) {
 					posThief.x -= thiefVelX;
@@ -89,7 +141,85 @@ void Thief::update(int deltaTime, int currentRoom)
 				}
 			}
 		}
-		else {
+	}
+	else if (stage == 3) {
+		if (lives == 3) {
+			if (posThief.x < 155) posThief.x += 4;
+		}
+		if (lives == 0) {
+			activeCollision = false;
+			if (!destroyed3Stage) {
+				map->destroyTop(tileMapDispl, shaderProgram, stage);
+				destroyed3Stage = true;
+			}
+			if (posThief.x < 87) {
+				posThief.x += 1;
+			}
+			else if (posThief.x > 87) {
+				posThief.x -= 1;
+			}
+			else {
+				posThief.y -= 4;
+				if (posThief.y < 90) {
+					activeCollision = true;
+					this->lives = 3;
+					this->stage = 4;
+					thiefVelX = 3;
+				}
+			}
+		}
+		if (lives == 2) {
+			if (posThief.x > 20) {
+				activeCollision = false;
+				posThief.x -= 3;
+			}
+			else activeCollision = true;
+		}
+		if (lives == 1) {
+			if (posThief.x < 87) {
+				activeCollision = false;
+				posThief.x += 3;
+			}
+			else activeCollision = true;
+		}
+	}
+	if (stage == 4) {
+		if (lives == 0) {
+			activeCollision = false;
+			if (!destroyed2Stage) {
+				map->destroyTop(tileMapDispl, shaderProgram, stage);
+				destroyed2Stage = true;
+			}
+			if (posThief.x < 80) posThief.x += 1;
+			else if (posThief.x > 90) posThief.x -= 1;
+			else {
+				posThief.y -= 1;
+				if (posThief.y < 10) {
+					this->thiefBeaten = true;
+				}
+			}
+		}
+		if (lives == 1) {
+			posThief.x += thiefVelX;
+			if (posThief.x > 166) {
+				posThief.x -= thiefVelX;
+				thiefVelX = -abs(thiefVelX);
+			}
+			else if (posThief.x < 8) {
+				posThief.x -= thiefVelX;
+				thiefVelX = abs(thiefVelX);
+			}
+			posThief.y += thiefVelY;
+			if (posThief.y > (66)) {
+				posThief.y -= thiefVelY;
+				thiefVelY = -abs(thiefVelY);
+			}
+			else if (posThief.y < 16) {
+				posThief.y -= thiefVelY;
+				thiefVelY = abs(thiefVelY);
+			}
+		}
+		if (lives == 3) {
 			posThief.x += thiefVelX;
 			if (posThief.x > 166) {
 				posThief.x -= thiefVelX;
@@ -100,26 +230,23 @@ void Thief::update(int deltaTime, int currentRoom)
 				thiefVelX = abs(thiefVelX);
 			}
 		}
-	}
-	else if (stage == 3) {//Y=-3,X=1
-		posThief.y += thiefVelY;
-		if (posThief.y > 100 + 192 * (4 - stage)) {
-			posThief.y -= thiefVelY;
-			thiefVelY = -abs(thiefVelY);
-		}
-		if (posThief.y < 0 + 192 * (4 - stage)) {
-			posThief.y -= thiefVelY;
-			thiefVelY = abs(thiefVelY);
-		}
-		posThief.x += thiefVelX;
-		if (posThief.x > 166) {
-			posThief.x -= thiefVelX;
-			thiefVelX = -abs(thiefVelX);
-
-		}
-		if (posThief.x < 8) {
-			posThief.x -= thiefVelX;
-			thiefVelX = abs(thiefVelX);
+		if (lives == 2) {
+			if (posThief.y > 16) {
+				activeCollision = false;
+				posThief.y -= 3;
+			}
+			else {
+				activeCollision = true;
+				posThief.x += thiefVelX;
+				if (posThief.x > 166) {
+					posThief.x -= thiefVelX;
+					thiefVelX = -abs(thiefVelX);
+				}
+				else if (posThief.x < 8) {
+					posThief.x -= thiefVelX;
+					thiefVelX = abs(thiefVelX);
+				}
+			}
 		}
 	}
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posThief.x), float(tileMapDispl.y + posThief.y)));
@@ -137,6 +264,10 @@ void Thief::setStage(int s) {
 void Thief::render()
 {
 	sprite->render();
+}
+
+bool Thief::getThiefBeaten() {
+	return this->thiefBeaten;
 }
 
 void Thief::setTileMap(TileMap* tileMap)
@@ -167,4 +298,7 @@ void Thief::setLives(int l) {
 
 int Thief::getLives() {
 	return this->lives;
+}
+bool Thief::getCollisionActive() {
+	return this->activeCollision;
 }

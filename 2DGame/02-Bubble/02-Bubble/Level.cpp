@@ -149,7 +149,13 @@ void Level::update(int deltaTime)
 	if (currentLevel == 4) {
 		if (ball->getThiefShooted()) {
 			ball->setThiefShooted(false);
-			thief->setLives(thief->getLives() - 1);
+			if (thief->getCollisionActive()) {
+				thief->setLives(thief->getLives() - 1);
+			}
+		}
+		if (thief->getThiefBeaten()) {
+			Game::instance().runConsole();
+			cout << "YOU WIN" << endl;
 		}
 	}
 	if (ball->getGetAllMoney()) {
