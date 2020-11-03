@@ -55,10 +55,17 @@ void Level::init(int ID)
 	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, currentLevel);
 	ball->setTileMap(map);
 	ball->setStuck(true);
+	frameSpritesheet.loadFromFile("images/frame.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	frameSprite = Sprite::createSprite(glm::ivec2(272, 240), glm::vec2(1.f, 1.f), &frameSpritesheet, &texProgram);
+	frameSprite->setPosition(glm::vec2(0.0, 576.0));
 	info = new Info();
 	info->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	info->setPosition(glm::vec2(INIT_INFO_X, INIT_INFO_Y));
 	info->setTileMap(map);
+	if (currentLevel < 4) batmodeSpritesheet.loadFromFile("images/text_batmode_thief.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	else batmodeSpritesheet.loadFromFile("images/text_batmode_cop.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	batmodeSprite = Sprite::createSprite(glm::ivec2(56, 16), glm::vec2(1.f, 1.f), &batmodeSpritesheet, &texProgram);
+	batmodeSprite->setPosition(glm::vec2(208.0, 752.0));
 	if (currentLevel == 4) {
 		thief = new Thief();
 		thief->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -101,14 +108,12 @@ void Level::init(int ID)
 		room[i]->setPosition(glm::vec2(248 + 8*i, 784));
 		room[i]->setTileMap(map);
 	}
-	frameSpritesheet.loadFromFile("images/frame.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	frameSprite = Sprite::createSprite(glm::ivec2(272, 240), glm::vec2(1.f, 1.f), &frameSpritesheet, &texProgram);
-	frameSprite->setPosition(glm::vec2(0.0, 576.0));
 	currentTime = 0.0f;
 	currentRoom = 1;
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
 	livesNum = 4;
 	currentTurnTime = 0.0f;
+	if (currentLevel == 4) currentLevel = 1;
 }
 
 void Level::update(int deltaTime)
@@ -118,8 +123,10 @@ void Level::update(int deltaTime)
 	currentRoom = ball->getCurrentRoom();
 	player->update(deltaTime, currentRoom);
 	ball->update(deltaTime, player->getPosition(), thief->getPosition(), currentRoom);
+	frameSprite->setPosition(glm::vec2(0.0, 576.0 - 192.0 * float(currentRoom - 1)));
 	info->update(deltaTime);
 	info->setPosition(glm::vec2(INIT_INFO_X, INIT_INFO_Y - 192.f*float(currentRoom - 1)));
+	batmodeSprite->setPosition(glm::vec2(208.0, 752.0 - 192.0*float(currentRoom - 1)));
 	if (currentLevel == 4) thief->update(deltaTime, currentRoom);
 	for (int i = 0; i < 7; ++i) {
 		int animId = ball->getCurrentMoney()/int(pow(10, 7 - 1 - i))%10;
@@ -146,7 +153,6 @@ void Level::update(int deltaTime)
 		room[i]->update(deltaTime, animId);
 		room[i]->setPosition(glm::vec2(248 + 8*i, 784 - 192.f*float(currentRoom - 1)));
 	}
-	frameSprite->setPosition(glm::vec2(0.0, 576.0 - 192.0*float(currentRoom - 1)));
 	if (currentLevel == 4) {
 		if (ball->getThiefShooted()) {
 			ball->setThiefShooted(false);
@@ -244,6 +250,7 @@ void Level::render()
 	player->render();
 	frameSprite->render();
 	info->render();
+	batmodeSprite->render();
 	if (currentLevel == 4) thief->render();
 	for (int i = 0; i < 7; ++i) money[i]->render();
 	for (int i = 0; i < 7; ++i) points[i]->render();

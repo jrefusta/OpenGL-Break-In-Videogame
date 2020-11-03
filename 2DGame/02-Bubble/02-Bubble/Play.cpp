@@ -30,8 +30,10 @@ void Play::loadSprites() {
 		levels[i].spritesheet.loadFromFile("images/text_bank_0" + to_string(i + 1) + ".png", TEXTURE_PIXEL_FORMAT_RGBA);
 		levels[i].sprite = Sprite::createSprite(glm::ivec2(40, 16), glm::vec2(1.f, 1.f), &levels[i].spritesheet, &texProgram);
 		levels[i].sprite->setPosition(glm::vec2(112.0, 88.0 + 24.0*i));
-		levels[i].sprite->setColor(glm::vec3(1.0f, 1.0f, 1.0f));
 	}
+	levels[3].spritesheet.loadFromFile("images/text_batmode_cop.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	levels[3].sprite = Sprite::createSprite(glm::ivec2(56, 16), glm::vec2(1.f, 1.f), &levels[3].spritesheet, &texProgram);
+	levels[3].sprite->setPosition(glm::vec2(104.0, 88.0 + 24.0*3));
 }
 
 void Play::update(int deltaTime) {
@@ -39,7 +41,7 @@ void Play::update(int deltaTime) {
 	currentTurnTime += deltaTime;
 	if (currentTurnTime >= float(150.0f)) {
 		if (Game::instance().moveDownPressed()) {
-			if (level < 2) ++level;
+			if (level < 3) ++level;
 			else {
 				level = 0;
 			}
@@ -49,7 +51,7 @@ void Play::update(int deltaTime) {
 		else if (Game::instance().moveUpPressed()) {
 			if (level > 0) --level;
 			else {
-				level = 2;
+				level = 3;
 			}
 			currentTurnTime = 0;
 		}
@@ -79,7 +81,7 @@ void Play::render() {
 	background->render();
 	if (int(currentTime/500)%2 == 0) escSprite->render();
 
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 4; i++) {
 		if (level != i || int(currentTime/500)%2 == 0) levels[i].sprite->render();
 	}
 }
