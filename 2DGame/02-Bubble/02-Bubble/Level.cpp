@@ -85,6 +85,9 @@ void Level::init(int ID)
 		room[i]->setPosition(glm::vec2(248 + 8*i, 784));
 		room[i]->setTileMap(map);
 	}
+	frameSpritesheet.loadFromFile("images/frame.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	frameSprite = Sprite::createSprite(glm::ivec2(272, 240), glm::vec2(1.f, 1.f), &frameSpritesheet, &texProgram);
+	frameSprite->setPosition(glm::vec2(0.0, 576.0));
 	currentTime = 0.0f;
 	currentRoom = 1;
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
@@ -96,6 +99,7 @@ void Level::update(int deltaTime)
 {
 	currentTime += deltaTime;
 	currentTurnTime += deltaTime;
+	this->currentRoom = ball->getCurrentRoom();
 	player->update(deltaTime, currentRoom);
 	ball->update(deltaTime, player->getPosition(), currentRoom);
 	info->update(deltaTime);
@@ -125,14 +129,14 @@ void Level::update(int deltaTime)
 		room[i]->update(deltaTime, animId);
 		room[i]->setPosition(glm::vec2(248 + 8*i, 784 - 192.f*float(currentRoom - 1)));
 	}
-	this->currentRoom = ball->getCurrentRoom(); 
+	frameSprite->setPosition(glm::vec2(0.0, 576.0 - 192.0*float(currentRoom - 1)));
 	if (ball->getGetAllMoney()) {
 		/*Game::instance().runConsole();
 		cout << "YOU WIN" << endl;*/
 	}
 	if (ball->getGetAlarmHit()) {
-		Game::instance().runConsole();
-		cout << "ALARM HITED" << endl;
+		/*Game::instance().runConsole();
+		cout << "ALARM HITED" << endl;*/
 	}
 
 	if (ball->getStuck()) {
@@ -224,6 +228,7 @@ void Level::render()
 	map->render();
 	ball->render();
 	player->render();
+	frameSprite->render();
 	info->render();
 	for (int i = 0; i < 7; ++i) money[i]->render();
 	for (int i = 0; i < 7; ++i) points[i]->render();

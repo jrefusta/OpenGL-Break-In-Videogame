@@ -25,5 +25,7 @@ private:
 
 	Level levels[7];
 	int level; //nivel seleccionado
+	Texture escSpritesheet;
+	Sprite* escSprite;
 };
 

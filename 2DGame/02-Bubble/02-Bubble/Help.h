@@ -18,5 +18,7 @@ public:
 	void printHelp();
 private:
 	int page;
+	Texture escSpritesheet;
+	Sprite* escSprite;
 };
 
