@@ -165,6 +165,9 @@ void Level::update(int deltaTime)
 			cout << "YOU WIN" << endl;
 		}
 	}
+	if (ball->getGodMode()) {
+
+	}
 	if (ball->getGetAllMoney()) {
 		/*Game::instance().runConsole();
 		cout << "YOU WIN" << endl;*/
@@ -200,7 +203,7 @@ void Level::update(int deltaTime)
 		ball->setPosition(player->getPosition() + glm::vec2(5.f, -9.f));
 		ball->setCurrentRoom(1);
 		currentRoom = ball->getCurrentRoom();
-		--livesNum;
+		if (!ball->getGodMode()) --livesNum;
 		Sleep(1500);
 	}
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
@@ -228,9 +231,7 @@ void Level::update(int deltaTime)
 		}
 		if (Game::instance().getKey('g') || Game::instance().getKey('G')) {//God mode
 			if (currentRoom > 0 && currentRoom < 4) {
-				ball->setStuck(false);
-				ball->setPosition(player->getPosition() + glm::vec2(5.f, -201.f));
-				currentTurnTime = 0;
+				ball->setGodMode(!ball->getGodMode());
 			}
 		}
 	}

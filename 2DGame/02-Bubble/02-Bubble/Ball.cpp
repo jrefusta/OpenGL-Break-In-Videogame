@@ -23,6 +23,7 @@ void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, int 
 	this->currentLevel = ID;
 	this->alarmHit = false;
 	this->thiefShooted = false;
+	this->godMode = false;
 }
 
 void Ball::update(int deltaTime, glm::vec2 posPlayer, glm::vec2 posThief, int currentRoom)
@@ -66,13 +67,15 @@ void Ball::update(int deltaTime, glm::vec2 posPlayer, glm::vec2 posThief, int cu
 			posBall.x -= ballVelX;
 			ballVelX = abs(ballVelX);
 		}
-		if (collisionPlayer(posPlayer) && ballVelX > 0 && ballVelY > 0) {
-			posBall.x -= ballVelX;
-			ballVelX = -abs(ballVelX);
-		}
-		else if (collisionPlayer(posPlayer) && ballVelX < 0 && ballVelY > 0) {
-			posBall.x -= ballVelX;
-			ballVelX = abs(ballVelX);
+		if (!godMode) {
+			if (collisionPlayer(posPlayer) && ballVelX > 0 && ballVelY > 0) {
+				posBall.x -= ballVelX;
+				ballVelX = -abs(ballVelX);
+			}
+			else if (collisionPlayer(posPlayer) && ballVelX < 0 && ballVelY > 0) {
+				posBall.x -= ballVelX;
+				ballVelX = abs(ballVelX);
+			}
 		}
 	}
 	if (posBall.y != 0 && posBall.x != 0 && this->currentRoom != 0) {
@@ -164,4 +167,11 @@ void Ball::setPosition(const glm::vec2& pos)
 {
 	posBall = pos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBall.x), float(tileMapDispl.y + posBall.y)));
+}
+
+void Ball::setGodMode(bool g) {
+	this->godMode = g;
+}
+bool Ball::getGodMode() {
+	return this->godMode;
 }

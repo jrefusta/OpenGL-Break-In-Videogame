@@ -1,5 +1,4 @@
-﻿  Level.cpp
-D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\02-Bubble\Level.cpp(208,30): warning C4129: ' ': secuencia de escape de carácter no reconocida
+﻿  Ball.cpp
 SOIL.lib(image_DXT.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(image_DXT.obj)' o en 'D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
 SOIL.lib(image_helper.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(image_helper.obj)' o en 'D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
 SOIL.lib(SOIL.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(SOIL.obj)' o en 'D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración

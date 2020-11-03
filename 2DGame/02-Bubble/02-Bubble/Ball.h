@@ -36,7 +36,8 @@ public:
 	bool getThiefShooted();
 	void setThiefShooted(bool t);
 	void setCurrentRoom(int c);
-
+	void setGodMode(bool g);
+	bool getGodMode();
 private:
 	int ballVelX;
 	int ballVelY;
@@ -49,6 +50,7 @@ private:
 	int currentLevel;
 	bool getAllMoney;
 	bool thiefShooted;
+	bool godMode;
 	int crossingRoom;
 	glm::ivec2 tileMapDispl, posBall;
 	int jumpAngle, startY;
