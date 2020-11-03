@@ -20,6 +20,7 @@ using namespace std;
 Level::Level()
 {
 	map = NULL;
+	player = NULL;
 	ball = NULL;
 	info = NULL;
 	thief = NULL;
