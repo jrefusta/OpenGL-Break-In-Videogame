@@ -45,7 +45,7 @@ void Level::init(int ID)
 {
 
 	initShaders();
-	currentLevel = 4;
+	currentLevel = ID;
 	map = TileMap::createTileMap("levels/level0" + to_string(currentLevel) + ".txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, currentLevel);
