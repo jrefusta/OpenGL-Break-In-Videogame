@@ -301,7 +301,7 @@ bool TileMap::isWall(int pos) {
 	return map[pos] == 13 || map[pos] == 15 || map[pos] == 17;
 }
 
-bool TileMap::isDiamond(int pos) {
+bool TileMap::isDiamond(int pos) {//1500€
 	return map[pos] == 55 || map[pos] == 56 || map[pos] == 67 || map[pos] == 68;
 }
 

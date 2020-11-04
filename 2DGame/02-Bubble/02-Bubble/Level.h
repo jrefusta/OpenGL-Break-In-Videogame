@@ -46,9 +46,11 @@ private:
 	int cameraVelocity;
 	int topCamera;
 	int bottomCamera;
+	bool winState;
+	bool loseState;
 	int livesNum;
-	Texture frameSpritesheet, batmodeSpritesheet;
-	Sprite *frameSprite, *batmodeSprite;
+	Texture frameSpritesheet, batmodeSpritesheet, winSpritesheet;
+	Sprite *frameSprite, *batmodeSprite, *winSprite;
 };
 
 

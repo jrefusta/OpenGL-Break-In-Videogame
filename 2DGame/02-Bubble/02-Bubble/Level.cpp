@@ -55,6 +55,9 @@ void Level::init(int ID)
 	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, currentLevel);
 	ball->setTileMap(map);
 	ball->setStuck(true);
+	winSpritesheet.loadFromFile("images/you_win.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	winSprite = Sprite::createSprite(glm::ivec2(272.0, 240.0), glm::vec2(1.f, 1.f), &winSpritesheet, &texProgram);
+	winSprite->setPosition(glm::vec2(0.0, 576.0 - 192.0 * float(5 - 1)-48));
 	frameSpritesheet.loadFromFile("images/frame.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	frameSprite = Sprite::createSprite(glm::ivec2(272, 240), glm::vec2(1.f, 1.f), &frameSpritesheet, &texProgram);
 	frameSprite->setPosition(glm::vec2(0.0, 576.0));
@@ -116,6 +119,8 @@ void Level::init(int ID)
 	cameraVelocity = 48.0f;
 	topCamera = 192.f * float(4 - currentRoom);
 	bottomCamera = float(SCREEN_HEIGHT) + 192.f * float(4 - currentRoom);
+	winState = loseState = false;
+
 }
 
 void Level::update(int deltaTime)
@@ -123,8 +128,25 @@ void Level::update(int deltaTime)
 	currentTime += deltaTime;
 	currentTurnTime += deltaTime;
 	currentRoom = ball->getCurrentRoom();
-	player->update(deltaTime, currentRoom);
-	ball->update(deltaTime, player->getPosition(), thief->getPosition(), currentRoom);
+	if (!winState && !loseState) {
+		player->update(deltaTime, currentRoom);
+		ball->update(deltaTime, player->getPosition(), thief->getPosition(), currentRoom);
+	}
+	if (winState) {
+		if (topCamera > 192.f * float(4 - 5)-48) {
+			topCamera -= cameraVelocity;
+			bottomCamera -= cameraVelocity;
+			projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(bottomCamera), float(topCamera));
+		}
+		if (currentTurnTime >= float(300.0f)) {
+			if (Game::instance().getKey('\ '))
+			{
+				winState = false;
+				init(currentLevel + 1);
+				currentTurnTime = 0.0f;
+			}
+		}
+	}
 	int aux = (currentRoom == 0) ? 1 : currentRoom;
 	frameSprite->setPosition(glm::vec2(0.0, 576.0 - 192.0 * float(aux - 1)));
 	info->update(deltaTime);
@@ -169,8 +191,7 @@ void Level::update(int deltaTime)
 		}
 	}
 	if (ball->getGetAllMoney()) {
-		/*Game::instance().runConsole();
-		cout << "YOU WIN" << endl;*/
+		winState = true;
 	}
 	if (ball->getGetAlarmHit()) {
 		/*Game::instance().runConsole();
@@ -205,7 +226,7 @@ void Level::update(int deltaTime)
 		currentRoom = ball->getCurrentRoom();
 		if (!ball->getGodMode()) --livesNum;
 	}
-	if (currentRoom <= 4 && currentRoom != 0) {
+	if (currentRoom <= 4 && currentRoom != 0 && !winState) {
 		if (topCamera > 192.f * float(4 - currentRoom)) {
 			topCamera -= cameraVelocity;
 			bottomCamera -= cameraVelocity;
@@ -222,14 +243,6 @@ void Level::update(int deltaTime)
 	{
 		ball->setStuck(false);
 	}
-	if (Game::instance().getKey('0'))
-	{
-		init(currentLevel);
-	}
-	if (Game::instance().getKey('1')) currentRoom = 1;
-	if (Game::instance().getKey('2')) currentRoom = 2;
-	if (Game::instance().getKey('3')) currentRoom = 3;
-	if (Game::instance().getKey('4')) currentRoom = 4;
 	if (currentTurnTime >= float(300.0f)) {
 		if (Game::instance().getKey('u') || Game::instance().getKey('U')) {//upper Layer
 			if (currentRoom > 0 && currentRoom < 4) {
@@ -239,10 +252,17 @@ void Level::update(int deltaTime)
 				currentTurnTime = 0;
 			}
 		}
-		if (Game::instance().getKey('g') || Game::instance().getKey('G')) {//God mode
+		else if (Game::instance().getKey('g') || Game::instance().getKey('G')) {//God mode
 			if (currentRoom > 0 && currentRoom < 4) {
 				ball->setGodMode(!ball->getGodMode());
 			}
+		}
+		else if (Game::instance().getKey('r') || Game::instance().getKey('R'))
+		{
+			init(currentLevel);
+		}
+		else if (Game::instance().getKey(27)) {
+			Game::instance().selectScene(1);
 		}
 	}
 }
@@ -262,6 +282,7 @@ void Level::render()
 	frameSprite->render();
 	info->render();
 	batmodeSprite->render();
+	winSprite->render();
 	if (currentLevel == 4) thief->render();
 	for (int i = 0; i < 7; ++i) money[i]->render();
 	for (int i = 0; i < 7; ++i) points[i]->render();
