@@ -25,7 +25,7 @@ public:
 	Level();
 	~Level();
 
-	void init(int ID);
+	void init(int ID, int points, int money, int lives);
 	void update(int deltaTime);
 	void render();
 
@@ -48,9 +48,10 @@ private:
 	int bottomCamera;
 	bool winState;
 	bool loseState;
-	int livesNum;
-	Texture frameSpritesheet, batmodeSpritesheet, winSpritesheet;
-	Sprite *frameSprite, *batmodeSprite, *winSprite;
+	bool exitMenu;
+	int livesNum, pointsNum, moneyNum;
+	Texture frameSpritesheet, batmodeSpritesheet, winSpritesheet, loseSpritesheet;
+	Sprite *frameSprite, *batmodeSprite, *winSprite, *loseSprite;
 };
 
 

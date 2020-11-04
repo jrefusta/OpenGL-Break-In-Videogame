@@ -24,6 +24,7 @@ void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, int 
 	this->alarmHit = false;
 	this->thiefShooted = false;
 	this->godMode = false;
+	initMoney = initPoints = 0;
 }
 
 void Ball::update(int deltaTime, glm::vec2 posPlayer, glm::vec2 posThief, int currentRoom)
@@ -33,8 +34,8 @@ void Ball::update(int deltaTime, glm::vec2 posPlayer, glm::vec2 posThief, int cu
 		this->getAllMoney = true;
 	}
 	this->alarmHit = map->getAlarmHited();
-	this->currentMoney = map->getMoney();
-	this->currentPoints = map->getPoints();
+	this->currentMoney = map->getMoney() + initMoney;
+	this->currentPoints = map->getPoints() + initPoints;
 	if (!this->getStuck()) {
 		posBall.y += ballVelY;
 		if (map->collisionMoveUp(posBall, glm::ivec2(9, 10), tileMapDispl, shaderProgram, currentRoom, this->currentLevel)) {
@@ -107,6 +108,12 @@ int Ball::getCurrentMoney() {
 }
 int Ball::getCurrentPoints() {
 	return this->currentPoints;
+}
+void Ball::setCurrentMoney(int m) {
+	this->initMoney = m;
+}
+void Ball::setCurrentPoints(int p) {
+	this->initPoints = p;
 }
 
 int Ball::getCurrentRoom() {

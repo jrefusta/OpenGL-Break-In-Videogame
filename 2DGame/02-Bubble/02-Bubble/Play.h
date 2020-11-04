@@ -12,7 +12,7 @@ public:
 	Play();
 	~Play();
 
-	void init(int l);
+	void init(int l, int points, int money, int lives);
 	void update(int deltaTime);
 	void render();
 	void loadSprites();
@@ -22,6 +22,8 @@ private:
 		Sprite* sprite;
 		Texture spritesheet;
 	};
+
+	int money, points, lives;
 
 	Level levels[4];
 	int level; //nivel seleccionado

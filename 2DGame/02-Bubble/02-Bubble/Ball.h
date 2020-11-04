@@ -31,6 +31,8 @@ public:
 	void destroyedTop();
 	int getCurrentMoney();
 	int getCurrentPoints();
+	void setCurrentMoney(int t);
+	void setCurrentPoints(int t);
 	int getCrossingRoom();
 	int getCurrentRoom();
 	bool getThiefShooted();
@@ -41,6 +43,8 @@ public:
 private:
 	int ballVelX;
 	int ballVelY;
+	int initPoints;
+	int initMoney;
 	int currentRoom;
 	bool stuck;
 	bool alarmHit;
