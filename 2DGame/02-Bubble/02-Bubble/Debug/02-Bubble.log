@@ -1,27 +1,10 @@
-﻿  Ball.cpp
-  Credits.cpp
-  Digit.cpp
-  Game.cpp
-  Help.cpp
-  Info.cpp
-  Level.cpp
+﻿  Level.cpp
 D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\02-Bubble\Level.cpp(125,19): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
 D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\02-Bubble\Level.cpp(126,20): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
 D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\02-Bubble\Level.cpp(127,38): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
 D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\02-Bubble\Level.cpp(150,32): warning C4129: ' ': secuencia de escape de carácter no reconocida
-D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\02-Bubble\Level.cpp(167,32): warning C4129: ' ': secuencia de escape de carácter no reconocida
-D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\02-Bubble\Level.cpp(269,30): warning C4129: ' ': secuencia de escape de carácter no reconocida
-  Menu.cpp
-  Play.cpp
-  Player.cpp
-  Thief.cpp
-  TileMap.cpp
-D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\02-Bubble\TileMap.cpp(95,65): warning C4244: '+=': conversión de 'double' a 'int'; posible pérdida de datos
-D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\02-Bubble\TileMap.cpp(96,64): warning C4244: '+=': conversión de 'double' a 'int'; posible pérdida de datos
-D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\02-Bubble\TileMap.cpp(97,66): warning C4244: '+=': conversión de 'double' a 'int'; posible pérdida de datos
-D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\02-Bubble\TileMap.cpp(98,69): warning C4244: '+=': conversión de 'double' a 'int'; posible pérdida de datos
-  main.cpp
-  Generando código...
+D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\02-Bubble\Level.cpp(171,32): warning C4129: ' ': secuencia de escape de carácter no reconocida
+D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\02-Bubble\Level.cpp(272,30): warning C4129: ' ': secuencia de escape de carácter no reconocida
 SOIL.lib(image_DXT.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(image_DXT.obj)' o en 'D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
 SOIL.lib(image_helper.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(image_helper.obj)' o en 'D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
 SOIL.lib(SOIL.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(SOIL.obj)' o en 'D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración

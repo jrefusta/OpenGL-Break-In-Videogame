@@ -324,3 +324,13 @@
 *.exe
 *.ilk
 *.pdb
+*.db
+*.db
+*.db
+*.log
+*.tlog
+*.obj
+*.pdb
+*.idb
+*.pdb
+*.ilk

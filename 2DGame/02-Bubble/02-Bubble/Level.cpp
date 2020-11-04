@@ -139,8 +139,6 @@ void Level::update(int deltaTime)
 		ball->update(deltaTime, player->getPosition(), thief->getPosition(), currentRoom);
 	}
 	if (winState) {
-		Game::instance().runConsole();
-		cout << ball->getCurrentMoney() << ' ' << ball->getCurrentPoints() << endl;
 		if (topCamera > 192.f * float(4 - 5)-48) {
 			topCamera -= cameraVelocity;
 			bottomCamera -= cameraVelocity;
@@ -149,10 +147,14 @@ void Level::update(int deltaTime)
 		if (currentTurnTime >= float(300.0f)) {
 			if (Game::instance().getKey('\ '))
 			{
-				Game::instance().runConsole();
-				cout << ball->getCurrentMoney() << ' ' << ball->getCurrentPoints()<< endl;
+				if (currentLevel < 3) {
+					winState = false;
+					init(currentLevel + 1, ball->getCurrentPoints(), ball->getCurrentMoney(), livesNum);
+				}
+				else {
+					exitMenu = true;
+				}
 				winState = false;
-				init(currentLevel + 1, ball->getCurrentPoints(), ball->getCurrentMoney(), livesNum);
 				currentTurnTime = 0.0f;
 			}
 		}
@@ -166,7 +168,6 @@ void Level::update(int deltaTime)
 		if (currentTurnTime >= float(300.0f)) {
 			if (Game::instance().getKey('\ '))
 			{
-				loseState = false;
 				exitMenu = true;
 				currentTurnTime = 0.0f;
 			}
