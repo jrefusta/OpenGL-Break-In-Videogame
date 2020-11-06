@@ -300,6 +300,9 @@ pair<int, int> TileMap::calculateNewTiles(int x, int y, int ID) {
 bool TileMap::isWall(int pos) {
 	return map[pos] == 13 || map[pos] == 15 || map[pos] == 17;
 }
+bool TileMap::isFakeWall(int pos) {
+	return map[pos] == 71 || map[pos] == 72;
+}
 
 bool TileMap::isDiamond(int pos) {//1500€
 	return map[pos] == 55 || map[pos] == 56 || map[pos] == 67 || map[pos] == 68;
@@ -381,6 +384,7 @@ bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, con
 	y = pos.y / tileSize;
 	for (int x = x0; x <= x1; x++)
 	{
+		if (isFakeWall(y * mapSize.x + x)) return true; 
 		if (checkCollision(x, y, ID, currentRoom, minCoords, program)) return true;
 	}
 	return false;

@@ -42,6 +42,7 @@ public:
 	bool isAlarm(int pos);
 	bool isWall(int pos);
 	bool isDiamond(int pos);
+	bool isFakeWall(int pos);
 	bool getAlarmHited();
 	int getPoints();
 	int getMoney();

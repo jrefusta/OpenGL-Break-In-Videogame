@@ -39,7 +39,7 @@ void Ball::update(int deltaTime, glm::vec2 posPlayer, glm::vec2 posThief, int cu
 	this->currentPoints = map->getPoints() + initPoints;
 	if (!this->getStuck()) {
 		posBall.y += ballVelY;
-		if (map->collisionMoveUp(posBall, glm::ivec2(9, 10), tileMapDispl, shaderProgram, currentRoom, this->currentLevel)) {
+		if (map->collisionMoveUp(posBall, glm::ivec2(9, 10), tileMapDispl, shaderProgram, currentRoom, this->currentLevel) && ballVelY < 0) {
 			posBall.y -= ballVelY;
 			ballVelY = abs(ballVelY);
 		}
