@@ -334,3 +334,11 @@
 *.idb
 *.pdb
 *.ilk
+*.db
+2DGame/02-Bubble/.vs/02-Bubble/v16/.suo
+*.log
+*.tlog
+*.idb
+*.exe
+*.pdb
+*.pdb

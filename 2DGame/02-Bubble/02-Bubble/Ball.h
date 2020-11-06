@@ -41,8 +41,8 @@ public:
 	void setGodMode(bool g);
 	bool getGodMode();
 private:
-	int ballVelX;
-	int ballVelY;
+	float ballVelX;
+	float ballVelY;
 	int initPoints;
 	int initMoney;
 	int currentRoom;
@@ -56,7 +56,8 @@ private:
 	bool thiefShooted;
 	bool godMode;
 	int crossingRoom;
-	glm::ivec2 tileMapDispl, posBall;
+	glm::ivec2 tileMapDispl;
+	glm::vec2 posBall;
 	int jumpAngle, startY;
 	Texture spritesheet;
 	Sprite* sprite;

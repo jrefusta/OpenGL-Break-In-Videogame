@@ -13,8 +13,9 @@ void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, int 
 	tileMapDispl = tileMapPos;
 	this->shaderProgram = shaderProgram;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBall.x), float(tileMapDispl.y + posBall.y)));
-	this->ballVelX = 2;
-	this->ballVelY = -2;
+
+	ballVelY = -2;
+	ballVelX = 0.5;
 	this->currentRoom = 1;
 	this->crossingRoom = 0;
 	this->getAllMoney = false;
@@ -49,7 +50,30 @@ void Ball::update(int deltaTime, glm::vec2 posPlayer, glm::vec2 posThief, int cu
 
 		if (collisionPlayer(posPlayer) && ballVelY > 0) {
 			posBall.y -= ballVelY;
-			ballVelY = -abs(ballVelY);
+			if (posPlayer.x - posBall.x >= 7) {
+				ballVelY = -0.5;
+				ballVelX = -2;
+			}
+			else if (posPlayer.x - posBall.x >= 0) {
+				ballVelY = -2;
+				ballVelX = -2;
+			}
+			else if (posPlayer.x - posBall.x >= -4) {
+				ballVelY = -2;
+				ballVelX = -0.5;
+			}
+			else if (posPlayer.x - posBall.x >= -8) {
+				ballVelY = -2;
+				ballVelX = 0.5;
+			}
+			else if (posPlayer.x - posBall.x >= -14) {
+				ballVelY = -2;
+				ballVelX = 2;
+			}
+			else {
+				ballVelY = -0.5;
+				ballVelX = 2;
+			}
 		}
 
 		if (collisionThief(posThief) && ballVelY < 0) {
@@ -134,13 +158,16 @@ void Ball::setCrossingRoom(int c) {
 
 
 bool Ball::collisionPlayer(glm::vec2& posPlayer) {
-	bool collisionX = posPlayer.x + 19 >= posBall.x && posBall.x + 9 >= posPlayer.x;
-	bool collisionY = posPlayer.y + 8 >= posBall.y && posBall.y + 10 >= posPlayer.y;
+	bool collisionX = posPlayer.x + 18 >= posBall.x && posBall.x + 9 >= posPlayer.x;
+	bool collisionY = posPlayer.y + 6 >= posBall.y && posBall.y + 10 >= posPlayer.y;
 	return collisionX && collisionY;
 }
+
+
+
 bool Ball::collisionThief(glm::vec2& posThief) {
-	bool collisionX = posThief.x + 19 >= posBall.x && posBall.x + 9 >= posThief.x;
-	bool collisionY = (posThief.y+18) + 8 >= posBall.y && posBall.y + 10 >= (posThief.y+18);
+	bool collisionX = posThief.x + 18 >= posBall.x && posBall.x + 9 >= posThief.x;
+	bool collisionY = (posThief.y+20) + 6 >= posBall.y && posBall.y + 10 >= (posThief.y+20);
 	return collisionX && collisionY;
 }
 
