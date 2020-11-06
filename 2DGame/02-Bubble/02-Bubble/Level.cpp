@@ -229,20 +229,22 @@ void Level::update(int deltaTime)
 		if (thief->getThiefBeaten() && ball->getPosBall().y < -16) {
 			winState = true;
 		}
-		if (ball->getCurrentMoney() >= 1000 && livesNum == 4) {
-			loseTransition = true;
-		}
-		if (ball->getCurrentMoney() >= 2000 && livesNum == 3) {
-			loseTransition = true;
-		}
-		if (ball->getCurrentMoney() >= 3000 && livesNum == 2) {
-			loseTransition = true;
-		}
-		if (ball->getCurrentMoney() >= 4000 && livesNum == 1) {
-			loseTransition = true;
-		}
-		if (ball->getCurrentMoney() >= 5000 && livesNum == 0) {
-			loseTransition = true;
+		if (!ball->getGodMode()) {
+			if (ball->getCurrentMoney() >= 1000 && livesNum == 4) {
+				loseTransition = true;
+			}
+			if (ball->getCurrentMoney() >= 2000 && livesNum == 3) {
+				loseTransition = true;
+			}
+			if (ball->getCurrentMoney() >= 3000 && livesNum == 2) {
+				loseTransition = true;
+			}
+			if (ball->getCurrentMoney() >= 4000 && livesNum == 1) {
+				loseTransition = true;
+			}
+			if (ball->getCurrentMoney() >= 5000 && livesNum == 0) {
+				loseTransition = true;
+			}
 		}
 	}
 	if (ball->getGetAllMoney()) {
