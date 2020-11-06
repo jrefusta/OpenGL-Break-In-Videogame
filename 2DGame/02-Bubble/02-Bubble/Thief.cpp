@@ -186,9 +186,9 @@ void Thief::update(int deltaTime, int currentRoom)
 	if (stage == 4) {
 		if (lives == 0) {
 			activeCollision = false;
-			if (!destroyed2Stage) {
+			if (!destroyed4Stage) {
 				map->destroyTop(tileMapDispl, shaderProgram, stage);
-				destroyed2Stage = true;
+				destroyed4Stage = true;
 			}
 			if (posThief.x < 80) posThief.x += 1;
 			else if (posThief.x > 90) posThief.x -= 1;

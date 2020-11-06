@@ -109,7 +109,7 @@ void Game::selectScene(int ID) {
 			break;
 		case 1:
 			scene = new Play();
-			scene->init(0);
+			scene->init(0, 0, 0, 4);
 			break;
 		case 2:
 			scene = new Help();
@@ -121,7 +121,7 @@ void Game::selectScene(int ID) {
 			break;
 		default:
 			scene = new Level();
-			scene->init(ID - 3);
+			scene->init(ID - 3, 0, 0, 4);
 			break;
 	}
 }

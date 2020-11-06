@@ -31,15 +31,21 @@ public:
 	void destroyedTop();
 	int getCurrentMoney();
 	int getCurrentPoints();
+	void setCurrentMoney(int t);
+	void setCurrentPoints(int t);
 	int getCrossingRoom();
 	int getCurrentRoom();
 	bool getThiefShooted();
 	void setThiefShooted(bool t);
 	void setCurrentRoom(int c);
-
+	void setGodMode(bool g);
+	bool getGodMode();
+	glm::vec2 getPosBall();
 private:
-	int ballVelX;
-	int ballVelY;
+	float ballVelX;
+	float ballVelY;
+	int initPoints;
+	int initMoney;
 	int currentRoom;
 	bool stuck;
 	bool alarmHit;
@@ -49,8 +55,10 @@ private:
 	int currentLevel;
 	bool getAllMoney;
 	bool thiefShooted;
+	bool godMode;
 	int crossingRoom;
-	glm::ivec2 tileMapDispl, posBall;
+	glm::ivec2 tileMapDispl;
+	glm::vec2 posBall;
 	int jumpAngle, startY;
 	Texture spritesheet;
 	Sprite* sprite;

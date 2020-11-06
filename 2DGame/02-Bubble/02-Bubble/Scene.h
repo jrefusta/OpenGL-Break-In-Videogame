@@ -8,6 +8,8 @@ class Scene
 
 public:
 	void virtual init(int level);
+	void virtual init(int level, int p, int m, int l);
+	void virtual init(int p, int m, int l);
 	void virtual init();
 	void virtual update(int deltaTime);
 	void virtual render();

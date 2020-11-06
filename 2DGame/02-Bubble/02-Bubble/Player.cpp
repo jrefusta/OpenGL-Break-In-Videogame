@@ -49,13 +49,13 @@ void Player::update(int deltaTime, int currentRoom)
 	{
 		/*if (sprite->animation() != MOVE_LEFT)
 			sprite->changeAnimation(MOVE_LEFT);*/
-		if (posPlayer.x > 8) posPlayer.x -= 2;
+		if (posPlayer.x > 8) posPlayer.x -= 4;
 	}
 	if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
 	{
 		//if (sprite->animation() != MOVE_RIGHT)
 			//sprite->changeAnimation(MOVE_RIGHT);
-		if (posPlayer.x < 166) posPlayer.x += 2;
+		if (posPlayer.x < 166) posPlayer.x += 4;
 	}/*
 	else
 	{
@@ -77,35 +77,6 @@ void Player::update(int deltaTime, int currentRoom)
 			sprite->changeAnimation(MOVE_RIGHT);*/
 		if (posPlayer.y > 20 + 192*(4 - currentRoom)) posPlayer.y -= 2;
 	}
-	/*if(bJumping)
-	{
-		jumpAngle += JUMP_ANGLE_STEP;
-		if(jumpAngle == 180)
-		{
-			bJumping = false;
-			posPlayer.y = startY;
-		}
-		else
-		{
-			posPlayer.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
-			if(jumpAngle > 90)
-				bJumping = !map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y);
-		}
-	}
-	else
-	{
-		posPlayer.y += FALL_STEP;
-		if(map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y))
-		{
-			if(Game::instance().getSpecialKey(GLUT_KEY_UP))
-			{
-				bJumping = true;
-				jumpAngle = 0;
-				startY = posPlayer.y;
-			}
-		}
-	}*/
-
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
 

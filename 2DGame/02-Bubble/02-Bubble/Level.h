@@ -25,7 +25,7 @@ public:
 	Level();
 	~Level();
 
-	void init(int ID);
+	void init(int ID, int points, int money, int lives);
 	void update(int deltaTime);
 	void render();
 
@@ -43,9 +43,17 @@ private:
 	int currentRoom;
 	int currentLevel;
 	glm::mat4 projection;
-	int livesNum;
-	Texture frameSpritesheet, batmodeSpritesheet;
-	Sprite *frameSprite, *batmodeSprite;
+	int cameraVelocity;
+	int topCamera;
+	int bottomCamera;
+	bool winState;
+	bool loseState;
+	bool exitMenu;
+	bool loseTransition;
+	int start;
+	int livesNum, pointsNum, moneyNum;
+	Texture frameSpritesheet, batmodeSpritesheet, winSpritesheet, loseSpritesheet;
+	Sprite *frameSprite, *batmodeSprite, *winSprite, *loseSprite;
 };
 
 

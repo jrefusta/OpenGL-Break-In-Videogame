@@ -9,6 +9,14 @@ void Scene::init(int level)
 {
 
 }
+void Scene::init(int level, int p, int m, int l)
+{
+
+}
+void Scene::init(int p, int m, int l)
+{
+
+}
 void Scene::init()
 {
 	initShaders();

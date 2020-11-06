@@ -41,12 +41,15 @@ public:
 	bool isPearl(int pos);
 	bool isAlarm(int pos);
 	bool isWall(int pos);
+	bool isDiamond(int pos);
+	bool isFakeWall(int pos);
 	bool getAlarmHited();
 	int getPoints();
 	int getMoney();
 	int getTotalMoney();
+	bool checkCollision(int x, int y, int ID, int currentRoom, glm::vec2 minCoords, ShaderProgram& program);
 	void destroyTop(const glm::vec2& minCoords, ShaderProgram& program, int currentRoom);
-
+	void computeNewFourTiles(int t1, int t2, int t3, int t4, int pos, int x, int y, int ID, glm::vec2 minCoords, ShaderProgram& program);
 private:
 	bool loadLevel(const string& levelFile);
 	void prepareArrays(const glm::vec2& minCoords, ShaderProgram& program);
