@@ -350,3 +350,12 @@
 *.pdb
 *.exe
 *.pdb
+2DGame/02-Bubble/.vs/02-Bubble/v16/.suo
+2DGame/02-Bubble/.vs/02-Bubble/v16/Browse.VC.db
+*.log
+*.obj
+*.tlog
+*.pdb
+*.idb
+*.exe
+*.pdb

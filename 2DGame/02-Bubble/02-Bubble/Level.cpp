@@ -127,6 +127,7 @@ void Level::init(int ID, int pointsP, int moneyP, int livesP)
 	bottomCamera = float(SCREEN_HEIGHT) + 192.f * float(4 - currentRoom);
 	winState = loseState = false;
 	exitMenu = false;	
+	loseTransition = false;
 }
 
 void Level::update(int deltaTime)
@@ -134,9 +135,21 @@ void Level::update(int deltaTime)
 	currentTime += deltaTime;
 	currentTurnTime += deltaTime;
 	currentRoom = ball->getCurrentRoom();
-	if (!winState && !loseState) {
+	if (!winState && !loseState && !loseTransition) {
 		player->update(deltaTime, currentRoom);
 		ball->update(deltaTime, player->getPosition(), thief->getPosition(), currentRoom);
+	}
+	if (!loseTransition) start = int(currentTime);
+	if (loseTransition) {
+		if (int(currentTime) > start + 1800) {
+			loseTransition = false;
+			if (!ball->getGodMode()) --livesNum;
+			player->setPosition(glm::vec2(INIT_PLAYER_X, INIT_PLAYER_Y));
+			ball->setPosition(player->getPosition() + glm::vec2(5.f, -9.f));
+			ball->setCurrentRoom(1);
+			ball->setStuck(true);
+			currentRoom = ball->getCurrentRoom();
+		}
 	}
 	if (winState) {
 		if (topCamera > 192.f * float(4 - 5)-48) {
@@ -173,7 +186,7 @@ void Level::update(int deltaTime)
 			}
 		}
 	}
-	int aux = (currentRoom == 0) ? 1 : currentRoom;
+	int aux = (currentRoom == 0 || currentRoom == 5) ? 1 : currentRoom;
 	frameSprite->setPosition(glm::vec2(0.0, 576.0 - 192.0 * float(aux - 1)));
 	info->update(deltaTime);
 	info->setPosition(glm::vec2(INIT_INFO_X, INIT_INFO_Y - 192.f*float(aux - 1)));
@@ -213,9 +226,23 @@ void Level::update(int deltaTime)
 				thief->setLives(thief->getLives() - 1);
 			}
 		}
-		if (thief->getThiefBeaten()) {
-			Game::instance().runConsole();
-			cout << "YOU WIN" << endl;
+		if (thief->getThiefBeaten() && ball->getPosBall().y < -16) {
+			winState = true;
+		}
+		if (ball->getCurrentMoney() >= 1000 && livesNum == 4) {
+			loseTransition = true;
+		}
+		if (ball->getCurrentMoney() >= 2000 && livesNum == 3) {
+			loseTransition = true;
+		}
+		if (ball->getCurrentMoney() >= 3000 && livesNum == 2) {
+			loseTransition = true;
+		}
+		if (ball->getCurrentMoney() >= 4000 && livesNum == 1) {
+			loseTransition = true;
+		}
+		if (ball->getCurrentMoney() >= 5000 && livesNum == 0) {
+			loseTransition = true;
 		}
 	}
 	if (ball->getGetAllMoney()) {
@@ -247,12 +274,7 @@ void Level::update(int deltaTime)
 	}
 	if (currentRoom == 0)
 	{
-		player->setPosition(glm::vec2(INIT_PLAYER_X, INIT_PLAYER_Y));
-		ball->setPosition(player->getPosition() + glm::vec2(5.f, -9.f));
-		ball->setCurrentRoom(1);
-		ball->setStuck(true);
-		currentRoom = ball->getCurrentRoom();
-		if (!ball->getGodMode()) --livesNum;
+		loseTransition = true;
 	}
 	if (currentRoom <= 4 && currentRoom != 0 && !winState && !loseState && !exitMenu) {
 		if (topCamera > 192.f * float(4 - currentRoom)) {

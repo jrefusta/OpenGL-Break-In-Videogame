@@ -140,6 +140,10 @@ void Ball::setCurrentPoints(int p) {
 	this->initPoints = p;
 }
 
+glm::vec2 Ball::getPosBall() {
+	return posBall;
+}
+
 int Ball::getCurrentRoom() {
 	return this->currentRoom;
 }

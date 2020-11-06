@@ -49,6 +49,8 @@ private:
 	bool winState;
 	bool loseState;
 	bool exitMenu;
+	bool loseTransition;
+	int start;
 	int livesNum, pointsNum, moneyNum;
 	Texture frameSpritesheet, batmodeSpritesheet, winSpritesheet, loseSpritesheet;
 	Sprite *frameSprite, *batmodeSprite, *winSprite, *loseSprite;

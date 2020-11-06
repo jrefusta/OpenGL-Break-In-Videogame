@@ -40,6 +40,7 @@ public:
 	void setCurrentRoom(int c);
 	void setGodMode(bool g);
 	bool getGodMode();
+	glm::vec2 getPosBall();
 private:
 	float ballVelX;
 	float ballVelY;
