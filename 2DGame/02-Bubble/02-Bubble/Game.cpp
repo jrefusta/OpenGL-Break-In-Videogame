@@ -132,7 +132,7 @@ void Game::loopMusic(char* fileName) {
 		stopMusic();
 		music = engine->play2D(fileName, true, false, true);
 		music->setVolume(0.5f);
-		//if (fileName == "music/Never_Back_Down_looped.wav") music->setVolume(0.2f);
+		if (fileName == "music/Break_In_OST.mp3") music->setVolume(0.3f);
 	}
 
 }

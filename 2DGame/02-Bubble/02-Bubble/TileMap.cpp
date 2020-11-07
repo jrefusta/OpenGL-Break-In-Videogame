@@ -521,30 +521,35 @@ bool TileMap::checkCollision(int x, int y, int ID, int currentRoom, glm::vec2 mi
 		computeNewFourTiles(62, 50, 61, 49, pos, x, y, ID, minCoords, program);
 		this->money += 100;
 		this->totalMoney -= 100;
+		Game::instance().playSound("music/WallSound.mp3");
 		return true;
 	}
 	else if (isBag(pos)) {
 		computeNewFourTiles(64, 52, 63, 51, pos, x, y, ID, minCoords, program);
 		this->money += 200;
 		this->totalMoney -= 200;
+		Game::instance().playSound("music/BagSound.mp3");
 		return true;
 	}
 	else if (isPhone(pos)) {
 		computeNewFourTiles(70, 58, 69, 57, pos, x, y, ID, minCoords, program);
 		this->money += this->points;
 		this->points = 0;
+		Game::instance().playSound("music/PhoneSound.mp3");
 		return true;
 	}
 	else if (isPearl(pos)) {
 		computeNewFourTiles(66, 54, 65, 53, pos, x, y, ID, minCoords, program);
 		this->money += 400;
 		this->totalMoney -= 400;
+		Game::instance().playSound("music/BagSound.mp3");
 		return true;
 	}
 	else if (isDiamond(pos)) {
 		computeNewFourTiles(68, 56, 67, 55, pos, x, y, ID, minCoords, program);
 		this->money += 1500;
 		this->totalMoney -= 1500;
+		Game::instance().playSound("music/BagSound.mp3");
 		return true;
 	}
 	else if (isAlarm(pos)) {

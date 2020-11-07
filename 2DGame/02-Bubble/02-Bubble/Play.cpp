@@ -43,6 +43,7 @@ void Play::update(int deltaTime) {
 	currentTurnTime += deltaTime;
 	if (currentTurnTime >= float(150.0f)) {
 		if (Game::instance().moveDownPressed()) {
+			Game::instance().playSound("music/BlockSound.mp3");
 			if (level < 3) ++level;
 			else {
 				level = 0;
@@ -51,6 +52,7 @@ void Play::update(int deltaTime) {
 		}
 
 		else if (Game::instance().moveUpPressed()) {
+			Game::instance().playSound("music/BlockSound.mp3");
 			if (level > 0) --level;
 			else {
 				level = 3;
@@ -59,6 +61,7 @@ void Play::update(int deltaTime) {
 		}
 
 		else if (Game::instance().getKey(13)) {
+			Game::instance().playSound("music/PhoneSound.mp3");
 			Game::instance().selectScene(level + 4);
 		}
 

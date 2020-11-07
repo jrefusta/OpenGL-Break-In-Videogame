@@ -153,6 +153,7 @@ void Level::update(int deltaTime)
 		currentRoom = ball->getCurrentRoom();
 	}
 	if (winState) {
+		Game::instance().loopMusic("music/WinSong.mp3");
 		if (topCamera > 192.f * float(4 - 5)-48) {
 			topCamera -= cameraVelocity;
 			bottomCamera -= cameraVelocity;

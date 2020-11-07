@@ -78,6 +78,7 @@ void Ball::update(int deltaTime, glm::vec2 posPlayer, glm::vec2 posThief, int cu
 		}
 
 		if (collisionThief(posThief) && ballVelY < 0) {
+			Game::instance().playSound("music/PlayerSound.mp3");
 			posBall.y -= ballVelY;
 			ballVelY = abs(ballVelY);
 			thiefShooted = true;
