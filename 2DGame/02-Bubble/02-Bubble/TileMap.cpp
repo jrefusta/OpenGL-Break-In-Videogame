@@ -514,6 +514,7 @@ bool TileMap::checkCollision(int x, int y, int ID, int currentRoom, glm::vec2 mi
 	else if (isKey(pos)) {
 		destroyTop(minCoords, program, currentRoom);
 		computeNewFourTiles(44, 32, 43, 31, pos, x, y, ID, minCoords, program);
+		Game::instance().playSound("music/WallSound.mp3");
 		return true;
 	}
 	else if (isCoin(pos)) {

@@ -54,7 +54,6 @@ private:
 	int livesNum, pointsNum, moneyNum;
 	Texture frameSpritesheet, batmodeSpritesheet, winSpritesheet, loseSpritesheet;
 	Sprite *frameSprite, *batmodeSprite, *winSprite, *loseSprite;
-	bool SoundYet = true;
 };
 
 

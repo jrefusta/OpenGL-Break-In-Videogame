@@ -143,19 +143,14 @@ void Level::update(int deltaTime)
 	if (!loseTransition) start = int(currentTime);
 	if (loseTransition) {
 		loseTransition = false;
-		if (!SoundYet) {
-			SoundYet = true;
-			Game::instance().playSound("music/DefeatSound.mp3");
-		}
-		if (int(currentTime) > start + 1800) {
-			//Game::instance().playSound("music/DefeatSound.mp3");
-			if (!ball->getGodMode()) --livesNum;
-			player->setPosition(glm::vec2(INIT_PLAYER_X, INIT_PLAYER_Y));
-			ball->setPosition(player->getPosition() + glm::vec2(5.f, -9.f));
-			ball->setCurrentRoom(1);
-			ball->setStuck(true);
-			currentRoom = ball->getCurrentRoom();
-		}
+		Game::instance().playSound("music/DefeatSound.mp3");
+		Sleep(1500);
+		if (!ball->getGodMode()) --livesNum;
+		player->setPosition(glm::vec2(INIT_PLAYER_X, INIT_PLAYER_Y));
+		ball->setPosition(player->getPosition() + glm::vec2(5.f, -9.f));
+		ball->setCurrentRoom(1);
+		ball->setStuck(true);
+		currentRoom = ball->getCurrentRoom();
 	}
 	if (winState) {
 		if (topCamera > 192.f * float(4 - 5)-48) {
@@ -280,11 +275,8 @@ void Level::update(int deltaTime)
 		loseState = true;
 		livesNum = 0;
 	}
-	if (currentRoom == 0)
+	if (currentRoom == 0 && !loseTransition)
 	{
-		currentRoom = 1;
-		//Game::instance().playSound("music/DefeatSound.mp3");
-		SoundYet = false;
 		loseTransition = true;
 	}
 	if (currentRoom <= 4 && currentRoom != 0 && !winState && !loseState && !exitMenu) {
