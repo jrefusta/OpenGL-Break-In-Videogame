@@ -16,6 +16,7 @@ void Menu::init(int o) {
 	loadSprites();
 
 	this->option = o;
+	Game::instance().loopMusic("music/Break_In_OST.mp3");
 	
 }
 
@@ -60,6 +61,7 @@ void Menu::update(int deltaTime) {
 
 		else if (Game::instance().getKey(13)) {
 			Game::instance().selectScene(option + 1);
+			Game::instance().playSound("music/WallSound.mp3");
 		}
 
 		else if (Game::instance().getKey(27)) {

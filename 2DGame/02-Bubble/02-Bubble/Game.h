@@ -9,6 +9,9 @@
 #include "Help.h"
 #include "Level.h"
 
+#include <irrKlang.h>
+#include <ik_ISoundEngine.h>
+using namespace irrklang;
 
 #define SCREEN_WIDTH 272
 #define SCREEN_HEIGHT 240
@@ -56,11 +59,19 @@ public:
 	void selectScene(int ID);
 
 
+	void loopMusic(char* fileName);
+	void stopMusic();
+	void playSound(char* fileName);
+
 private:
 	bool bPlay;                       // Continue to play game?
 	Scene* scene;                      // Scene to render
 	bool keys[256], specialKeys[256]; // Store key states so that 
 	                                  // we can have access at any time
+
+	irrklang::ISoundEngine* engine; //para la musica del juego
+	ISound* music;
+
 
 };
 

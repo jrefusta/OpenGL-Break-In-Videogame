@@ -457,12 +457,16 @@ void TileMap::computeNewFourTiles(int t1, int t2, int t3, int t4, int pos, int x
 
 bool TileMap::checkCollision(int x, int y, int ID, int currentRoom, glm::vec2 minCoords, ShaderProgram& program) {
 	int pos = y * mapSize.x + x;
-	if (isWall(pos)) return true;
+	if (isWall(pos)) {
+		Game::instance().playSound("music/WallSound.mp3");
+		return true;
+	}
 	else if (map[pos] == 21) {
 		printTile(minCoords, program, pos, 23);
 		map[pos] = 23;
 		printTile(minCoords, program, pos + 1, 24);
 		map[pos + 1] = 24;
+		Game::instance().playSound("music/BlockSound.mp3");
 		return true;
 	}
 	else if (map[pos] == 22) {
@@ -470,6 +474,7 @@ bool TileMap::checkCollision(int x, int y, int ID, int currentRoom, glm::vec2 mi
 		map[pos] = 24;
 		printTile(minCoords, program, pos - 1, 23);
 		map[pos - 1] = 23;
+		Game::instance().playSound("music/BlockSound.mp3");
 		return true;
 	}
 	else if (map[pos] == 59) {
@@ -477,6 +482,7 @@ bool TileMap::checkCollision(int x, int y, int ID, int currentRoom, glm::vec2 mi
 		map[pos] = 21;
 		printTile(minCoords, program, pos + 1, 22);
 		map[pos + 1] = 22;
+		Game::instance().playSound("music/BlockSound.mp3");
 		return true;
 	}
 	else if (map[pos] == 60) {
@@ -484,6 +490,7 @@ bool TileMap::checkCollision(int x, int y, int ID, int currentRoom, glm::vec2 mi
 		map[pos] = 22;
 		printTile(minCoords, program, pos - 1, 21);
 		map[pos - 1] = 21;
+		Game::instance().playSound("music/BlockSound.mp3");
 		return true;
 	}
 	else if (isLeftSideBlock(pos) || isRightSideBlock(pos)) {
@@ -501,6 +508,7 @@ bool TileMap::checkCollision(int x, int y, int ID, int currentRoom, glm::vec2 mi
 			map[pos + 1] = newTile.second;
 		}
 		this->points += 100;
+		Game::instance().playSound("music/BlockSound.mp3");
 		return true;
 	}
 	else if (isKey(pos)) {

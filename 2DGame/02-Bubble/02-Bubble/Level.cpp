@@ -45,6 +45,7 @@ void Level::init(int ID, int pointsP, int moneyP, int livesP)
 {
 	initShaders();
 	currentLevel = ID;
+	Game::instance().stopMusic();
 	map = TileMap::createTileMap("levels/level0" + to_string(currentLevel) + ".txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, currentLevel);
@@ -141,8 +142,13 @@ void Level::update(int deltaTime)
 	}
 	if (!loseTransition) start = int(currentTime);
 	if (loseTransition) {
+		loseTransition = false;
+		if (!SoundYet) {
+			SoundYet = true;
+			Game::instance().playSound("music/DefeatSound.mp3");
+		}
 		if (int(currentTime) > start + 1800) {
-			loseTransition = false;
+			//Game::instance().playSound("music/DefeatSound.mp3");
 			if (!ball->getGodMode()) --livesNum;
 			player->setPosition(glm::vec2(INIT_PLAYER_X, INIT_PLAYER_Y));
 			ball->setPosition(player->getPosition() + glm::vec2(5.f, -9.f));
@@ -276,6 +282,9 @@ void Level::update(int deltaTime)
 	}
 	if (currentRoom == 0)
 	{
+		currentRoom = 1;
+		//Game::instance().playSound("music/DefeatSound.mp3");
+		SoundYet = false;
 		loseTransition = true;
 	}
 	if (currentRoom <= 4 && currentRoom != 0 && !winState && !loseState && !exitMenu) {
