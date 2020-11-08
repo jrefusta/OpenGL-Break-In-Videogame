@@ -24,6 +24,7 @@ Level::Level()
 	ball = NULL;
 	info = NULL;
 	thief = NULL;
+	guard = NULL;
 }
 
 Level::~Level()
@@ -38,6 +39,8 @@ Level::~Level()
 		delete info;
 	if (thief != NULL)
 		delete thief;
+	if (guard != NULL)
+		delete guard;
 }
 
 
@@ -66,6 +69,10 @@ void Level::init(int ID, int pointsP, int moneyP, int livesP)
 	frameSpritesheet.loadFromFile("images/frame.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	frameSprite = Sprite::createSprite(glm::ivec2(272, 240), glm::vec2(1.f, 1.f), &frameSpritesheet, &texProgram);
 	frameSprite->setPosition(glm::vec2(0.0, 576.0));
+	alarmSpritesheet.loadFromFile("images/alarm.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	alarmSprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.f, 1.f), &alarmSpritesheet, &texProgram);
+	if (currentLevel == 2) alarmSprite->setPosition(glm::vec2(168.0, 120.0));
+	else if (currentLevel == 3) alarmSprite->setPosition(glm::vec2(104.0, 472.0));
 	info = new Info();
 	info->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	info->setPosition(glm::vec2(INIT_INFO_X, INIT_INFO_Y));
@@ -253,8 +260,19 @@ void Level::update(int deltaTime)
 		winState = true;
 	}
 	if (ball->getGetAlarmHit()) {
-		/*Game::instance().runConsole();
-		cout << "ALARM HITED" << endl;*/
+		if ((currentLevel == 2 && currentRoom == 4) || (currentLevel == 3 && currentRoom == 2)) {
+			if (guard == NULL) {
+				guard = new Guard();
+				guard->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+				if (currentLevel == 2) guard->setPosition(glm::vec2(10, 181));
+				else if (currentLevel == 3) guard->setPosition(glm::vec2(10, 565));
+				guard->setTileMap(map);
+			} else {
+				guard->update(deltaTime, player->getPosition());
+			}
+		} else {
+			guard = NULL;
+		}
 	}
 
 	if (ball->getStuck()) {
@@ -331,6 +349,7 @@ void Level::render()
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	map->render();
+	if (ball->getGetAlarmHit() && int(currentTime / 10) % 2 == 1) alarmSprite->render();
 	ball->render();
 	player->render();
 	frameSprite->render();
@@ -346,6 +365,7 @@ void Level::render()
 	if (currentRoom > 1 || int(currentTime/500)%2 == 0) {
 		for (int i = 0; i < 2; ++i) room[i]->render();
 	}
+	if (guard != NULL) guard->render();
 }
 
 void Level::initShaders()

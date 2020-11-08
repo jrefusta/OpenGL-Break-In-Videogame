@@ -27,7 +27,7 @@ images/blocks.png 	-- Tilesheet
 ?XWXWXWXWXWXWXWXWXWXWXW?
 ?LKLKLKLKLKLKLKLKLKLKLK?
 ??????WXWXWXWXWXWX??????
-xxxxxxxxxxxxxxxxxxxxxxxx
+@@@@@@@@@@@@@@@@@@@@@@@@
 ?XWXWXWXWXWXWXWXWXWXWXW?
 ?LKLKLKLKLKLKLKLKLKLKLK?
 ?X;<WXWXWXWXWXWXWXWX;<W?
@@ -51,7 +51,7 @@ xxxxxxxxxxxxxxxxxxxxxxxx
 ?XWXWXWXWXWXWXWXWXWXWXW?
 ?LKLKLKLKLKLKLKLKLKLKLK?
 ????WXWXWXWXWXWXWXWX????
-xxxxxxxxxxxxxxxxxxxxxxxx
+@@@@@@@@@@@@@@@@@@@@@@@@
 ?XWXWXWXWXWXWXWXWXWXWXW?
 ?LKLKL;<34;<34;<34KLKLK?
 ?XWXWX34;<34;<34;<WXWXW?
@@ -75,7 +75,7 @@ xxxxxxxxxxxxxxxxxxxxxxxx
 ?X3478WXWXWXWXWXWX7834W?
 ?LKLKLKLKLKLKLKLKLKLKLK?
 ??????WXWXWXWXWXWX??????
-xxxxxxxxxxxxxxxxxxxxxxxx
+@@@@@@@@@@@@@@@@@@@@@@@@
 ?XWXWXWXWXWXWXWXWXWXWXW?
 ?LKLKLKLKLKLKLKLKLKLKLK?
 ?X34WXWXWXWXWXWXWXWX34W?

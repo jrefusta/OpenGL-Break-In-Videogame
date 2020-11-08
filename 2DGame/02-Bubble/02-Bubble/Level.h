@@ -12,6 +12,7 @@
 #include "Info.h"
 #include "Thief.h"
 #include "Digit.h"
+#include "Guard.h"
 
 
 // Scene contains all the entities of our game.
@@ -39,6 +40,7 @@ private:
 	Info* info;
 	Thief* thief;
 	Digit *money[7], *points[7], *lives[2], *bank[2], *room[2];
+	Guard *guard;
 	ShaderProgram texProgram;
 	int currentRoom;
 	int currentLevel;
@@ -52,8 +54,8 @@ private:
 	bool loseTransition;
 	int start;
 	int livesNum, pointsNum, moneyNum;
-	Texture frameSpritesheet, batmodeSpritesheet, winSpritesheet, loseSpritesheet;
-	Sprite *frameSprite, *batmodeSprite, *winSprite, *loseSprite;
+	Texture frameSpritesheet, batmodeSpritesheet, winSpritesheet, loseSpritesheet, alarmSpritesheet;
+	Sprite *frameSprite, *batmodeSprite, *winSprite, *loseSprite, *alarmSprite;
 };
 
 

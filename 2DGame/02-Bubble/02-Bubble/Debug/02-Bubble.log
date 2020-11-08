@@ -1,8 +1,18 @@
-﻿  Ball.cpp
-  Game.cpp
+﻿  Level.cpp
+C:\Users\GL553VD\Documents\GitHub\VJ_2D\2DGame\02-Bubble\02-Bubble\Level.cpp(132,19): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\GL553VD\Documents\GitHub\VJ_2D\2DGame\02-Bubble\02-Bubble\Level.cpp(133,20): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\GL553VD\Documents\GitHub\VJ_2D\2DGame\02-Bubble\02-Bubble\Level.cpp(134,38): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\GL553VD\Documents\GitHub\VJ_2D\2DGame\02-Bubble\02-Bubble\Level.cpp(168,32): warning C4129: ' ': secuencia de escape de carácter no reconocida
+C:\Users\GL553VD\Documents\GitHub\VJ_2D\2DGame\02-Bubble\02-Bubble\Level.cpp(189,32): warning C4129: ' ': secuencia de escape de carácter no reconocida
+C:\Users\GL553VD\Documents\GitHub\VJ_2D\2DGame\02-Bubble\02-Bubble\Level.cpp(312,30): warning C4129: ' ': secuencia de escape de carácter no reconocida
+  TileMap.cpp
+C:\Users\GL553VD\Documents\GitHub\VJ_2D\2DGame\02-Bubble\02-Bubble\TileMap.cpp(95,65): warning C4244: '+=': conversión de 'double' a 'int'; posible pérdida de datos
+C:\Users\GL553VD\Documents\GitHub\VJ_2D\2DGame\02-Bubble\02-Bubble\TileMap.cpp(96,64): warning C4244: '+=': conversión de 'double' a 'int'; posible pérdida de datos
+C:\Users\GL553VD\Documents\GitHub\VJ_2D\2DGame\02-Bubble\02-Bubble\TileMap.cpp(97,66): warning C4244: '+=': conversión de 'double' a 'int'; posible pérdida de datos
+C:\Users\GL553VD\Documents\GitHub\VJ_2D\2DGame\02-Bubble\02-Bubble\TileMap.cpp(98,69): warning C4244: '+=': conversión de 'double' a 'int'; posible pérdida de datos
   Generando código...
-SOIL.lib(image_DXT.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(image_DXT.obj)' o en 'D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
-SOIL.lib(image_helper.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(image_helper.obj)' o en 'D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
-SOIL.lib(SOIL.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(SOIL.obj)' o en 'D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
-SOIL.lib(stb_image_aug.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(stb_image_aug.obj)' o en 'D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
-  02-Bubble.vcxproj -> D:\Users\jrefu\Desktop\VJ\VJ_2D\2DGame\02-Bubble\Debug\02-Bubble.exe
+SOIL.lib(image_DXT.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(image_DXT.obj)' o en 'C:\Users\GL553VD\Documents\GitHub\VJ_2D\2DGame\02-Bubble\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
+SOIL.lib(image_helper.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(image_helper.obj)' o en 'C:\Users\GL553VD\Documents\GitHub\VJ_2D\2DGame\02-Bubble\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
+SOIL.lib(SOIL.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(SOIL.obj)' o en 'C:\Users\GL553VD\Documents\GitHub\VJ_2D\2DGame\02-Bubble\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
+SOIL.lib(stb_image_aug.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(stb_image_aug.obj)' o en 'C:\Users\GL553VD\Documents\GitHub\VJ_2D\2DGame\02-Bubble\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
+  02-Bubble.vcxproj -> C:\Users\GL553VD\Documents\GitHub\VJ_2D\2DGame\02-Bubble\Debug\02-Bubble.exe

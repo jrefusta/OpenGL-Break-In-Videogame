@@ -301,7 +301,7 @@ bool TileMap::isWall(int pos) {
 	return map[pos] == 13 || map[pos] == 15 || map[pos] == 17;
 }
 bool TileMap::isFakeWall(int pos) {
-	return map[pos] == 71 || map[pos] == 72;
+	return map[pos] == 14 || map[pos] == 16 || map[pos] == 18;
 }
 
 bool TileMap::isDiamond(int pos) {//1500€
