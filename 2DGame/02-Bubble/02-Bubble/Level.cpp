@@ -150,16 +150,32 @@ void Level::update(int deltaTime)
 	if (!loseTransition) start = int(currentTime);
 	if (loseTransition) {
 		loseTransition = false;
+		Game::instance().stopMusic();
 		Game::instance().playSound("music/DefeatSound.mp3");
 		Sleep(1500);
 		if (!ball->getGodMode()) --livesNum;
-		player->setPosition(glm::vec2(INIT_PLAYER_X, INIT_PLAYER_Y));
-		ball->setPosition(player->getPosition() + glm::vec2(5.f, -9.f));
-		ball->setCurrentRoom(1);
-		ball->setStuck(true);
-		currentRoom = ball->getCurrentRoom();
+		if ((currentLevel == 2 && currentRoom == 4) || (currentLevel == 3 && currentRoom == 2) || currentLevel == 4) {
+			if (currentLevel == 2) guard->setPosition(glm::vec2(10, 181));
+			else if (currentLevel == 3) guard->setPosition(glm::vec2(10, 565));
+			if (ball->getGetAlarmHit()) {
+				guard = NULL;
+				ball->setAlarmHit(false);
+			}
+			player->setPosition(glm::vec2(INIT_PLAYER_X, INIT_PLAYER_Y-(192*(currentRoom-1))));
+			ball->setPosition(player->getPosition() + glm::vec2(5.f, -9.f));
+			ball->setStuck(true);
+		}
+		else {
+			player->setPosition(glm::vec2(INIT_PLAYER_X, INIT_PLAYER_Y));
+			ball->setPosition(player->getPosition() + glm::vec2(5.f, -9.f));
+			ball->setCurrentRoom(1);
+			ball->setStuck(true);
+			currentRoom = ball->getCurrentRoom();
+		}
 	}
 	if (winState) {
+		guard = NULL;
+		if (ball->getGetAlarmHit()) ball->setAlarmHit(false);
 		Game::instance().loopMusic("music/WinSong.mp3");
 		if (topCamera > 192.f * float(4 - 5)-48) {
 			topCamera -= cameraVelocity;
@@ -261,6 +277,7 @@ void Level::update(int deltaTime)
 	}
 	if (ball->getGetAlarmHit()) {
 		if ((currentLevel == 2 && currentRoom == 4) || (currentLevel == 3 && currentRoom == 2)) {
+			Game::instance().loopMusic("music/AlarmSound.mp3");
 			if (guard == NULL) {
 				guard = new Guard();
 				guard->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -269,8 +286,13 @@ void Level::update(int deltaTime)
 				guard->setTileMap(map);
 			} else {
 				guard->update(deltaTime, player->getPosition());
+				if (guard->getCollisionGuard(player->getPosition())) {
+					loseTransition = true;
+				}
 			}
-		} else {
+		} 
+		else {
+			Game::instance().stopMusic();
 			guard = NULL;
 		}
 	}
@@ -365,7 +387,7 @@ void Level::render()
 	if (currentRoom > 1 || int(currentTime/500)%2 == 0) {
 		for (int i = 0; i < 2; ++i) room[i]->render();
 	}
-	if (guard != NULL) guard->render();
+	if (guard != NULL && ball->getGetAlarmHit()) guard->render();
 }
 
 void Level::initShaders()

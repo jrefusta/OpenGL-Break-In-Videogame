@@ -44,6 +44,7 @@ public:
 	bool isDiamond(int pos);
 	bool isFakeWall(int pos);
 	bool getAlarmHited();
+	void setAlarmHited(bool a);
 	int getPoints();
 	int getMoney();
 	int getTotalMoney();

@@ -73,10 +73,22 @@ void Guard::setTileMap(TileMap *tileMap)
 	map = tileMap;
 }
 
-void Guard::setPosition(const glm::vec2 &pos)
+
+bool Guard::getCollisionGuard(glm::vec2 posPlayer) {
+	bool collisionX = posPlayer.x + 18 >= posGuard.x && posGuard.x + 12 >= posPlayer.x;
+	bool collisionY = posPlayer.y + 26 >= posGuard.y && posGuard.y + 8 >= posPlayer.y;
+	return collisionX && collisionY;
+}
+
+void Guard::setPosition(const glm::vec2& pos)
 {
 	posGuard = pos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posGuard.x), float(tileMapDispl.y + posGuard.y)));
+}
+
+glm::ivec2 Guard::getPosition()
+{
+	return posGuard;
 }
 
 

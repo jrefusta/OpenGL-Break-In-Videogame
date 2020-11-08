@@ -18,6 +18,8 @@ public:
 	
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
+	bool getCollisionGuard(glm::vec2 posPlayer);
+	glm::ivec2 getPosition();
 	
 private:
 	bool bMoving;
