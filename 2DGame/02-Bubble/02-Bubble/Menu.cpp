@@ -16,6 +16,7 @@ void Menu::init(int o) {
 	loadSprites();
 
 	this->option = o;
+	Game::instance().loopMusic("music/Break_In_OST.mp3");
 	
 }
 
@@ -43,6 +44,7 @@ void Menu::update(int deltaTime) {
 
 	if (currentTurnTime >= float(150.0f)) {
 		if (Game::instance().moveDownPressed()) {
+			Game::instance().playSound("music/BlockSound.mp3");
 			if (option < 2) ++option;
 			else {
 				option = 0;
@@ -51,6 +53,7 @@ void Menu::update(int deltaTime) {
 		}
 
 		else if (Game::instance().moveUpPressed()) {
+			Game::instance().playSound("music/BlockSound.mp3");
 			if (option > 0) --option;
 			else {
 				option = 2;
@@ -60,6 +63,7 @@ void Menu::update(int deltaTime) {
 
 		else if (Game::instance().getKey(13)) {
 			Game::instance().selectScene(option + 1);
+			Game::instance().playSound("music/PhoneSound.mp3");
 		}
 
 		else if (Game::instance().getKey(27)) {
@@ -83,7 +87,7 @@ void Menu::render() {
 	background->render();
 
 	for (int i = 0; i < 3; i++) {
-		if (option != i || int(currentTime/500)%2 == 0) options[i].sprite->render();
+		if (option != i || int(currentTime/200)%5 != 0) options[i].sprite->render();
 	}
 
 

@@ -9,7 +9,7 @@ void Game::init()
 {
 	bPlay = true;
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
+	engine = createIrrKlangDevice();
 	scene = new Menu();
 	scene->init(0);
 }
@@ -125,6 +125,31 @@ void Game::selectScene(int ID) {
 			break;
 	}
 }
+
+void Game::loopMusic(char* fileName) {
+	//engine->removeSoundSource(fileName);
+	if (!engine->isCurrentlyPlaying(fileName)) {
+		stopMusic();
+		music = engine->play2D(fileName, true, false, true);
+		music->setVolume(0.5f);
+		if (fileName == "music/Break_In_OST.mp3") music->setVolume(0.3f);
+	}
+
+}
+
+void Game::stopMusic() {
+	if (music != NULL) {
+		music->stop();
+	}
+}
+
+
+void Game::playSound(char* fileName) {
+	ISound* sound = engine->play2D(fileName, false, false, true);
+	sound->setVolume(0.2f);
+	sound->setPlaybackSpeed();
+}
+
 void Game::runConsole() {
 	FILE* fp;
 	AllocConsole();

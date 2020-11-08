@@ -457,12 +457,16 @@ void TileMap::computeNewFourTiles(int t1, int t2, int t3, int t4, int pos, int x
 
 bool TileMap::checkCollision(int x, int y, int ID, int currentRoom, glm::vec2 minCoords, ShaderProgram& program) {
 	int pos = y * mapSize.x + x;
-	if (isWall(pos)) return true;
+	if (isWall(pos)) {
+		Game::instance().playSound("music/WallSound.mp3");
+		return true;
+	}
 	else if (map[pos] == 21) {
 		printTile(minCoords, program, pos, 23);
 		map[pos] = 23;
 		printTile(minCoords, program, pos + 1, 24);
 		map[pos + 1] = 24;
+		Game::instance().playSound("music/BlockSound.mp3");
 		return true;
 	}
 	else if (map[pos] == 22) {
@@ -470,6 +474,7 @@ bool TileMap::checkCollision(int x, int y, int ID, int currentRoom, glm::vec2 mi
 		map[pos] = 24;
 		printTile(minCoords, program, pos - 1, 23);
 		map[pos - 1] = 23;
+		Game::instance().playSound("music/BlockSound.mp3");
 		return true;
 	}
 	else if (map[pos] == 59) {
@@ -477,6 +482,7 @@ bool TileMap::checkCollision(int x, int y, int ID, int currentRoom, glm::vec2 mi
 		map[pos] = 21;
 		printTile(minCoords, program, pos + 1, 22);
 		map[pos + 1] = 22;
+		Game::instance().playSound("music/BlockSound.mp3");
 		return true;
 	}
 	else if (map[pos] == 60) {
@@ -484,6 +490,7 @@ bool TileMap::checkCollision(int x, int y, int ID, int currentRoom, glm::vec2 mi
 		map[pos] = 22;
 		printTile(minCoords, program, pos - 1, 21);
 		map[pos - 1] = 21;
+		Game::instance().playSound("music/BlockSound.mp3");
 		return true;
 	}
 	else if (isLeftSideBlock(pos) || isRightSideBlock(pos)) {
@@ -501,41 +508,48 @@ bool TileMap::checkCollision(int x, int y, int ID, int currentRoom, glm::vec2 mi
 			map[pos + 1] = newTile.second;
 		}
 		this->points += 100;
+		Game::instance().playSound("music/BlockSound.mp3");
 		return true;
 	}
 	else if (isKey(pos)) {
 		destroyTop(minCoords, program, currentRoom);
 		computeNewFourTiles(44, 32, 43, 31, pos, x, y, ID, minCoords, program);
+		Game::instance().playSound("music/WallSound.mp3");
 		return true;
 	}
 	else if (isCoin(pos)) {
 		computeNewFourTiles(62, 50, 61, 49, pos, x, y, ID, minCoords, program);
 		this->money += 100;
 		this->totalMoney -= 100;
+		Game::instance().playSound("music/WallSound.mp3");
 		return true;
 	}
 	else if (isBag(pos)) {
 		computeNewFourTiles(64, 52, 63, 51, pos, x, y, ID, minCoords, program);
 		this->money += 200;
 		this->totalMoney -= 200;
+		Game::instance().playSound("music/BagSound.mp3");
 		return true;
 	}
 	else if (isPhone(pos)) {
 		computeNewFourTiles(70, 58, 69, 57, pos, x, y, ID, minCoords, program);
 		this->money += this->points;
 		this->points = 0;
+		Game::instance().playSound("music/PhoneSound.mp3");
 		return true;
 	}
 	else if (isPearl(pos)) {
 		computeNewFourTiles(66, 54, 65, 53, pos, x, y, ID, minCoords, program);
 		this->money += 400;
 		this->totalMoney -= 400;
+		Game::instance().playSound("music/BagSound.mp3");
 		return true;
 	}
 	else if (isDiamond(pos)) {
 		computeNewFourTiles(68, 56, 67, 55, pos, x, y, ID, minCoords, program);
 		this->money += 1500;
 		this->totalMoney -= 1500;
+		Game::instance().playSound("music/BagSound.mp3");
 		return true;
 	}
 	else if (isAlarm(pos)) {

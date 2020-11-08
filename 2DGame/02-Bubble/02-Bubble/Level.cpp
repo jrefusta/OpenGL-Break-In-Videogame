@@ -48,6 +48,7 @@ void Level::init(int ID, int pointsP, int moneyP, int livesP)
 {
 	initShaders();
 	currentLevel = ID;
+	Game::instance().stopMusic();
 	map = TileMap::createTileMap("levels/level0" + to_string(currentLevel) + ".txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, currentLevel);
@@ -148,17 +149,18 @@ void Level::update(int deltaTime)
 	}
 	if (!loseTransition) start = int(currentTime);
 	if (loseTransition) {
-		if (int(currentTime) > start + 1800) {
-			loseTransition = false;
-			if (!ball->getGodMode()) --livesNum;
-			player->setPosition(glm::vec2(INIT_PLAYER_X, INIT_PLAYER_Y));
-			ball->setPosition(player->getPosition() + glm::vec2(5.f, -9.f));
-			ball->setCurrentRoom(1);
-			ball->setStuck(true);
-			currentRoom = ball->getCurrentRoom();
-		}
+		loseTransition = false;
+		Game::instance().playSound("music/DefeatSound.mp3");
+		Sleep(1500);
+		if (!ball->getGodMode()) --livesNum;
+		player->setPosition(glm::vec2(INIT_PLAYER_X, INIT_PLAYER_Y));
+		ball->setPosition(player->getPosition() + glm::vec2(5.f, -9.f));
+		ball->setCurrentRoom(1);
+		ball->setStuck(true);
+		currentRoom = ball->getCurrentRoom();
 	}
 	if (winState) {
+		Game::instance().loopMusic("music/WinSong.mp3");
 		if (topCamera > 192.f * float(4 - 5)-48) {
 			topCamera -= cameraVelocity;
 			bottomCamera -= cameraVelocity;
@@ -292,7 +294,7 @@ void Level::update(int deltaTime)
 		loseState = true;
 		livesNum = 0;
 	}
-	if (currentRoom == 0)
+	if (currentRoom == 0 && !loseTransition)
 	{
 		loseTransition = true;
 	}

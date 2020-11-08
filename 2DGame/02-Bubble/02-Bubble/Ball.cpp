@@ -49,6 +49,7 @@ void Ball::update(int deltaTime, glm::vec2 posPlayer, glm::vec2 posThief, int cu
 		}
 
 		if (collisionPlayer(posPlayer) && ballVelY > 0) {
+			Game::instance().playSound("music/PlayerSound.mp3");
 			posBall.y -= ballVelY;
 			if (posPlayer.x - posBall.x >= 7) {
 				ballVelY = -0.5;
@@ -77,6 +78,7 @@ void Ball::update(int deltaTime, glm::vec2 posPlayer, glm::vec2 posThief, int cu
 		}
 
 		if (collisionThief(posThief) && ballVelY < 0) {
+			Game::instance().playSound("music/PlayerSound.mp3");
 			posBall.y -= ballVelY;
 			ballVelY = abs(ballVelY);
 			thiefShooted = true;
@@ -96,10 +98,12 @@ void Ball::update(int deltaTime, glm::vec2 posPlayer, glm::vec2 posThief, int cu
 			if (collisionPlayer(posPlayer) && ballVelX > 0 && ballVelY > 0) {
 				posBall.x -= ballVelX;
 				ballVelX = -abs(ballVelX);
+				Game::instance().playSound("music/PlayerSound.mp3");
 			}
 			else if (collisionPlayer(posPlayer) && ballVelX < 0 && ballVelY > 0) {
 				posBall.x -= ballVelX;
 				ballVelX = abs(ballVelX);
+				Game::instance().playSound("music/PlayerSound.mp3");
 			}
 		}
 	}
