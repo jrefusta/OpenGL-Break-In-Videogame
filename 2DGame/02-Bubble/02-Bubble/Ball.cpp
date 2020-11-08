@@ -217,3 +217,8 @@ void Ball::setGodMode(bool g) {
 bool Ball::getGodMode() {
 	return this->godMode;
 }
+
+void Ball::setAlarmHit(bool a) {
+	map->setAlarmHited(a);
+	alarmHit = a;
+}

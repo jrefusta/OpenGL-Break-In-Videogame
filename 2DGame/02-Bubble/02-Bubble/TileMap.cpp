@@ -168,6 +168,9 @@ int TileMap::getTotalMoney() {
 bool TileMap::getAlarmHited() {
 	return this->alarmHited;
 }
+void TileMap::setAlarmHited(bool a) {
+	this->alarmHited = a;
+}
 void TileMap::printTile(const glm::vec2& minCoords, ShaderProgram& program, int pos, int newTile) {
 	int tile, nTiles = 2;
 	glm::vec2 posTile, texCoordTile[2], halfTexel;

@@ -37,6 +37,7 @@ public:
 	int getCurrentRoom();
 	bool getThiefShooted();
 	void setThiefShooted(bool t);
+	void setAlarmHit(bool a);
 	void setCurrentRoom(int c);
 	void setGodMode(bool g);
 	bool getGodMode();
