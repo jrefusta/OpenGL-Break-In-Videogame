@@ -79,7 +79,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, in
 		sprite->setAnimationSpeed(LOOK_DOWN_RIGHT_3, 8);
 		sprite->addKeyframe(LOOK_DOWN_RIGHT_3, glm::vec2(6/7.f, 0.5f));
 
-		sprite->setAnimationSpeed(CLOSE, 8);
+		sprite->setAnimationSpeed(CLOSE, 7);
 		sprite->addKeyframe(CLOSE, glm::vec2(0.f, 0.75f));
 		sprite->addKeyframe(CLOSE, glm::vec2(1/7.f, 0.75f));
 		sprite->addKeyframe(CLOSE, glm::vec2(2/7.f, 0.75f));

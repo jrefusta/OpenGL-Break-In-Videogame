@@ -13,6 +13,7 @@
 #include "Thief.h"
 #include "Digit.h"
 #include "Guard.h"
+#include "PlayerPassword.h"
 
 
 // Scene contains all the entities of our game.
@@ -41,6 +42,7 @@ private:
 	Thief* thief;
 	Digit *money[7], *points[7], *lives[2], *bank[2], *room[2];
 	Guard *guard;
+	PlayerPassword *playerPassword;
 	ShaderProgram texProgram;
 	int currentRoom;
 	int currentLevel;
@@ -56,6 +58,7 @@ private:
 	int livesNum, pointsNum, moneyNum;
 	Texture frameSpritesheet, batmodeSpritesheet, winSpritesheet, loseSpritesheet, alarmSpritesheet;
 	Sprite *frameSprite, *batmodeSprite, *winSprite, *loseSprite, *alarmSprite;
+	float passwordTime;
 };
 
 

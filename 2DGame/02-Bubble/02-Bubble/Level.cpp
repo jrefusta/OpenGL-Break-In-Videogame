@@ -25,6 +25,7 @@ Level::Level()
 	info = NULL;
 	thief = NULL;
 	guard = NULL;
+	playerPassword = NULL;
 }
 
 Level::~Level()
@@ -41,6 +42,8 @@ Level::~Level()
 		delete thief;
 	if (guard != NULL)
 		delete guard;
+	if (playerPassword != NULL)
+		delete playerPassword;
 }
 
 
@@ -60,7 +63,7 @@ void Level::init(int ID, int pointsP, int moneyP, int livesP)
 	ball->setStuck(true);
 	ball->setCurrentPoints(pointsP);
 	ball->setCurrentMoney(moneyP);
-	winSpritesheet.loadFromFile("images/you_win.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	winSpritesheet.loadFromFile("images/password.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	winSprite = Sprite::createSprite(glm::ivec2(272.0, 240.0), glm::vec2(1.f, 1.f), &winSpritesheet, &texProgram);
 	winSprite->setPosition(glm::vec2(0.0, 576.0 - 192.0 * float(5 - 1) - 48));
 	loseSpritesheet.loadFromFile("images/game_over.png", TEXTURE_PIXEL_FORMAT_RGBA);
@@ -123,6 +126,10 @@ void Level::init(int ID, int pointsP, int moneyP, int livesP)
 		room[i]->setPosition(glm::vec2(248 + 8*i, 784));
 		room[i]->setTileMap(map);
 	}
+	playerPassword = new PlayerPassword();
+	playerPassword->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	playerPassword->setPosition(glm::vec2(20, -111));
+	playerPassword->setTileMap(map);
 	currentTime = 0.0f;
 	currentRoom = 1;
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT) + 192.f*float(4 - currentRoom), 192.f*float(4 - currentRoom));
@@ -136,6 +143,7 @@ void Level::init(int ID, int pointsP, int moneyP, int livesP)
 	winState = loseState = false;
 	exitMenu = false;	
 	loseTransition = false;
+	passwordTime = -1;
 }
 
 void Level::update(int deltaTime)
@@ -174,6 +182,7 @@ void Level::update(int deltaTime)
 		}
 	}
 	if (winState) {
+		if (passwordTime < 0) passwordTime = currentTime;
 		guard = NULL;
 		if (ball->getGetAlarmHit()) ball->setAlarmHit(false);
 		Game::instance().loopMusic("music/WinSong.mp3");
@@ -183,7 +192,7 @@ void Level::update(int deltaTime)
 			projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(bottomCamera), float(topCamera));
 		}
 		if (currentTurnTime >= float(300.0f)) {
-			if (Game::instance().getKey('\ '))
+			if (Game::instance().getKey('\ ') || currentTime - passwordTime >= 17500)
 			{
 				if (currentLevel < 3) {
 					winState = false;
@@ -196,6 +205,7 @@ void Level::update(int deltaTime)
 				currentTurnTime = 0.0f;
 			}
 		}
+		playerPassword->update(deltaTime);
 	}
 	if (loseState) {
 		if (topCamera < 192.f * float(4) + 48) {
@@ -211,7 +221,7 @@ void Level::update(int deltaTime)
 			}
 		}
 	}
-	int aux = (currentRoom == 0 || currentRoom == 5) ? 1 : currentRoom;
+	int aux = (currentRoom == 0) ? 1 : currentRoom;
 	frameSprite->setPosition(glm::vec2(0.0, 576.0 - 192.0 * float(aux - 1)));
 	info->update(deltaTime);
 	info->setPosition(glm::vec2(INIT_INFO_X, INIT_INFO_Y - 192.f*float(aux - 1)));
@@ -240,7 +250,10 @@ void Level::update(int deltaTime)
 		bank[i]->setPosition(glm::vec2(248 + 8*i, 728 - 192.f*float(aux - 1)));
 	}
 	for (int i = 0; i < 2; ++i) {
-		int animId = currentRoom/int(pow(10, 2 - 1 - i))%10;
+		int actualRoom = currentRoom;
+		if (actualRoom == 0) actualRoom = 1;
+		else if (actualRoom == 5) actualRoom = 4;
+		int animId = actualRoom/int(pow(10, 2 - 1 - i))%10;
 		room[i]->update(deltaTime, animId);
 		room[i]->setPosition(glm::vec2(248 + 8*i, 784 - 192.f*float(aux - 1)));
 	}
@@ -374,11 +387,11 @@ void Level::render()
 	if (ball->getGetAlarmHit() && int(currentTime / 10) % 2 == 1) alarmSprite->render();
 	ball->render();
 	player->render();
+	winSprite->render();
 	frameSprite->render();
 	info->render();
 	batmodeSprite->render();
 	loseSprite->render();
-	winSprite->render();
 	if (currentLevel == 4) thief->render();
 	for (int i = 0; i < 7; ++i) money[i]->render();
 	for (int i = 0; i < 7; ++i) points[i]->render();
@@ -388,6 +401,7 @@ void Level::render()
 		for (int i = 0; i < 2; ++i) room[i]->render();
 	}
 	if (guard != NULL && ball->getGetAlarmHit()) guard->render();
+	if (winState) playerPassword->render();
 }
 
 void Level::initShaders()
