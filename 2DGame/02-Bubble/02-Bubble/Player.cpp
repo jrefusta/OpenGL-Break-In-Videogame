@@ -21,6 +21,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, in
 	else spritesheet.loadFromFile("images/player.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(19, 26), glm::vec2(1/7.0, 0.25), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(20);
+	dead = false;
 	
 		sprite->setAnimationSpeed(LOOK_UP_LEFT_2, 8);
 		sprite->addKeyframe(LOOK_UP_LEFT_2, glm::vec2(1/7.f, 0.f));
@@ -94,10 +95,102 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, in
 	
 }
 
-void Player::update(int deltaTime, int currentRoom)
+void Player::update(int deltaTime, int currentRoom, glm::vec2 posBall)
 {
 	//int currentRoom = 1;
 	sprite->update(deltaTime);
+	float valX = float(posBall.x + 3.5) - float(posPlayer.x + 9.5);
+	float valY = float(posBall.y + 5) - float(posPlayer.y + 13);
+	float dist = sqrt(pow(valX, 2) + pow(valY, 2));
+	float angle = (-atan2(valY,valX))*180/3.1416;
+	if (!dead) {
+		if (angle > 0 && angle <= 25.71) {
+			if (dist < 30) {
+				if (sprite->animation() != LOOK_CENTER_RIGHT_1) {
+					sprite->changeAnimation(LOOK_CENTER_RIGHT_1);
+				}
+			}
+			else if (dist < 60) {
+				if (sprite->animation() != LOOK_CENTER_RIGHT_2) {
+					sprite->changeAnimation(LOOK_CENTER_RIGHT_2);
+				}
+			}
+			else {
+				if (sprite->animation() != LOOK_CENTER_RIGHT_3) {
+					sprite->changeAnimation(LOOK_CENTER_RIGHT_3);
+				}
+			}
+		}
+		if (angle > 25.71 && angle <= 51.42) {
+			if (sprite->animation() != LOOK_UP_RIGHT_2) {
+				sprite->changeAnimation(LOOK_UP_RIGHT_2);
+			}
+		}
+		if (angle > 51.42 && angle <= 77.13) {
+			if (sprite->animation() != LOOK_UP_RIGHT_1) {
+				sprite->changeAnimation(LOOK_UP_RIGHT_1);
+			}
+		}
+		if (angle > 77.13 && angle <= 102.84) {
+			if (dist < 30) {
+				if (sprite->animation() != LOOK_DOWN_CENTER) {
+					sprite->changeAnimation(LOOK_DOWN_CENTER);
+				}
+			}
+			else if (dist < 60) {
+				if (sprite->animation() != LOOK_CENTER_CENTER) {
+					sprite->changeAnimation(LOOK_CENTER_CENTER);
+				}
+			}
+			else {
+				if (sprite->animation() != LOOK_UP_CENTER) {
+					sprite->changeAnimation(LOOK_UP_CENTER);
+				}
+			}
+		}
+		if (angle > 102.84 && angle <= 128.55) {
+			if (sprite->animation() != LOOK_UP_LEFT_1) {
+				sprite->changeAnimation(LOOK_UP_LEFT_1);
+			}
+		}
+		if (angle > 128.55 && angle <= 154.26) {
+			if (sprite->animation() != LOOK_UP_LEFT_2) {
+				sprite->changeAnimation(LOOK_UP_LEFT_2);
+			}
+		}
+		if (angle > 154.26 && angle <= 180) {
+			if (dist < 30) {
+				if (sprite->animation() != LOOK_CENTER_LEFT_1) {
+					sprite->changeAnimation(LOOK_CENTER_LEFT_1);
+				}
+			}
+			else if (dist < 60) {
+				if (sprite->animation() != LOOK_CENTER_LEFT_2) {
+					sprite->changeAnimation(LOOK_CENTER_LEFT_2);
+				}
+			}
+			else {
+				if (sprite->animation() != LOOK_CENTER_LEFT_3) {
+					sprite->changeAnimation(LOOK_CENTER_LEFT_3);
+				}
+			}
+		}
+		if (angle > -90 && angle <= 0) {
+			if (sprite->animation() != LOOK_DOWN_RIGHT_1) {
+				sprite->changeAnimation(LOOK_DOWN_RIGHT_1);
+			}
+		}
+		if (angle > -180 && angle <= -90) {
+			if (sprite->animation() != LOOK_DOWN_LEFT_1) {
+				sprite->changeAnimation(LOOK_DOWN_LEFT_1);
+			}
+		}
+	}
+	else {
+		if (sprite->animation() != CLOSE) {
+			sprite->changeAnimation(CLOSE);
+		}
+	}
 	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 	{
 		/*if (sprite->animation() != MOVE_LEFT)
@@ -152,6 +245,10 @@ void Player::setPosition(const glm::vec2& pos)
 glm::vec2 Player::getPosition()
 {
 	return this->posPlayer;
+}
+
+void Player::setDead(bool d) {
+	dead = d;
 }
 
 

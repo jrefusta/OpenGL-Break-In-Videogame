@@ -144,12 +144,13 @@ void Level::update(int deltaTime)
 	currentTurnTime += deltaTime;
 	currentRoom = ball->getCurrentRoom();
 	if (!winState && !loseState && !loseTransition) {
-		player->update(deltaTime, currentRoom);
+		player->update(deltaTime, currentRoom, ball->getPosBall());
 		ball->update(deltaTime, player->getPosition(), thief->getPosition(), currentRoom);
 	}
 	if (!loseTransition) start = int(currentTime);
 	if (loseTransition) {
 		loseTransition = false;
+		player->setDead(true);
 		Game::instance().stopMusic();
 		Game::instance().playSound("music/DefeatSound.mp3");
 		Sleep(1500);
@@ -172,6 +173,8 @@ void Level::update(int deltaTime)
 			ball->setStuck(true);
 			currentRoom = ball->getCurrentRoom();
 		}
+
+		player->setDead(false);
 	}
 	if (winState) {
 		guard = NULL;
