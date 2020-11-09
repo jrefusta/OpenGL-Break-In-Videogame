@@ -23,6 +23,7 @@
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Play.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerPassword.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderProgram.h" />
@@ -43,6 +44,7 @@
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Play.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerPassword.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
