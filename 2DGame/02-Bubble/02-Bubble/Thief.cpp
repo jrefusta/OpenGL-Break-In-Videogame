@@ -6,10 +6,10 @@
 #include "Game.h"
 
 
-/*enum PlayerAnims
+enum PlayerAnims
 {
-	STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT
-};*/
+	STAGE1, STAGE2, STAGE3, STAGE4, STAGE_DEAD
+};
 
 
 void Thief::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
