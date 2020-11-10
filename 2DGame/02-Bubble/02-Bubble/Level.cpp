@@ -327,11 +327,13 @@ void Level::update(int deltaTime)
 			guard = NULL;
 		}
 	}
+	Game::instance().runConsole();
+	cout << currentTime - stuckTime << endl;
 
 	if (ball->getStuck()) {
 		ball->setPosition(player->getPosition() + glm::vec2(5.f, -9.f));
 		if (stuckTime < 0) stuckTime = currentTime;
-		if (currentTime - stuckTime >= 2500) {
+		if (currentTime - stuckTime >= 2500 && ball->getStuck()) {
 			ball->setStuck(false);
 			stuckTime = -1;
 		}
@@ -381,6 +383,7 @@ void Level::update(int deltaTime)
 
 		else if (Game::instance().getKey('\ ') || Game::instance().getSpecialKey(GLUT_KEY_UP))
 		{
+			stuckTime = -1;
 			ball->setStuck(false);
 			currentTurnTime = 0;
 		}
