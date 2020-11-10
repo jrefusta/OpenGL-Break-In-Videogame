@@ -224,33 +224,35 @@ void Level::update(int deltaTime)
 			}
 		}
 	}
+	int offset = (winState) ? -48 : 0;
 	int aux = (currentRoom == 0) ? 1 : currentRoom;
-	frameSprite->setPosition(glm::vec2(0.0, 576.0 - 192.0 * float(aux - 1)));
+	if (winState) aux = 5;
+	frameSprite->setPosition(glm::vec2(0.0, 576.0 - 192.0 * float(aux - 1)+offset));
 	info->update(deltaTime);
-	info->setPosition(glm::vec2(INIT_INFO_X, INIT_INFO_Y - 192.f*float(aux - 1)));
-	batmodeSprite->setPosition(glm::vec2(208.0, 752.0 - 192.0*float(aux - 1)));
+	info->setPosition(glm::vec2(INIT_INFO_X, INIT_INFO_Y - 192.f*float(aux - 1) + offset));
+	batmodeSprite->setPosition(glm::vec2(208.0, 752.0 - 192.0*float(aux - 1) + offset));
 	if (currentLevel == 4) thief->update(deltaTime, currentRoom);
 	for (int i = 0; i < 7; ++i) {
 		int animId = ball->getCurrentMoney()/int(pow(10, 7 - 1 - i))%10;
 		money[i]->update(deltaTime, animId);
-		money[i]->setPosition(glm::vec2(208 + 8*i, 608 - 192.f*float(aux - 1)));
+		money[i]->setPosition(glm::vec2(208 + 8*i, 608 - 192.f*float(aux - 1) + offset));
 	}
 	for (int i = 0; i < 7; ++i) {
 		int animId = ball->getCurrentPoints()/int(pow(10, 7 - 1 - i))%10;
 		points[i]->update(deltaTime, animId);
-		points[i]->setPosition(glm::vec2(208 + 8*i, 648 - 192.f*float(aux - 1)));
+		points[i]->setPosition(glm::vec2(208 + 8*i, 648 - 192.f*float(aux - 1) + offset));
 	}
 	for (int i = 0; i < 2; ++i) {
 		if (livesNum >= 0) {
 			int animId = livesNum / int(pow(10, 2 - 1 - i)) % 10;
 			lives[i]->update(deltaTime, animId);
-			lives[i]->setPosition(glm::vec2(248 + 8 * i, 696 - 192.f * float(aux - 1)));
+			lives[i]->setPosition(glm::vec2(248 + 8 * i, 696 - 192.f * float(aux - 1) + offset));
 		}
 	}
 	for (int i = 0; i < 2; ++i) {
 		int animId = currentLevel/int(pow(10, 2 - 1 - i))%10;
 		bank[i]->update(deltaTime, animId);
-		bank[i]->setPosition(glm::vec2(248 + 8*i, 728 - 192.f*float(aux - 1)));
+		bank[i]->setPosition(glm::vec2(248 + 8*i, 728 - 192.f*float(aux - 1) + offset));
 	}
 	for (int i = 0; i < 2; ++i) {
 		int actualRoom = currentRoom;
@@ -258,7 +260,7 @@ void Level::update(int deltaTime)
 		else if (actualRoom == 5) actualRoom = 4;
 		int animId = actualRoom/int(pow(10, 2 - 1 - i))%10;
 		room[i]->update(deltaTime, animId);
-		room[i]->setPosition(glm::vec2(248 + 8*i, 784 - 192.f*float(aux - 1)));
+		room[i]->setPosition(glm::vec2(248 + 8*i, 784 - 192.f*float(aux - 1) + offset));
 	}
 	if (currentLevel == 4) {
 		if (ball->getThiefShooted()) {
