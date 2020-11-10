@@ -4,6 +4,7 @@
 #include <GL/glut.h>
 #include "Player.h"
 #include "Game.h"
+#include <time.h>
 
 
 enum PlayerAnims
@@ -102,7 +103,7 @@ void Player::update(int deltaTime, int currentRoom, glm::vec2 posBall)
 	float valX = float(posBall.x + 3.5) - float(posPlayer.x + 9.5);
 	float valY = float(posBall.y + 5) - float(posPlayer.y + 13);
 	float dist = sqrt(pow(valX, 2) + pow(valY, 2));
-	float angle = (-atan2(valY,valX))*180/3.1416;
+	float angle = (-atan2(valY, valX)) * 180 / 3.1416;
 	if (!dead) {
 		if (angle > 0 && angle <= 25.71) {
 			if (dist < 30) {
@@ -184,44 +185,44 @@ void Player::update(int deltaTime, int currentRoom, glm::vec2 posBall)
 			if (sprite->animation() != LOOK_DOWN_LEFT_1) {
 				sprite->changeAnimation(LOOK_DOWN_LEFT_1);
 			}
+		}	
+		if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
+		{
+			/*if (sprite->animation() != MOVE_LEFT)
+				sprite->changeAnimation(MOVE_LEFT);*/
+			if (posPlayer.x > 8) posPlayer.x -= 4;
+		}
+		if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
+		{
+			//if (sprite->animation() != MOVE_RIGHT)
+				//sprite->changeAnimation(MOVE_RIGHT);
+			if (posPlayer.x < 166) posPlayer.x += 4;
+		}/*
+		else
+		{
+			if(sprite->animation() == MOVE_LEFT)
+				sprite->changeAnimation(STAND_LEFT);
+			else if(sprite->animation() == MOVE_RIGHT)
+				sprite->changeAnimation(STAND_RIGHT);
+		}*/
+
+		if (Game::instance().getSpecialKey(GLUT_KEY_DOWN))
+		{
+			/*if (sprite->animation() != MOVE_RIGHT)
+				sprite->changeAnimation(MOVE_RIGHT);*/
+			if (posPlayer.y < 166 + 192 * (4 - currentRoom)) posPlayer.y += 2;
+		}
+		if (Game::instance().getSpecialKey(GLUT_KEY_UP))
+		{
+			/*if (sprite->animation() != MOVE_RIGHT)
+				sprite->changeAnimation(MOVE_RIGHT);*/
+			if (posPlayer.y > 20 + 192 * (4 - currentRoom)) posPlayer.y -= 2;
 		}
 	}
 	else {
 		if (sprite->animation() != CLOSE) {
 			sprite->changeAnimation(CLOSE);
 		}
-	}
-	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
-	{
-		/*if (sprite->animation() != MOVE_LEFT)
-			sprite->changeAnimation(MOVE_LEFT);*/
-		if (posPlayer.x > 8) posPlayer.x -= 4;
-	}
-	if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
-	{
-		//if (sprite->animation() != MOVE_RIGHT)
-			//sprite->changeAnimation(MOVE_RIGHT);
-		if (posPlayer.x < 166) posPlayer.x += 4;
-	}/*
-	else
-	{
-		if(sprite->animation() == MOVE_LEFT)
-			sprite->changeAnimation(STAND_LEFT);
-		else if(sprite->animation() == MOVE_RIGHT)
-			sprite->changeAnimation(STAND_RIGHT);
-	}*/
-
-	if (Game::instance().getSpecialKey(GLUT_KEY_DOWN))
-	{
-		/*if (sprite->animation() != MOVE_RIGHT)
-			sprite->changeAnimation(MOVE_RIGHT);*/
-		if (posPlayer.y < 166 + 192*(4 - currentRoom)) posPlayer.y += 2;
-	}
-	if (Game::instance().getSpecialKey(GLUT_KEY_UP))
-	{
-		/*if (sprite->animation() != MOVE_RIGHT)
-			sprite->changeAnimation(MOVE_RIGHT);*/
-		if (posPlayer.y > 20 + 192*(4 - currentRoom)) posPlayer.y -= 2;
 	}
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }

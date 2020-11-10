@@ -54,11 +54,11 @@ private:
 	bool loseState;
 	bool exitMenu;
 	bool loseTransition;
-	int start;
+	bool soundYet;
 	int livesNum, pointsNum, moneyNum;
 	Texture frameSpritesheet, batmodeSpritesheet, winSpritesheet, loseSpritesheet, alarmSpritesheet;
 	Sprite *frameSprite, *batmodeSprite, *winSprite, *loseSprite, *alarmSprite;
-	float passwordTime;
+	float passwordTime, deadTime;
 };
 
 

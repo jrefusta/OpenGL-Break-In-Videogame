@@ -144,6 +144,7 @@ void Level::init(int ID, int pointsP, int moneyP, int livesP)
 	exitMenu = false;	
 	loseTransition = false;
 	passwordTime = -1;
+	soundYet = false;
 }
 
 void Level::update(int deltaTime)
@@ -151,38 +152,50 @@ void Level::update(int deltaTime)
 	currentTime += deltaTime;
 	currentTurnTime += deltaTime;
 	currentRoom = ball->getCurrentRoom();
+	player->update(deltaTime, currentRoom, ball->getPosBall());
 	if (!winState && !loseState && !loseTransition) {
-		player->update(deltaTime, currentRoom, ball->getPosBall());
+		//player->update(deltaTime, currentRoom, ball->getPosBall());
 		ball->update(deltaTime, player->getPosition(), thief->getPosition(), currentRoom);
 	}
-	if (!loseTransition) start = int(currentTime);
+	//if (!loseTransition) deadTime = (currentTime);
 	if (loseTransition) {
-		loseTransition = false;
+		if (deadTime < 0) deadTime = currentTime;
 		player->setDead(true);
-		Game::instance().stopMusic();
-		Game::instance().playSound("music/DefeatSound.mp3");
-		Sleep(1500);
-		if (!ball->getGodMode()) --livesNum;
-		if ((currentLevel == 2 && currentRoom == 4) || (currentLevel == 3 && currentRoom == 2) || currentLevel == 4) {
-			if (currentLevel == 2) guard->setPosition(glm::vec2(10, 181));
-			else if (currentLevel == 3) guard->setPosition(glm::vec2(10, 565));
-			if (ball->getGetAlarmHit()) {
-				guard = NULL;
-				ball->setAlarmHit(false);
+		if (!soundYet) {
+			Game::instance().stopMusic();
+			Game::instance().playSound("music/DefeatSound.mp3");
+			soundYet = true;
+		}
+		bool done = false;
+		if (currentTime - deadTime >= 1000) {
+			player->setDead(false);
+			if (!ball->getGodMode()) --livesNum;
+			loseTransition = false;
+			done = true;
+			deadTime = -1.f;
+			soundYet = false;
+		}
+		if (done) {
+			Game::instance().stopMusic();
+			if ((currentLevel == 2 && currentRoom == 4) || (currentLevel == 3 && currentRoom == 2) || currentLevel == 4) {
+				if (currentLevel == 2) guard->setPosition(glm::vec2(10, 181));
+				else if (currentLevel == 3) guard->setPosition(glm::vec2(10, 565));
+				if (ball->getGetAlarmHit()) {
+					guard = NULL;
+					ball->setAlarmHit(false);
+				}
+				player->setPosition(glm::vec2(INIT_PLAYER_X, INIT_PLAYER_Y - (192 * (currentRoom - 1))));
+				ball->setPosition(player->getPosition() + glm::vec2(5.f, -9.f));
+				ball->setStuck(true);
 			}
-			player->setPosition(glm::vec2(INIT_PLAYER_X, INIT_PLAYER_Y-(192*(currentRoom-1))));
-			ball->setPosition(player->getPosition() + glm::vec2(5.f, -9.f));
-			ball->setStuck(true);
+			else {
+				player->setPosition(glm::vec2(INIT_PLAYER_X, INIT_PLAYER_Y));
+				ball->setPosition(player->getPosition() + glm::vec2(5.f, -9.f));
+				ball->setCurrentRoom(1);
+				ball->setStuck(true);
+				currentRoom = ball->getCurrentRoom();
+			}
 		}
-		else {
-			player->setPosition(glm::vec2(INIT_PLAYER_X, INIT_PLAYER_Y));
-			ball->setPosition(player->getPosition() + glm::vec2(5.f, -9.f));
-			ball->setCurrentRoom(1);
-			ball->setStuck(true);
-			currentRoom = ball->getCurrentRoom();
-		}
-
-		player->setDead(false);
 	}
 	if (winState) {
 		if (passwordTime < 0) passwordTime = currentTime;
