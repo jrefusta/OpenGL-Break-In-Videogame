@@ -330,6 +330,12 @@ void Level::update(int deltaTime)
 
 	if (ball->getStuck()) {
 		ball->setPosition(player->getPosition() + glm::vec2(5.f, -9.f));
+		if (stuckTime < 0) stuckTime = currentTime;
+		if (currentTime - stuckTime >= 2500) {
+			ball->setStuck(false);
+			stuckTime = -1;
+		}
+
 	}
 
 	if (ball->getCrossingRoom() == 1) {
@@ -363,11 +369,6 @@ void Level::update(int deltaTime)
 			projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(bottomCamera), float(topCamera));
 		}
 	}
-
-	if (Game::instance().getKey('\ ') || Game::instance().getSpecialKey(GLUT_KEY_UP))
-	{
-		ball->setStuck(false);
-	}
 	if (currentTurnTime >= float(300.0f)) {
 		if (Game::instance().getKey('u') || Game::instance().getKey('U')) {//upper Layer
 			if (currentRoom > 0 && currentRoom < 4) {
@@ -377,17 +378,30 @@ void Level::update(int deltaTime)
 				currentTurnTime = 0;
 			}
 		}
+
+		else if (Game::instance().getKey('\ ') || Game::instance().getSpecialKey(GLUT_KEY_UP))
+		{
+			ball->setStuck(false);
+			currentTurnTime = 0;
+		}
 		else if (Game::instance().getKey('g') || Game::instance().getKey('G')) {//God mode
-			if (currentRoom > 0 && currentRoom < 4) {
-				ball->setGodMode(!ball->getGodMode());
+			if (!ball->getGodMode()) {
+				Game::instance().playSound("music/PhoneSound.mp3");
 			}
+			else {
+				Game::instance().playSound("music/InvertPhoneSound.mp3");
+			}
+			ball->setGodMode(!ball->getGodMode());
+			currentTurnTime = 0;
 		}
 		else if (Game::instance().getKey('r') || Game::instance().getKey('R'))
 		{
 			init(currentLevel,0,0,4);
+			currentTurnTime = 0;
 		}
 		else if (Game::instance().getKey(27) || exitMenu) {
 			Game::instance().selectScene(1);
+			currentTurnTime = 0;
 		}
 	}
 }

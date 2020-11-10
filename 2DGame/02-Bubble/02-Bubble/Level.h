@@ -58,7 +58,7 @@ private:
 	int livesNum, pointsNum, moneyNum;
 	Texture frameSpritesheet, batmodeSpritesheet, winSpritesheet, loseSpritesheet, alarmSpritesheet;
 	Sprite *frameSprite, *batmodeSprite, *winSprite, *loseSprite, *alarmSprite;
-	float passwordTime, deadTime;
+	float passwordTime, deadTime, stuckTime;
 };
 
 
