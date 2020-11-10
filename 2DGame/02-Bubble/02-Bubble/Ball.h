@@ -28,6 +28,7 @@ public:
 	bool getGetAllMoney();
 	bool getGetAlarmHit();
 	bool getStuck();	
+	void setInitVel();
 	void destroyedTop();
 	int getCurrentMoney();
 	int getCurrentPoints();

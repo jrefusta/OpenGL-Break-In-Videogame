@@ -181,6 +181,7 @@ void Level::update(int deltaTime)
 				done = true;
 				deadTime = -1.f;
 				soundYet = false;
+				ball->setInitVel();
 			}
 			if (done) {
 				Game::instance().stopMusic();
@@ -432,12 +433,12 @@ void Level::render()
 	if (ball->getGetAlarmHit() && int(currentTime / 10) % 2 == 1) alarmSprite->render();
 	ball->render();
 	player->render();
+	if (currentLevel == 4) thief->render();
 	winSprite->render();
 	frameSprite->render();
 	info->render();
 	batmodeSprite->render();
 	loseSprite->render();
-	if (currentLevel == 4) thief->render();
 	for (int i = 0; i < 7; ++i) money[i]->render();
 	for (int i = 0; i < 7; ++i) points[i]->render();
 	for (int i = 0; i < 2; ++i) lives[i]->render();
