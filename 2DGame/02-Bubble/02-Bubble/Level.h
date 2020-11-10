@@ -52,7 +52,7 @@ private:
 	int bottomCamera;
 	bool winState;
 	bool loseState;
-	bool exitMenu;
+	bool exitMenu, exitCredits;
 	bool loseTransition;
 	bool soundYet;
 	int livesNum, pointsNum, moneyNum;

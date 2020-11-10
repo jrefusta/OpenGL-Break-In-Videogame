@@ -17,9 +17,8 @@ void Credits::init() {
 	escSpritesheet.loadFromFile("images/text_press_esc_to_go_back.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	escSprite = Sprite::createSprite(glm::ivec2(160, 8), glm::vec2(1.f, 1.f), &escSpritesheet, &texProgram);
 	escSprite->setPosition(glm::vec2(56.0, 208.0));
-
 	projection = glm::ortho(0.0f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.0f);
-
+	Game::instance().loopMusic("music/Break_In_OST.mp3");
 }
 
 void Credits::update(int deltaTime) {

@@ -13,7 +13,7 @@ void Help::init() {
 	page = 1;
 	printHelp();
 	projection = glm::ortho(0.0f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.0f);
-
+	Game::instance().loopMusic("music/Break_In_OST.mp3");
 }
 
 void Help::update(int deltaTime) {

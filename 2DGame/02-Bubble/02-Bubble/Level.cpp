@@ -141,7 +141,8 @@ void Level::init(int ID, int pointsP, int moneyP, int livesP)
 	topCamera = 192.f * float(4 - currentRoom);
 	bottomCamera = float(SCREEN_HEIGHT) + 192.f * float(4 - currentRoom);
 	winState = loseState = false;
-	exitMenu = false;	
+	exitMenu = false;
+	exitCredits = false;
 	loseTransition = false;
 	passwordTime = -1;
 	soundYet = false;
@@ -153,258 +154,267 @@ void Level::update(int deltaTime)
 	currentTurnTime += deltaTime;
 	currentRoom = ball->getCurrentRoom();
 	player->update(deltaTime, currentRoom, ball->getPosBall());
-	if (!winState && !loseState && !loseTransition) {
-		//player->update(deltaTime, currentRoom, ball->getPosBall());
-		ball->update(deltaTime, player->getPosition(), thief->getPosition(), currentRoom);
+
+	if (exitCredits) {
+		Game::instance().selectScene(3);
 	}
-	//if (!loseTransition) deadTime = (currentTime);
-	if (loseTransition) {
-		if (deadTime < 0) deadTime = currentTime;
-		player->setDead(true);
-		if (!soundYet) {
-			Game::instance().stopMusic();
-			Game::instance().playSound("music/DefeatSound.mp3");
-			soundYet = true;
+	else {
+		if (!winState && !loseState && !loseTransition) {
+			info->update(deltaTime);
+			//player->update(deltaTime, currentRoom, ball->getPosBall());
+			ball->update(deltaTime, player->getPosition(), thief->getPosition(), currentRoom);
 		}
-		bool done = false;
-		if (currentTime - deadTime >= 1000) {
-			player->setDead(false);
-			if (!ball->getGodMode()) --livesNum;
-			loseTransition = false;
-			done = true;
-			deadTime = -1.f;
-			soundYet = false;
-		}
-		if (done) {
-			Game::instance().stopMusic();
-			if ((currentLevel == 2 && currentRoom == 4) || (currentLevel == 3 && currentRoom == 2) || currentLevel == 4) {
-				if (currentLevel == 2) guard->setPosition(glm::vec2(10, 181));
-				else if (currentLevel == 3) guard->setPosition(glm::vec2(10, 565));
-				if (ball->getGetAlarmHit()) {
-					guard = NULL;
-					ball->setAlarmHit(false);
-				}
-				player->setPosition(glm::vec2(INIT_PLAYER_X, INIT_PLAYER_Y - (192 * (currentRoom - 1))));
-				ball->setPosition(player->getPosition() + glm::vec2(5.f, -9.f));
-				ball->setStuck(true);
+		//if (!loseTransition) deadTime = (currentTime);
+		if (loseTransition) {
+			if (deadTime < 0) deadTime = currentTime;
+			player->setDead(true);
+			if (!soundYet) {
+				Game::instance().stopMusic();
+				Game::instance().playSound("music/DefeatSound.mp3");
+				soundYet = true;
 			}
-			else {
-				player->setPosition(glm::vec2(INIT_PLAYER_X, INIT_PLAYER_Y));
-				ball->setPosition(player->getPosition() + glm::vec2(5.f, -9.f));
-				ball->setCurrentRoom(1);
-				ball->setStuck(true);
-				currentRoom = ball->getCurrentRoom();
+			bool done = false;
+			if (currentTime - deadTime >= 1000) {
+				player->setDead(false);
+				if (!ball->getGodMode()) --livesNum;
+				loseTransition = false;
+				done = true;
+				deadTime = -1.f;
+				soundYet = false;
 			}
-		}
-	}
-	if (winState) {
-		if (passwordTime < 0) passwordTime = currentTime;
-		guard = NULL;
-		if (ball->getGetAlarmHit()) ball->setAlarmHit(false);
-		Game::instance().loopMusic("music/WinSong.mp3");
-		if (topCamera > 192.f * float(4 - 5)-48) {
-			topCamera -= cameraVelocity;
-			bottomCamera -= cameraVelocity;
-			projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(bottomCamera), float(topCamera));
-		}
-		if (currentTurnTime >= float(300.0f)) {
-			if (Game::instance().getKey('\ ') || currentTime - passwordTime >= 17500)
-			{
-				if (currentLevel < 3) {
-					winState = false;
-					init(currentLevel + 1, ball->getCurrentPoints(), ball->getCurrentMoney(), livesNum);
+			if (done) {
+				Game::instance().stopMusic();
+				if ((currentLevel == 2 && currentRoom == 4) || (currentLevel == 3 && currentRoom == 2) || currentLevel == 4) {
+					if (currentLevel == 2) guard->setPosition(glm::vec2(10, 181));
+					else if (currentLevel == 3) guard->setPosition(glm::vec2(10, 565));
+					if (ball->getGetAlarmHit()) {
+						guard = NULL;
+						ball->setAlarmHit(false);
+					}
+					player->setPosition(glm::vec2(INIT_PLAYER_X, INIT_PLAYER_Y - (192 * (currentRoom - 1))));
+					ball->setPosition(player->getPosition() + glm::vec2(5.f, -9.f));
+					ball->setStuck(true);
 				}
 				else {
-					exitMenu = true;
+					player->setPosition(glm::vec2(INIT_PLAYER_X, INIT_PLAYER_Y));
+					ball->setPosition(player->getPosition() + glm::vec2(5.f, -9.f));
+					ball->setCurrentRoom(1);
+					ball->setStuck(true);
+					currentRoom = ball->getCurrentRoom();
 				}
-				winState = false;
-				currentTurnTime = 0.0f;
 			}
 		}
-		playerPassword->update(deltaTime);
-	}
-	if (loseState) {
-		if (topCamera < 192.f * float(4) + 48) {
-			topCamera += cameraVelocity;
-			bottomCamera += cameraVelocity;
-			projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(bottomCamera), float(topCamera));
-		}
-		if (currentTurnTime >= float(300.0f)) {
-			if (Game::instance().getKey('\ '))
-			{
-				exitMenu = true;
-				currentTurnTime = 0.0f;
+		if (winState) {
+			if (passwordTime < 0) passwordTime = currentTime;
+			guard = NULL;
+			if (ball->getGetAlarmHit()) ball->setAlarmHit(false);
+			Game::instance().loopMusic("music/WinSong.mp3");
+			playerPassword->update(deltaTime);
+			if (topCamera > 192.f * float(4 - 5) - 48) {
+				topCamera -= cameraVelocity;
+				bottomCamera -= cameraVelocity;
+				projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(bottomCamera), float(topCamera));
+			}
+			if (currentTurnTime >= float(300.0f)) {
+				if (Game::instance().getKey('\ ') || currentTime - passwordTime >= 17500)
+				{
+					if (currentLevel < 4) {
+						winState = false;
+						init(currentLevel + 1, ball->getCurrentPoints(), ball->getCurrentMoney(), livesNum);
+					}
+					else {
+						exitCredits = true;
+					}
+					winState = false;
+					currentTurnTime = 0.0f;
+				}
 			}
 		}
-	}
-	int offset = (winState) ? -48 : 0;
-	int aux = (currentRoom == 0) ? 1 : currentRoom;
-	if (winState) aux = 5;
-	frameSprite->setPosition(glm::vec2(0.0, 576.0 - 192.0 * float(aux - 1)+offset));
-	info->update(deltaTime);
-	info->setPosition(glm::vec2(INIT_INFO_X, INIT_INFO_Y - 192.f*float(aux - 1) + offset));
-	batmodeSprite->setPosition(glm::vec2(208.0, 752.0 - 192.0*float(aux - 1) + offset));
-	if (currentLevel == 4) thief->update(deltaTime, currentRoom);
-	for (int i = 0; i < 7; ++i) {
-		int animId = ball->getCurrentMoney()/int(pow(10, 7 - 1 - i))%10;
-		money[i]->update(deltaTime, animId);
-		money[i]->setPosition(glm::vec2(208 + 8*i, 608 - 192.f*float(aux - 1) + offset));
-	}
-	for (int i = 0; i < 7; ++i) {
-		int animId = ball->getCurrentPoints()/int(pow(10, 7 - 1 - i))%10;
-		points[i]->update(deltaTime, animId);
-		points[i]->setPosition(glm::vec2(208 + 8*i, 648 - 192.f*float(aux - 1) + offset));
-	}
-	for (int i = 0; i < 2; ++i) {
-		if (livesNum >= 0) {
-			int animId = livesNum / int(pow(10, 2 - 1 - i)) % 10;
-			lives[i]->update(deltaTime, animId);
-			lives[i]->setPosition(glm::vec2(248 + 8 * i, 696 - 192.f * float(aux - 1) + offset));
-		}
-	}
-	for (int i = 0; i < 2; ++i) {
-		int animId = currentLevel/int(pow(10, 2 - 1 - i))%10;
-		bank[i]->update(deltaTime, animId);
-		bank[i]->setPosition(glm::vec2(248 + 8*i, 728 - 192.f*float(aux - 1) + offset));
-	}
-	for (int i = 0; i < 2; ++i) {
-		int actualRoom = currentRoom;
-		if (actualRoom == 0) actualRoom = 1;
-		else if (actualRoom == 5) actualRoom = 4;
-		int animId = actualRoom/int(pow(10, 2 - 1 - i))%10;
-		room[i]->update(deltaTime, animId);
-		room[i]->setPosition(glm::vec2(248 + 8*i, 784 - 192.f*float(aux - 1) + offset));
-	}
-	if (currentLevel == 4) {
-		if (ball->getThiefShooted()) {
-			ball->setThiefShooted(false);
-			if (thief->getCollisionActive()) {
-				thief->setLives(thief->getLives() - 1);
+		if (loseState) {
+			if (topCamera < 192.f * float(4) + 48) {
+				topCamera += cameraVelocity;
+				bottomCamera += cameraVelocity;
+				projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(bottomCamera), float(topCamera));
+			}
+			if (currentTurnTime >= float(300.0f)) {
+				if (Game::instance().getKey('\ '))
+				{
+					exitMenu = true;
+					currentTurnTime = 0.0f;
+				}
 			}
 		}
-		if (thief->getThiefBeaten() && ball->getPosBall().y < -16) {
-			winState = true;
+		int offset = (winState) ? -48 : 0;
+		int aux = (currentRoom == 0) ? 1 : currentRoom;
+		if (winState) aux = 5;
+		frameSprite->setPosition(glm::vec2(0.0, 576.0 - 192.0 * float(aux - 1) + offset));
+		//info->update(deltaTime);
+		info->setPosition(glm::vec2(INIT_INFO_X, INIT_INFO_Y - 192.f * float(aux - 1) + offset));
+		batmodeSprite->setPosition(glm::vec2(208.0, 752.0 - 192.0 * float(aux - 1) + offset));
+		if (currentLevel == 4) thief->update(deltaTime, currentRoom);
+		for (int i = 0; i < 7; ++i) {
+			int animId = ball->getCurrentMoney() / int(pow(10, 7 - 1 - i)) % 10;
+			money[i]->update(deltaTime, animId);
+			money[i]->setPosition(glm::vec2(208 + 8 * i, 608 - 192.f * float(aux - 1) + offset));
 		}
-		if (!ball->getGodMode()) {
-			if (ball->getCurrentMoney() >= 1000 && livesNum == 4) {
-				loseTransition = true;
-			}
-			if (ball->getCurrentMoney() >= 2000 && livesNum == 3) {
-				loseTransition = true;
-			}
-			if (ball->getCurrentMoney() >= 3000 && livesNum == 2) {
-				loseTransition = true;
-			}
-			if (ball->getCurrentMoney() >= 4000 && livesNum == 1) {
-				loseTransition = true;
-			}
-			if (ball->getCurrentMoney() >= 5000 && livesNum == 0) {
-				loseTransition = true;
+		for (int i = 0; i < 7; ++i) {
+			int animId = ball->getCurrentPoints() / int(pow(10, 7 - 1 - i)) % 10;
+			points[i]->update(deltaTime, animId);
+			points[i]->setPosition(glm::vec2(208 + 8 * i, 648 - 192.f * float(aux - 1) + offset));
+		}
+		for (int i = 0; i < 2; ++i) {
+			if (livesNum >= 0) {
+				int animId = livesNum / int(pow(10, 2 - 1 - i)) % 10;
+				lives[i]->update(deltaTime, animId);
+				lives[i]->setPosition(glm::vec2(248 + 8 * i, 696 - 192.f * float(aux - 1) + offset));
 			}
 		}
-	}
-	if (ball->getGetAllMoney()) {
-		winState = true;
-	}
-	if (ball->getGetAlarmHit()) {
-		if ((currentLevel == 2 && currentRoom == 4) || (currentLevel == 3 && currentRoom == 2)) {
-			Game::instance().loopMusic("music/AlarmSound.mp3");
-			if (guard == NULL) {
-				guard = new Guard();
-				guard->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-				if (currentLevel == 2) guard->setPosition(glm::vec2(10, 181));
-				else if (currentLevel == 3) guard->setPosition(glm::vec2(10, 565));
-				guard->setTileMap(map);
-			} else {
-				guard->update(deltaTime, player->getPosition());
-				if (guard->getCollisionGuard(player->getPosition())) {
+		for (int i = 0; i < 2; ++i) {
+			int animId = currentLevel / int(pow(10, 2 - 1 - i)) % 10;
+			bank[i]->update(deltaTime, animId);
+			bank[i]->setPosition(glm::vec2(248 + 8 * i, 728 - 192.f * float(aux - 1) + offset));
+		}
+		for (int i = 0; i < 2; ++i) {
+			int actualRoom = currentRoom;
+			if (actualRoom == 0) actualRoom = 1;
+			else if (actualRoom == 5) actualRoom = 4;
+			int animId = actualRoom / int(pow(10, 2 - 1 - i)) % 10;
+			room[i]->update(deltaTime, animId);
+			room[i]->setPosition(glm::vec2(248 + 8 * i, 784 - 192.f * float(aux - 1) + offset));
+		}
+		if (currentLevel == 4) {
+			if (ball->getThiefShooted()) {
+				ball->setThiefShooted(false);
+				if (thief->getCollisionActive()) {
+					thief->setLives(thief->getLives() - 1);
+				}
+			}
+			if (thief->getThiefBeaten() && ball->getPosBall().y < -16) {
+				winState = true;
+			}
+			if (!ball->getGodMode()) {
+				if (ball->getCurrentMoney() >= 1000 && livesNum == 4) {
+					loseTransition = true;
+				}
+				if (ball->getCurrentMoney() >= 2000 && livesNum == 3) {
+					loseTransition = true;
+				}
+				if (ball->getCurrentMoney() >= 3000 && livesNum == 2) {
+					loseTransition = true;
+				}
+				if (ball->getCurrentMoney() >= 4000 && livesNum == 1) {
+					loseTransition = true;
+				}
+				if (ball->getCurrentMoney() >= 5000 && livesNum == 0) {
 					loseTransition = true;
 				}
 			}
-		} 
-		else {
-			Game::instance().stopMusic();
-			guard = NULL;
 		}
-	}
-	Game::instance().runConsole();
-	cout << currentTime - stuckTime << endl;
-
-	if (ball->getStuck()) {
-		ball->setPosition(player->getPosition() + glm::vec2(5.f, -9.f));
-		if (stuckTime < 0) stuckTime = currentTime;
-		if (currentTime - stuckTime >= 2500 && ball->getStuck()) {
-			ball->setStuck(false);
-			stuckTime = -1;
+		if (ball->getGetAllMoney()) {
+			winState = true;
 		}
-
-	}
-
-	if (ball->getCrossingRoom() == 1) {
-		player->setPosition(player->getPosition() + glm::vec2(0, -192));
-		ball->setCrossingRoom(0);
-	}
-	if (ball->getCrossingRoom() == -1) {
-		if (ball->getCurrentRoom() != 0) {
-			player->setPosition(player->getPosition() + glm::vec2(0, 192));
-		}
-		ball->setCrossingRoom(0);
-	}
-
-	if (livesNum == -1) {
-		loseState = true;
-		livesNum = 0;
-	}
-	if (currentRoom == 0 && !loseTransition)
-	{
-		loseTransition = true;
-	}
-	if (currentRoom <= 4 && currentRoom != 0 && !winState && !loseState && !exitMenu) {
-		if (topCamera > 192.f * float(4 - currentRoom)) {
-			topCamera -= cameraVelocity;
-			bottomCamera -= cameraVelocity;
-			projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(bottomCamera), float(topCamera));
-		}
-		else if (topCamera < 192.f * float(4 - currentRoom)) {
-			topCamera += cameraVelocity;
-			bottomCamera += cameraVelocity;
-			projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(bottomCamera), float(topCamera));
-		}
-	}
-	if (currentTurnTime >= float(300.0f)) {
-		if (Game::instance().getKey('u') || Game::instance().getKey('U')) {//upper Layer
-			if (currentRoom > 0 && currentRoom < 4) {
-				ball->destroyedTop();
-				ball->setStuck(false);
-				ball->setPosition(player->getPosition() + glm::vec2(5.f, -201.f));
-				currentTurnTime = 0;
-			}
-		}
-
-		else if (Game::instance().getKey('\ ') || Game::instance().getSpecialKey(GLUT_KEY_UP))
-		{
-			stuckTime = -1;
-			ball->setStuck(false);
-			currentTurnTime = 0;
-		}
-		else if (Game::instance().getKey('g') || Game::instance().getKey('G')) {//God mode
-			if (!ball->getGodMode()) {
-				Game::instance().playSound("music/PhoneSound.mp3");
+		if (ball->getGetAlarmHit()) {
+			if ((currentLevel == 2 && currentRoom == 4) || (currentLevel == 3 && currentRoom == 2)) {
+				Game::instance().loopMusic("music/AlarmSound.mp3");
+				if (guard == NULL) {
+					guard = new Guard();
+					guard->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+					if (currentLevel == 2) guard->setPosition(glm::vec2(10, 181));
+					else if (currentLevel == 3) guard->setPosition(glm::vec2(10, 565));
+					guard->setTileMap(map);
+				}
+				else {
+					guard->update(deltaTime, player->getPosition());
+					if (guard->getCollisionGuard(player->getPosition())) {
+						loseTransition = true;
+					}
+				}
 			}
 			else {
-				Game::instance().playSound("music/InvertPhoneSound.mp3");
+				Game::instance().stopMusic();
+				guard = NULL;
 			}
-			ball->setGodMode(!ball->getGodMode());
-			currentTurnTime = 0;
 		}
-		else if (Game::instance().getKey('r') || Game::instance().getKey('R'))
+
+		if (ball->getStuck()) {
+			ball->setPosition(player->getPosition() + glm::vec2(5.f, -9.f));
+			if (stuckTime < 0) stuckTime = currentTime;
+			if (currentTime - stuckTime >= 2500 && ball->getStuck()) {
+				ball->setStuck(false);
+				stuckTime = -1;
+			}
+
+		}
+
+		if (ball->getCrossingRoom() == 1) {
+			player->setPosition(player->getPosition() + glm::vec2(0, -192));
+			ball->setCrossingRoom(0);
+		}
+		if (ball->getCrossingRoom() == -1) {
+			if (ball->getCurrentRoom() != 0) {
+				player->setPosition(player->getPosition() + glm::vec2(0, 192));
+			}
+			ball->setCrossingRoom(0);
+		}
+
+		if (livesNum == -1) {
+			loseState = true;
+			livesNum = 0;
+		}
+		if (currentRoom == 0 && !loseTransition)
 		{
-			init(currentLevel,0,0,4);
-			currentTurnTime = 0;
+			loseTransition = true;
 		}
-		else if (Game::instance().getKey(27) || exitMenu) {
-			Game::instance().selectScene(1);
-			currentTurnTime = 0;
+		if (currentRoom <= 4 && currentRoom != 0 && !winState && !loseState && !exitMenu) {
+			if (topCamera > 192.f * float(4 - currentRoom)) {
+				topCamera -= cameraVelocity;
+				bottomCamera -= cameraVelocity;
+				projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(bottomCamera), float(topCamera));
+			}
+			else if (topCamera < 192.f * float(4 - currentRoom)) {
+				topCamera += cameraVelocity;
+				bottomCamera += cameraVelocity;
+				projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(bottomCamera), float(topCamera));
+			}
+		}
+		if (currentTurnTime >= float(300.0f)) {
+			if (Game::instance().getKey('u') || Game::instance().getKey('U')) {//upper Layer
+				if (currentRoom > 0 && currentRoom < 4) {
+					ball->destroyedTop();
+					ball->setStuck(false);
+					ball->setPosition(player->getPosition() + glm::vec2(5.f, -201.f));
+					currentTurnTime = 0;
+				}
+			}
+			else if (Game::instance().getKey('i') || Game::instance().getKey('I')) {//upper Layer
+				winState = true;
+			}
+
+			else if (Game::instance().getKey('\ ') || Game::instance().getSpecialKey(GLUT_KEY_UP))
+			{
+				stuckTime = -1;
+				ball->setStuck(false);
+				currentTurnTime = 0;
+			}
+			else if (Game::instance().getKey('g') || Game::instance().getKey('G')) {//God mode
+				if (!ball->getGodMode()) {
+					Game::instance().playSound("music/PhoneSound.mp3");
+				}
+				else {
+					Game::instance().playSound("music/InvertPhoneSound.mp3");
+				}
+				ball->setGodMode(!ball->getGodMode());
+				currentTurnTime = 0;
+			}
+			else if (Game::instance().getKey('r') || Game::instance().getKey('R'))
+			{
+				init(currentLevel, 0, 0, 4);
+				currentTurnTime = 0;
+			}
+			else if (Game::instance().getKey(27) || exitMenu) {
+				Game::instance().selectScene(1);
+				currentTurnTime = 0;
+			}
 		}
 	}
 }
