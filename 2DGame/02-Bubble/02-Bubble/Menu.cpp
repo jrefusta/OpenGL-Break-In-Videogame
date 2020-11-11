@@ -11,13 +11,10 @@ void Menu::init(int o) {
 	spritesheet.loadFromFile("images/menu.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	background = Sprite::createSprite(glm::vec2(272.0, 240.0), glm::vec2(1.f, 1.f), &spritesheet, &texProgram);
 	background->setPosition(glm::vec2(0.0, 0.0));
-
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	loadSprites();
-
 	this->option = o;
 	Game::instance().loopMusic("music/Break_In_OST.mp3");
-	
 }
 
 void Menu::loadSprites() {

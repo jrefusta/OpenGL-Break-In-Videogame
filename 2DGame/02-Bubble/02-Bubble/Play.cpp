@@ -16,14 +16,13 @@ void Play::init(int l, int points, int money, int lives) {
 	escSpritesheet.loadFromFile("images/text_press_esc_to_go_back.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	escSprite = Sprite::createSprite(glm::ivec2(160, 8), glm::vec2(1.f, 1.f), &escSpritesheet, &texProgram);
 	escSprite->setPosition(glm::vec2(56.0, 208.0));
-
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	loadSprites();
 	this->points = points;
 	this->money = money;
 	this->lives = lives;
 	this->level = l;
-
+	Game::instance().loopMusic("music/Break_In_OST.mp3");
 }
 
 void Play::loadSprites() {

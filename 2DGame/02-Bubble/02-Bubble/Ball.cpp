@@ -14,8 +14,7 @@ void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, int 
 	this->shaderProgram = shaderProgram;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBall.x), float(tileMapDispl.y + posBall.y)));
 
-	ballVelY = -2;
-	ballVelX = 0.5;
+	setInitVel();
 	this->currentRoom = 1;
 	this->crossingRoom = 0;
 	this->getAllMoney = false;
@@ -203,6 +202,12 @@ void Ball::render()
 void Ball::setTileMap(TileMap* tileMap)
 {
 	map = tileMap;
+}
+
+void Ball::setInitVel()
+{
+	ballVelY = -2;
+	ballVelX = 0.5;
 }
 
 void Ball::setPosition(const glm::vec2& pos)

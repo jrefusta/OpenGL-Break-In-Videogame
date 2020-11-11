@@ -15,7 +15,20 @@ enum PlayerAnims
 void Thief::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
 	spritesheet.loadFromFile("images/thief.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(glm::ivec2(19, 26), glm::vec2(1.0, 1.0), &spritesheet, &shaderProgram);
+	sprite = Sprite::createSprite(glm::ivec2(19, 26), glm::vec2(1/5.0, 1.0), &spritesheet, &shaderProgram);
+	sprite->setNumberAnimations(5);
+	sprite->setAnimationSpeed(STAGE1, 8);
+	sprite->addKeyframe(STAGE1, glm::vec2(0.f, 0.f));
+	sprite->setAnimationSpeed(STAGE2, 8);
+	sprite->addKeyframe(STAGE2, glm::vec2(1 / 5.f, 0.f));
+	sprite->setAnimationSpeed(STAGE3, 8);
+	sprite->addKeyframe(STAGE3, glm::vec2(2 / 5.f, 0.f));
+	sprite->setAnimationSpeed(STAGE4, 8);
+	sprite->addKeyframe(STAGE4, glm::vec2(3 / 5.f, 0.f));
+	sprite->setAnimationSpeed(STAGE_DEAD, 8);
+	sprite->addKeyframe(STAGE_DEAD, glm::vec2(4 / 5.f, 0.f));
+
+	sprite->changeAnimation(STAGE1);
 	this->shaderProgram = shaderProgram;
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posThief.x), float(tileMapDispl.y + posThief.y)));
@@ -36,6 +49,9 @@ void Thief::update(int deltaTime, int currentRoom)
 	sprite->update(deltaTime);
 
 	if (stage == 1) {
+		if (sprite->animation() != STAGE1) {
+			sprite->changeAnimation(STAGE1);
+		}
 		if (lives == 0) {
 			activeCollision = false;
 			if (!destroyed1Stage) {
@@ -74,6 +90,9 @@ void Thief::update(int deltaTime, int currentRoom)
 		}
 	}
 	if (stage == 2) {
+		if (sprite->animation() != STAGE2) {
+			sprite->changeAnimation(STAGE2);
+		}
 		if (lives == 0) {
 			activeCollision = false;
 			if (!destroyed2Stage) {
@@ -143,6 +162,9 @@ void Thief::update(int deltaTime, int currentRoom)
 		}
 	}
 	else if (stage == 3) {
+		if (sprite->animation() != STAGE3) {
+			sprite->changeAnimation(STAGE3);
+		}
 		if (lives == 3) {
 			if (posThief.x < 155) posThief.x += 4;
 		}
@@ -184,7 +206,13 @@ void Thief::update(int deltaTime, int currentRoom)
 		}
 	}
 	if (stage == 4) {
+		if (sprite->animation() != STAGE4) {
+			sprite->changeAnimation(STAGE4);
+		}
 		if (lives == 0) {
+			if (sprite->animation() != STAGE_DEAD) {
+				sprite->changeAnimation(STAGE_DEAD);
+			}
 			activeCollision = false;
 			if (!destroyed4Stage) {
 				map->destroyTop(tileMapDispl, shaderProgram, stage);
@@ -210,11 +238,11 @@ void Thief::update(int deltaTime, int currentRoom)
 				thiefVelX = abs(thiefVelX);
 			}
 			posThief.y += thiefVelY;
-			if (posThief.y > (66)) {
+			if (posThief.y >= 66) {
 				posThief.y -= thiefVelY;
 				thiefVelY = -abs(thiefVelY);
 			}
-			else if (posThief.y < 16) {
+			else if (posThief.y <= 16) {
 				posThief.y -= thiefVelY;
 				thiefVelY = abs(thiefVelY);
 			}
