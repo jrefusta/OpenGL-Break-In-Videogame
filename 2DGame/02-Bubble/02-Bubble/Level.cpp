@@ -221,7 +221,8 @@ void Level::update(int deltaTime)
 				{
 					if (currentLevel < 4) {
 						winState = false;
-						init(currentLevel + 1, ball->getCurrentPoints(), ball->getCurrentMoney(), livesNum);
+						if (currentLevel == 3)	init(currentLevel + 1, 0, 0, 4);
+						else init(currentLevel + 1, ball->getCurrentPoints(), ball->getCurrentMoney(), livesNum);
 					}
 					else {
 						exitCredits = true;
