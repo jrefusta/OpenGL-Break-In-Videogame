@@ -63,7 +63,8 @@ void Level::init(int ID, int pointsP, int moneyP, int livesP)
 	ball->setStuck(true);
 	ball->setCurrentPoints(pointsP);
 	ball->setCurrentMoney(moneyP);
-	winSpritesheet.loadFromFile("images/password.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	if (currentLevel < 3) winSpritesheet.loadFromFile("images/password.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	else winSpritesheet.loadFromFile("images/password_win.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	winSprite = Sprite::createSprite(glm::ivec2(272.0, 240.0), glm::vec2(1.f, 1.f), &winSpritesheet, &texProgram);
 	winSprite->setPosition(glm::vec2(0.0, 576.0 - 192.0 * float(5 - 1) - 48));
 	loseSpritesheet.loadFromFile("images/game_over.png", TEXTURE_PIXEL_FORMAT_RGBA);
@@ -219,10 +220,9 @@ void Level::update(int deltaTime)
 			if (currentTurnTime >= float(300.0f)) {
 				if (Game::instance().getKey('\ ') || currentTime - passwordTime >= 17500)
 				{
-					if (currentLevel < 4) {
+					if (currentLevel < 3) {
 						winState = false;
-						if (currentLevel == 3)	init(currentLevel + 1, 0, 0, 4);
-						else init(currentLevel + 1, ball->getCurrentPoints(), ball->getCurrentMoney(), livesNum);
+						init(currentLevel + 1, ball->getCurrentPoints(), ball->getCurrentMoney(), livesNum);
 					}
 					else {
 						exitCredits = true;
