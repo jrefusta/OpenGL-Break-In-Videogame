@@ -3,8 +3,8 @@ C:\Users\GL553VD\Documents\GitHub\VJ_2D\2DGame\02-Bubble\02-Bubble\Level.cpp(141
 C:\Users\GL553VD\Documents\GitHub\VJ_2D\2DGame\02-Bubble\02-Bubble\Level.cpp(142,20): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
 C:\Users\GL553VD\Documents\GitHub\VJ_2D\2DGame\02-Bubble\02-Bubble\Level.cpp(143,38): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
 C:\Users\GL553VD\Documents\GitHub\VJ_2D\2DGame\02-Bubble\02-Bubble\Level.cpp(221,33): warning C4129: ' ': secuencia de escape de carácter no reconocida
-C:\Users\GL553VD\Documents\GitHub\VJ_2D\2DGame\02-Bubble\02-Bubble\Level.cpp(243,33): warning C4129: ' ': secuencia de escape de carácter no reconocida
-C:\Users\GL553VD\Documents\GitHub\VJ_2D\2DGame\02-Bubble\02-Bubble\Level.cpp(396,37): warning C4129: ' ': secuencia de escape de carácter no reconocida
+C:\Users\GL553VD\Documents\GitHub\VJ_2D\2DGame\02-Bubble\02-Bubble\Level.cpp(242,33): warning C4129: ' ': secuencia de escape de carácter no reconocida
+C:\Users\GL553VD\Documents\GitHub\VJ_2D\2DGame\02-Bubble\02-Bubble\Level.cpp(395,37): warning C4129: ' ': secuencia de escape de carácter no reconocida
 SOIL.lib(image_DXT.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(image_DXT.obj)' o en 'C:\Users\GL553VD\Documents\GitHub\VJ_2D\2DGame\02-Bubble\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
 SOIL.lib(image_helper.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(image_helper.obj)' o en 'C:\Users\GL553VD\Documents\GitHub\VJ_2D\2DGame\02-Bubble\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
 SOIL.lib(SOIL.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(SOIL.obj)' o en 'C:\Users\GL553VD\Documents\GitHub\VJ_2D\2DGame\02-Bubble\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración

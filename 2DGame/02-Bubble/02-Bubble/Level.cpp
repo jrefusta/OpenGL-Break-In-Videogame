@@ -220,10 +220,9 @@ void Level::update(int deltaTime)
 			if (currentTurnTime >= float(300.0f)) {
 				if (Game::instance().getKey('\ ') || currentTime - passwordTime >= 17500)
 				{
-					if (currentLevel < 4) {
+					if (currentLevel < 3) {
 						winState = false;
-						if (currentLevel == 3)	init(currentLevel + 1, 0, 0, 4);
-						else init(currentLevel + 1, ball->getCurrentPoints(), ball->getCurrentMoney(), livesNum);
+						init(currentLevel + 1, ball->getCurrentPoints(), ball->getCurrentMoney(), livesNum);
 					}
 					else {
 						exitCredits = true;
