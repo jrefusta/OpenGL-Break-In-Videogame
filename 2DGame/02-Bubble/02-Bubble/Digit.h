@@ -1,12 +1,8 @@
 #ifndef _DIGIT_INCLUDE
 #define _DIGIT_INCLUDE
 
-
 #include "Sprite.h"
 #include "TileMap.h"
-
-
-
 
 class Digit
 {
@@ -24,7 +20,6 @@ private:
 	Texture spritesheet;
 	Sprite *sprite;
 	TileMap *map;
-
 };
 
 

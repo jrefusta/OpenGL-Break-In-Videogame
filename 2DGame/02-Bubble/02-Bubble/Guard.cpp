@@ -5,11 +5,6 @@
 #include "Guard.h"
 #include "Game.h"
 
-
-
-
-
-
 void Guard::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
 	bMoving = false;
@@ -18,22 +13,22 @@ void Guard::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite = Sprite::createSprite(glm::ivec2(12, 8), glm::vec2(0.25, 0.5), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(2);
 	
-		sprite->setAnimationSpeed(0, 16);
-		sprite->addKeyframe(0, glm::vec2(0.f, 0.f));
-		sprite->addKeyframe(0, glm::vec2(0.25f, 0.f));
-		sprite->addKeyframe(0, glm::vec2(0.5f, 0.f));
-		sprite->addKeyframe(0, glm::vec2(0.75f, 0.f));
-		sprite->addKeyframe(0, glm::vec2(0.5f, 0.f));
-		sprite->addKeyframe(0, glm::vec2(0.25f, 0.f));
-		sprite->addKeyframe(0, glm::vec2(0.f, 0.f));
-		sprite->addKeyframe(0, glm::vec2(0.f, 0.5f));
-		sprite->addKeyframe(0, glm::vec2(0.25f, 0.5f));
-		sprite->addKeyframe(0, glm::vec2(0.5f, 0.5f));
-		sprite->addKeyframe(0, glm::vec2(0.25f, 0.5f));
-		sprite->addKeyframe(0, glm::vec2(0.f, 0.5f));
+	sprite->setAnimationSpeed(0, 16);
+	sprite->addKeyframe(0, glm::vec2(0.f, 0.f));
+	sprite->addKeyframe(0, glm::vec2(0.25f, 0.f));
+	sprite->addKeyframe(0, glm::vec2(0.5f, 0.f));
+	sprite->addKeyframe(0, glm::vec2(0.75f, 0.f));
+	sprite->addKeyframe(0, glm::vec2(0.5f, 0.f));
+	sprite->addKeyframe(0, glm::vec2(0.25f, 0.f));
+	sprite->addKeyframe(0, glm::vec2(0.f, 0.f));
+	sprite->addKeyframe(0, glm::vec2(0.f, 0.5f));
+	sprite->addKeyframe(0, glm::vec2(0.25f, 0.5f));
+	sprite->addKeyframe(0, glm::vec2(0.5f, 0.5f));
+	sprite->addKeyframe(0, glm::vec2(0.25f, 0.5f));
+	sprite->addKeyframe(0, glm::vec2(0.f, 0.5f));
 		
-		sprite->setAnimationSpeed(1, 8);
-		sprite->addKeyframe(1, glm::vec2(0.5f, 0.5f));
+	sprite->setAnimationSpeed(1, 8);
+	sprite->addKeyframe(1, glm::vec2(0.5f, 0.5f));
 		
 	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
@@ -59,7 +54,6 @@ void Guard::update(int deltaTime, glm::ivec2 posPlayer)
 		vecPlayer = posPlayer - posGuard;
 		posGuardAux = posGuard;
 	}
-	
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posGuard.x), float(tileMapDispl.y + posGuard.y)));
 }
 
@@ -90,7 +84,4 @@ glm::ivec2 Guard::getPosition()
 {
 	return posGuard;
 }
-
-
-
 

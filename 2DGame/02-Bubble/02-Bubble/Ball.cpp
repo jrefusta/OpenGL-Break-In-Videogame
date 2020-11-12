@@ -7,23 +7,22 @@
 
 void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, int ID)
 {
-	this->stuck = true;
 	spritesheet.loadFromFile("images/ball.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(9, 10), glm::vec2(1.0, 1.0), &spritesheet, &shaderProgram);
 	tileMapDispl = tileMapPos;
 	this->shaderProgram = shaderProgram;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBall.x), float(tileMapDispl.y + posBall.y)));
-
 	setInitVel();
-	this->currentRoom = 1;
-	this->crossingRoom = 0;
-	this->getAllMoney = false;
-	this->currentMoney = 0;
-	this->currentPoints = 0;
-	this->currentLevel = ID;
-	this->alarmHit = false;
-	this->thiefShooted = false;
-	this->godMode = false;
+	currentRoom = 1;
+	crossingRoom = 0;
+	getAllMoney = false;
+	currentMoney = 0;
+	currentPoints = 0;
+	stuck = true;
+	currentLevel = ID;
+	alarmHit = false;
+	thiefShooted = false;
+	godMode = false;
 	initMoney = initPoints = 0;
 }
 
@@ -107,22 +106,22 @@ void Ball::update(int deltaTime, glm::vec2 posPlayer, glm::vec2 posThief, int cu
 		}
 	}
 	if (posBall.y != 0 && posBall.x != 0 && this->currentRoom != 0) {
-		if (posBall.y > 752.0 - (24 * 8 * (this->currentRoom - 1))) {
+		if (posBall.y > 752.0 - (24*8*(this->currentRoom - 1))) {
 			this->crossingRoom = -1;
 			this->currentRoom -= 1;
 		}
-		else if (posBall.y < 752.0 - (24 * 8 * (this->currentRoom))) {
-			
+		else if (posBall.y < 752.0 - (24*8*(this->currentRoom))) {
 			this->currentRoom += 1;
 			this->crossingRoom = 1;
 		}
-
 	}
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBall.x), float(tileMapDispl.y + posBall.y)));
 }
+
 bool Ball::getGetAllMoney() {
 	return this->getAllMoney;
 }
+
 bool Ball::getGetAlarmHit() {
 	return this->alarmHit;
 }
@@ -130,15 +129,19 @@ bool Ball::getGetAlarmHit() {
 void Ball::destroyedTop() {
 	map->destroyTop(tileMapDispl, shaderProgram, currentRoom);
 }
+
 int Ball::getCurrentMoney() {
 	return this->currentMoney;
 }
+
 int Ball::getCurrentPoints() {
 	return this->currentPoints;
 }
+
 void Ball::setCurrentMoney(int m) {
 	this->initMoney = m;
 }
+
 void Ball::setCurrentPoints(int p) {
 	this->initPoints = p;
 }
@@ -163,14 +166,11 @@ void Ball::setCrossingRoom(int c) {
 	this->crossingRoom = c;
 }
 
-
 bool Ball::collisionPlayer(glm::vec2& posPlayer) {
 	bool collisionX = posPlayer.x + 18 >= posBall.x && posBall.x + 9 >= posPlayer.x;
 	bool collisionY = posPlayer.y + 6 >= posBall.y && posBall.y + 10 >= posPlayer.y;
 	return collisionX && collisionY;
 }
-
-
 
 bool Ball::collisionThief(glm::vec2& posThief) {
 	bool collisionX = posThief.x + 18 >= posBall.x && posBall.x + 9 >= posThief.x;

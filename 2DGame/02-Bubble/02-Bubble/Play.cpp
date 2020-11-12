@@ -1,6 +1,7 @@
 #include "Play.h"
 #include <iostream>
 using namespace std;
+
 Play::Play() {
 
 }
@@ -8,6 +9,7 @@ Play::Play() {
 Play::~Play() {
 
 }
+
 void Play::init(int l, int points, int money, int lives) {
 	Scene::init();
 	spritesheet.loadFromFile("images/play.png", TEXTURE_PIXEL_FORMAT_RGBA);
@@ -18,10 +20,10 @@ void Play::init(int l, int points, int money, int lives) {
 	escSprite->setPosition(glm::vec2(56.0, 208.0));
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	loadSprites();
-	this->points = points;
-	this->money = money;
-	this->lives = lives;
-	this->level = l;
+	points = points;
+	money = money;
+	lives = lives;
+	level = l;
 	Game::instance().loopMusic("music/Break_In_OST.mp3");
 }
 
@@ -49,7 +51,6 @@ void Play::update(int deltaTime) {
 			}
 			currentTurnTime = 0;
 		}
-
 		else if (Game::instance().moveUpPressed()) {
 			Game::instance().playSound("music/BlockSound.mp3");
 			if (level > 0) --level;
@@ -58,33 +59,26 @@ void Play::update(int deltaTime) {
 			}
 			currentTurnTime = 0;
 		}
-
 		else if (Game::instance().getKey(13)) {
 			Game::instance().playSound("music/PhoneSound.mp3");
 			Game::instance().selectScene(level + 4);
 		}
-
 		else if (Game::instance().getKey(27)) {
 			Game::instance().selectScene(0);
 		}
 	}
-
-
 }
 
 void Play::render() {
 	glm::mat4 modelview;
-
 	texProgram.use();
 	texProgram.setUniformMatrix4f("projection", projection);
 	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
 	modelview = glm::mat4(1.0f);
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
-
 	background->render();
 	if (int(currentTime/500)%2 == 0) escSprite->render();
-
 	for (int i = 0; i < 4; i++) {
 		if (level != i || int(currentTime/500)%2 == 0) levels[i].sprite->render();
 	}

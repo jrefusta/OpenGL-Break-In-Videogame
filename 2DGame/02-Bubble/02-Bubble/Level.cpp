@@ -249,10 +249,9 @@ void Level::update(int deltaTime)
 		int offset = (winState) ? -48 : 0;
 		int aux = (currentRoom == 0) ? 1 : currentRoom;
 		if (winState) aux = 5;
-		frameSprite->setPosition(glm::vec2(0.0, 576.0 - 192.0 * float(aux - 1) + offset));
-		//info->update(deltaTime);
+		frameSprite->setPosition(glm::vec2(0.0, 576.0 - 192.0 * float(aux-1) + offset));
 		info->setPosition(glm::vec2(INIT_INFO_X, INIT_INFO_Y - 192.f * float(aux - 1) + offset));
-		batmodeSprite->setPosition(glm::vec2(208.0, 752.0 - 192.0 * float(aux - 1) + offset));
+		batmodeSprite->setPosition(glm::vec2(208.0, 752.0 - 192.0 * float(aux-1) + offset));
 		if (currentLevel == 4) thief->update(deltaTime, currentRoom);
 		for (int i = 0; i < 7; ++i) {
 			int animId = ball->getCurrentMoney() / int(pow(10, 7 - 1 - i)) % 10;
@@ -388,10 +387,6 @@ void Level::update(int deltaTime)
 					currentTurnTime = 0;
 				}
 			}
-			else if (Game::instance().getKey('i') || Game::instance().getKey('I')) {//upper Layer
-				winState = true;
-			}
-
 			else if (Game::instance().getKey('\ ') || Game::instance().getSpecialKey(GLUT_KEY_UP))
 			{
 				stuckTime = -1;
@@ -420,10 +415,10 @@ void Level::update(int deltaTime)
 		}
 	}
 }
+
 void Level::render()
 {
 	glm::mat4 modelview;
-
 	texProgram.use();
 	texProgram.setUniformMatrix4f("projection", projection);
 	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);

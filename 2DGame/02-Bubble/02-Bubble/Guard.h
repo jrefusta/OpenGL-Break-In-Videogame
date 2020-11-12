@@ -1,12 +1,8 @@
 #ifndef _GUARD_INCLUDE
 #define _GUARD_INCLUDE
 
-
 #include "Sprite.h"
 #include "TileMap.h"
-
-
-
 
 class Guard
 {
@@ -31,7 +27,6 @@ private:
 	TileMap *map;
 
 };
-
 
 #endif // _GUARD_INCLUDE
 

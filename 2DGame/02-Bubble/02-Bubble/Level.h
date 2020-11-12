@@ -15,11 +15,6 @@
 #include "Guard.h"
 #include "PlayerPassword.h"
 
-
-// Scene contains all the entities of our game.
-// It is responsible for updating and render them.
-
-
 class Level : public Scene
 {
 

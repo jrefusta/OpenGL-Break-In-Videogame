@@ -1,12 +1,8 @@
 #ifndef _INFO_INCLUDE
 #define _INFO_INCLUDE
 
-
 #include "Sprite.h"
 #include "TileMap.h"
-
-
-
 
 class Info
 {
@@ -26,7 +22,6 @@ private:
 	TileMap *map;
 
 };
-
 
 #endif // _INFO_INCLUDE
 

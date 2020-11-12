@@ -1,14 +1,8 @@
 #ifndef _BALL_INCLUDE
 #define _BALL_INCLUDE
 
-
 #include "Sprite.h"
 #include "TileMap.h"
-
-
-// Player is basically a Sprite that represents the player. As such it has
-// all properties it needs to track its movement, jumping, and collisions.
-
 
 class Ball
 {
@@ -43,6 +37,7 @@ public:
 	void setGodMode(bool g);
 	bool getGodMode();
 	glm::vec2 getPosBall();
+
 private:
 	float ballVelX;
 	float ballVelY;
@@ -70,6 +65,4 @@ private:
 };
 
 
-#endif // _PLAYER_INCLUDE
-
-
+#endif 
