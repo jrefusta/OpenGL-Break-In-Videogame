@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Ball.cpp" />
+    <ClCompile Include="Digit.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Help.cpp" />
+    <ClCompile Include="Info.cpp" />
+    <ClCompile Include="Level.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="Play.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="ShaderProgram.cpp" />
+    <ClCompile Include="Credits.cpp" />
+    <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Thief.cpp" />
+    <ClCompile Include="TileMap.cpp" />
+    <ClCompile Include="Guard.cpp" />
+    <ClCompile Include="PlayerPassword.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AnimKeyframes.h" />
+    <ClInclude Include="Ball.h" />
+    <ClInclude Include="Credits.h" />
+    <ClInclude Include="Digit.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="Help.h" />
+    <ClInclude Include="Info.h" />
+    <ClInclude Include="Level.h" />
+    <ClInclude Include="Menu.h" />
+    <ClInclude Include="Play.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="Shader.h" />
+    <ClInclude Include="ShaderProgram.h" />
+    <ClInclude Include="Sprite.h" />
+    <ClInclude Include="Texture.h" />
+    <ClInclude Include="Thief.h" />
+    <ClInclude Include="TileMap.h" />
+    <ClInclude Include="Guard.h" />
+    <ClInclude Include="PlayerPassword.h" />
+  </ItemGroup>
+</Project>
