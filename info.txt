@@ -1,0 +1,28 @@
+Joan Manuel Ramos Refusta (Grup 11)
+joan.manuel.ramos@estudiantat.upc.edu
+Alex Núñez Rodríguez (Grup 12)
+alex.nunez.rodriguez@estudiantat.upc.edu
+
+FUNCIONALIDADES IMPLEMENTADAS:
+
+- Tres niveles con cuatro pantallas cada uno.
+- Tres tipos de bloque (resistencia 1, 2 y 3). Los bloques de resistencia 2 se pueden encontrar en la última pantalla del segundo nivel, y los bloques de resistencia 3 los encontramos en la última pantalla del tercer nivel.
+- Mecánica de las llaves para pasar de pantallas
+- Mecánica del dinero a la última pantalla de cada nivel
+- Alarma que provoca que aparezca el vigilante y que, al atraparnos, perdemos una vida.
+- Estructura básica de las 4 pantallas: Menú principal, Instrucciones, Créditos y un menú para seleccionar entre los 3 niveles y el modo extra (de esta forma podemos saltar a cualquier nivel sin passwords).
+- Mecánica extra:
+Hemos creado un nuevo modo de juego en el que jugamos como el Policia. Normalmente, usando el Ladrón, llegábamos a la última pantalla de cada nivel y recogíamos todo el dinero para ganar. Esta vez, como Policía, empezaremos en la pantalla final y tendremos que evitar coger el dinero para ganar. Cada vez que recojamos 1000 unidades de dinero, perderemos una vida. Recorremos las pantallas del primer nivel inversamente. En cada pantalla nos encontraremos al ladrón, si logramos darle 3 veces con la bola, abriremos la puerta de la pantalla actual y podremos acceder a la siguiente. El comportamiento del Ladrón varia con cada golpe que le damos. Ganamos en el momento en que le quitamos todas las vidas al Ladrón en la última pantalla y atravesamos la puerta que se nos abre al vencer al "final boss".
+
+INSTRUCCIONES DEL JUEGO:
+- Nos moveremos por el menú utilziando las flechas del teclado. Seleccionaremos una opción con el 'ENTER'.
+- Una vez dentro del juego, lanzaremos la bola con la flecha hacia arriba o la barra espaciadora. Si no hacemos ninguna acción durante 2.5 segundos, la bola se accionará automáticamente.
+- Nos moveremos por la pantalla con las flechas del teclado.
+- Cada vez que colisionemos la bola con una llave, abriremos la puerta de la pantalla actual.
+- Si colisionamos la bola con el teléfono, nuestros puntos se convertirán en dinero.
+- Una vez recojamos todo el dinero de la última pantalla, veremos la animación de ganar. Si presionamos 'ESPACIO', pasamos al siguiente nivel directamente. Si estamos en el último nivel o en el modo extra, al presionar 'ESPACIO', veremos los créditos.
+- Teclas para saltar contenido:
+- Presionando la tecla 'G', activamos God Mode. Si se activa, siempre que la bola colisione con el jugador, irá hacia arriba, a demás de que no perderemos vidas.
+- Presionando la tecla 'U', abriremos la puerta de la pantalla actual y pasaremos a la siguiente pantalla.
+- Presionando la tecla 'R' reiniciamos el nivel actual.
+- Para volver al menú, hay que presionar la tecla ESC. También, sirve para salir del juego cuando te encuentras en el menú.
