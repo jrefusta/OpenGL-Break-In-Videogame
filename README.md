@@ -1,6 +1,5 @@
 # Break In based in OpenGL
 
-Pràctica de l'assignatura Llenguatges de Programació 19-20Q1. Consisteix en un bot per Telegram que constesta textualment i gràficament a preguntes relacionades amb les enquestes descrites amb el compilador descrit prèviament, així com recullir les dades d’enquestes.
 University project of the subject Videogames 20-21Q1 made at FIB, UPC. It consists of a representation of the videogame Break in from 1987, based in OpenGL.
 
 Grade: **10.0**
