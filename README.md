@@ -5,7 +5,7 @@ You can emulate the videogame online [here](https://www.cheatmsx.com/es/browseti
 
 Grade: **10.0**
 
-![](https://media.githubusercontent.com/media/jrefusta/VJ_2D/main/gifs/gif1.gif)
+![](https://github.com/jrefusta/OpenGL-Break-In-Videogame/blob/main/gifs/gif1.gif)
 
 ## How to run it
 
