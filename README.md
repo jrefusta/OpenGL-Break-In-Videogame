@@ -15,7 +15,7 @@ Download the project and execute the following executable file: "Break in.exe".
 /Binari/Break in.exe
 ```
 
-![](https://media.githubusercontent.com/media/jrefusta/VJ_2D/main/gifs/gif2.gif)
+![](https://github.com/jrefusta/OpenGL-Break-In-Videogame/blob/main/gifs/gif2.gif)
 
 
 ## Implemented functionalities
@@ -29,7 +29,7 @@ Download the project and execute the following executable file: "Break in.exe".
 - Extra mechanics:
 We have created a new game mode in which we play as the Cop. Normally, using the Thief, we would reach the last screen of each level and collect all the money to win. This time, as the Cop, we will start at the final screen and we will have to avoid taking the money to win. Every time we collect 1000 units of money, we will lose a life. We go through the screens of the first level in reverse. In each screen we will find the thief, if we hit him 3 times with the ball, we will open the door of the current screen and we will be able to access the next one. The behavior of the thief varies with each hit we give him. We win when we take all the lives of the thief in the last screen and go through the door that opens when we defeat the "final boss".
 
-![](https://media.githubusercontent.com/media/jrefusta/VJ_2D/main/gifs/gif3.gif)
+![](https://github.com/jrefusta/OpenGL-Break-In-Videogame/blob/main/gifs/gif3.gif)
 
 
 ## Instructions
@@ -46,4 +46,4 @@ We have created a new game mode in which we play as the Cop. Normally, using the
 - Pressing the 'R' key restarts the current level.
 - To return to the menu, press the ESC key. Also, it is used to exit the game when you are in the menu.
 
-![](https://media.githubusercontent.com/media/jrefusta/VJ_2D/main/gifs/gif4.gif)
+![](https://github.com/jrefusta/OpenGL-Break-In-Videogame/blob/main/gifs/gif4.gif)
